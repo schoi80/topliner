@@ -1,0 +1,49 @@
+name: Topliner
+options:
+  bundleIdPrefix: com.schoi80
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  Topliner:
+    type: application
+    platform: iOS
+    sources:
+      - Topliner
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.schoi80.topliner
+        INFOPLIST_KEY_CFBundleDisplayName: Topliner
+        INFOPLIST_KEY_UILaunchScreen_Generation: true
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
+    info:
+      path: Topliner/Info.plist
+      properties:
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        UILaunchScreen: {}
+  ToplinerTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - ToplinerTests
+    dependencies:
+      - target: Topliner
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.schoi80.topliner.tests
+  ToplinerUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - ToplinerUITests
+    dependencies:
+      - target: Topliner
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.schoi80.topliner.uitests

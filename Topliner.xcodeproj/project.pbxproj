@@ -1,0 +1,503 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BA5711C11F0FBE52EE2E0A /* ToplinerApp.swift */; };
+		5609CEA746FE2913AE3A0994 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8210A972A1FB695D7396E190 /* ContentView.swift */; };
+		5EE6630D3A408C586EB0B940 /* ToplinerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */; };
+		CE40CF66D9CE63DD6DBD5057 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AA5A8E6673FC30C20831CE /* AppEnvironment.swift */; };
+		E2DFAC43990AEE7DE091B78F /* ToplinerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0AD56F30A718E272A2B09F19 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 86B1C1CE6712DD2519BBB8AB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ED3CB96B5681BAAD46076D5D;
+			remoteInfo = Topliner;
+		};
+		3F39B678A454D22D3DF34C96 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 86B1C1CE6712DD2519BBB8AB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ED3CB96B5681BAAD46076D5D;
+			remoteInfo = Topliner;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		05AA5A8E6673FC30C20831CE /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		666428F59A91F4715331A535 /* ToplinerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ToplinerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F9B98075E6F554F7A0C818E /* Topliner.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Topliner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8210A972A1FB695D7396E190 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		84BA5711C11F0FBE52EE2E0A /* ToplinerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerApp.swift; sourceTree = "<group>"; };
+		AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerTests.swift; sourceTree = "<group>"; };
+		D3DD77054BF4908FDD9F7991 /* ToplinerUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ToplinerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerUITests.swift; sourceTree = "<group>"; };
+		FF7B1C3E1270E92A00567610 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2503C157B5CD4F01B809FED7 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				05AA5A8E6673FC30C20831CE /* AppEnvironment.swift */,
+				84BA5711C11F0FBE52EE2E0A /* ToplinerApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		2B714605702AFE0C5526B0BC /* ToplinerTests */ = {
+			isa = PBXGroup;
+			children = (
+				AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */,
+			);
+			path = ToplinerTests;
+			sourceTree = "<group>";
+		};
+		2CFBF5DA2472CDD09F945ED7 /* Topliner */ = {
+			isa = PBXGroup;
+			children = (
+				8210A972A1FB695D7396E190 /* ContentView.swift */,
+				FF7B1C3E1270E92A00567610 /* Info.plist */,
+				2503C157B5CD4F01B809FED7 /* App */,
+			);
+			path = Topliner;
+			sourceTree = "<group>";
+		};
+		588FDDFE0203624EE43D62A3 = {
+			isa = PBXGroup;
+			children = (
+				2CFBF5DA2472CDD09F945ED7 /* Topliner */,
+				2B714605702AFE0C5526B0BC /* ToplinerTests */,
+				B5A258C6DC19E2E37FEBC4A8 /* ToplinerUITests */,
+				7B999A2562D2FA200CA479DB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7B999A2562D2FA200CA479DB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6F9B98075E6F554F7A0C818E /* Topliner.app */,
+				666428F59A91F4715331A535 /* ToplinerTests.xctest */,
+				D3DD77054BF4908FDD9F7991 /* ToplinerUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B5A258C6DC19E2E37FEBC4A8 /* ToplinerUITests */ = {
+			isa = PBXGroup;
+			children = (
+				DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */,
+			);
+			path = ToplinerUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		ED3CB96B5681BAAD46076D5D /* Topliner */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 115B648CD99F784F55C70C46 /* Build configuration list for PBXNativeTarget "Topliner" */;
+			buildPhases = (
+				4D5B5F5767A6817911A1EAA4 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Topliner;
+			packageProductDependencies = (
+			);
+			productName = Topliner;
+			productReference = 6F9B98075E6F554F7A0C818E /* Topliner.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F14BE5FFCFAD7B856981BA84 /* ToplinerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4BFB29676AB92B8D70204CE2 /* Build configuration list for PBXNativeTarget "ToplinerUITests" */;
+			buildPhases = (
+				AED72BF908E01D5255E84791 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				37CC7A5C9853222FF7693300 /* PBXTargetDependency */,
+			);
+			name = ToplinerUITests;
+			packageProductDependencies = (
+			);
+			productName = ToplinerUITests;
+			productReference = D3DD77054BF4908FDD9F7991 /* ToplinerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		FC3C54C4946520B015D69E9D /* ToplinerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 265AE9E24E91E41A84A08B5D /* Build configuration list for PBXNativeTarget "ToplinerTests" */;
+			buildPhases = (
+				A0445953A1182E248FEB6C22 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DCFF965DF1511A6E00CA4240 /* PBXTargetDependency */,
+			);
+			name = ToplinerTests;
+			packageProductDependencies = (
+			);
+			productName = ToplinerTests;
+			productReference = 666428F59A91F4715331A535 /* ToplinerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		86B1C1CE6712DD2519BBB8AB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					F14BE5FFCFAD7B856981BA84 = {
+						TestTargetID = ED3CB96B5681BAAD46076D5D;
+					};
+				};
+			};
+			buildConfigurationList = 9C4B120F754F9EEAC32CB3A7 /* Build configuration list for PBXProject "Topliner" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 588FDDFE0203624EE43D62A3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 7B999A2562D2FA200CA479DB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				ED3CB96B5681BAAD46076D5D /* Topliner */,
+				FC3C54C4946520B015D69E9D /* ToplinerTests */,
+				F14BE5FFCFAD7B856981BA84 /* ToplinerUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4D5B5F5767A6817911A1EAA4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE40CF66D9CE63DD6DBD5057 /* AppEnvironment.swift in Sources */,
+				5609CEA746FE2913AE3A0994 /* ContentView.swift in Sources */,
+				382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A0445953A1182E248FEB6C22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EE6630D3A408C586EB0B940 /* ToplinerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AED72BF908E01D5255E84791 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E2DFAC43990AEE7DE091B78F /* ToplinerUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		37CC7A5C9853222FF7693300 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ED3CB96B5681BAAD46076D5D /* Topliner */;
+			targetProxy = 3F39B678A454D22D3DF34C96 /* PBXContainerItemProxy */;
+		};
+		DCFF965DF1511A6E00CA4240 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ED3CB96B5681BAAD46076D5D /* Topliner */;
+			targetProxy = 0AD56F30A718E272A2B09F19 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0B15BB8770E9368682434CED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		22A16AE24A661AA7341CFBDF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.schoi80.topliner.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Topliner.app/Topliner";
+			};
+			name = Release;
+		};
+		27EFCC6CC00AEF49D071D874 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.schoi80.topliner.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Topliner.app/Topliner";
+			};
+			name = Debug;
+		};
+		524A03872EC17BFE0B3BC591 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.schoi80.topliner.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Topliner;
+			};
+			name = Release;
+		};
+		59C12D5EE08976B351BE9BC3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Topliner/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Topliner;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.schoi80.topliner;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7149CE577C165D416BFCEE5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.schoi80.topliner.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Topliner;
+			};
+			name = Debug;
+		};
+		BB906EE6A3FE6CBFD4DD2929 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Topliner/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Topliner;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.schoi80.topliner;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		ECACEB3E6BED99C51FEC7CFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		115B648CD99F784F55C70C46 /* Build configuration list for PBXNativeTarget "Topliner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				59C12D5EE08976B351BE9BC3 /* Debug */,
+				BB906EE6A3FE6CBFD4DD2929 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		265AE9E24E91E41A84A08B5D /* Build configuration list for PBXNativeTarget "ToplinerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27EFCC6CC00AEF49D071D874 /* Debug */,
+				22A16AE24A661AA7341CFBDF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4BFB29676AB92B8D70204CE2 /* Build configuration list for PBXNativeTarget "ToplinerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7149CE577C165D416BFCEE5B /* Debug */,
+				524A03872EC17BFE0B3BC591 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9C4B120F754F9EEAC32CB3A7 /* Build configuration list for PBXProject "Topliner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0B15BB8770E9368682434CED /* Debug */,
+				ECACEB3E6BED99C51FEC7CFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 86B1C1CE6712DD2519BBB8AB /* Project object */;
+}
