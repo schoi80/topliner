@@ -9,6 +9,16 @@ settings:
     SWIFT_VERSION: "5.9"
     MARKETING_VERSION: "1.0"
     CURRENT_PROJECT_VERSION: "1"
+schemes:
+  Topliner:
+    build:
+      targets:
+        Topliner: all
+        ToplinerTests: [test]
+    test:
+      targets:
+        - ToplinerTests
+
 targets:
   Topliner:
     type: application
@@ -37,6 +47,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.schoi80.topliner.tests
+        GENERATE_INFOPLIST_FILE: YES
   ToplinerUITests:
     type: bundle.ui-testing
     platform: iOS
@@ -47,3 +58,4 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.schoi80.topliner.uitests
+        GENERATE_INFOPLIST_FILE: YES

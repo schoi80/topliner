@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		239ABE359B9847EA8483B255 /* MIDINoteEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E5351C7DACB7D5D8B5D1B5 /* MIDINoteEvent.swift */; };
 		382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BA5711C11F0FBE52EE2E0A /* ToplinerApp.swift */; };
 		5609CEA746FE2913AE3A0994 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8210A972A1FB695D7396E190 /* ContentView.swift */; };
 		5EE6630D3A408C586EB0B940 /* ToplinerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */; };
+		B8BFC9EF4A8EC6A3F0443EE3 /* MIDINoteEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D0FFEA0E1C83A8C5E9551F /* MIDINoteEventTests.swift */; };
 		CE40CF66D9CE63DD6DBD5057 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AA5A8E6673FC30C20831CE /* AppEnvironment.swift */; };
 		E2DFAC43990AEE7DE091B78F /* ToplinerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */; };
 /* End PBXBuildFile section */
@@ -38,7 +40,9 @@
 		8210A972A1FB695D7396E190 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		84BA5711C11F0FBE52EE2E0A /* ToplinerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerApp.swift; sourceTree = "<group>"; };
 		AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerTests.swift; sourceTree = "<group>"; };
+		D3D0FFEA0E1C83A8C5E9551F /* MIDINoteEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDINoteEventTests.swift; sourceTree = "<group>"; };
 		D3DD77054BF4908FDD9F7991 /* ToplinerUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ToplinerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8E5351C7DACB7D5D8B5D1B5 /* MIDINoteEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDINoteEvent.swift; sourceTree = "<group>"; };
 		DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerUITests.swift; sourceTree = "<group>"; };
 		FF7B1C3E1270E92A00567610 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -57,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */,
+				53409B8D97B25028ABD7B07C /* Models */,
 			);
 			path = ToplinerTests;
 			sourceTree = "<group>";
@@ -67,8 +72,17 @@
 				8210A972A1FB695D7396E190 /* ContentView.swift */,
 				FF7B1C3E1270E92A00567610 /* Info.plist */,
 				2503C157B5CD4F01B809FED7 /* App */,
+				F65151B1E04D7B27ED15FA06 /* Models */,
 			);
 			path = Topliner;
+			sourceTree = "<group>";
+		};
+		53409B8D97B25028ABD7B07C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D3D0FFEA0E1C83A8C5E9551F /* MIDINoteEventTests.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		588FDDFE0203624EE43D62A3 = {
@@ -97,6 +111,14 @@
 				DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */,
 			);
 			path = ToplinerUITests;
+			sourceTree = "<group>";
+		};
+		F65151B1E04D7B27ED15FA06 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D8E5351C7DACB7D5D8B5D1B5 /* MIDINoteEvent.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -197,6 +219,7 @@
 			files = (
 				CE40CF66D9CE63DD6DBD5057 /* AppEnvironment.swift in Sources */,
 				5609CEA746FE2913AE3A0994 /* ContentView.swift in Sources */,
+				239ABE359B9847EA8483B255 /* MIDINoteEvent.swift in Sources */,
 				382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -205,6 +228,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8BFC9EF4A8EC6A3F0443EE3 /* MIDINoteEventTests.swift in Sources */,
 				5EE6630D3A408C586EB0B940 /* ToplinerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -302,6 +326,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -318,6 +343,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -334,6 +360,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -369,6 +396,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
