@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		239ABE359B9847EA8483B255 /* MIDINoteEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E5351C7DACB7D5D8B5D1B5 /* MIDINoteEvent.swift */; };
+		25DD5B0E70FAB332372455AE /* LeadVoiceBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B161209CDB6DED2185DFE /* LeadVoiceBuffer.swift */; };
 		382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BA5711C11F0FBE52EE2E0A /* ToplinerApp.swift */; };
 		5609CEA746FE2913AE3A0994 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8210A972A1FB695D7396E190 /* ContentView.swift */; };
 		5EE6630D3A408C586EB0B940 /* ToplinerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */; };
+		B816FD171A04FAB597AA877F /* LeadVoiceBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8686E36CB4C4266AD2E5081 /* LeadVoiceBufferTests.swift */; };
 		B8BFC9EF4A8EC6A3F0443EE3 /* MIDINoteEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D0FFEA0E1C83A8C5E9551F /* MIDINoteEventTests.swift */; };
 		CE40CF66D9CE63DD6DBD5057 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AA5A8E6673FC30C20831CE /* AppEnvironment.swift */; };
 		E2DFAC43990AEE7DE091B78F /* ToplinerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */; };
@@ -39,11 +41,13 @@
 		6F9B98075E6F554F7A0C818E /* Topliner.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Topliner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8210A972A1FB695D7396E190 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		84BA5711C11F0FBE52EE2E0A /* ToplinerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerApp.swift; sourceTree = "<group>"; };
+		A07B161209CDB6DED2185DFE /* LeadVoiceBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadVoiceBuffer.swift; sourceTree = "<group>"; };
 		AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerTests.swift; sourceTree = "<group>"; };
 		D3D0FFEA0E1C83A8C5E9551F /* MIDINoteEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDINoteEventTests.swift; sourceTree = "<group>"; };
 		D3DD77054BF4908FDD9F7991 /* ToplinerUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ToplinerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E5351C7DACB7D5D8B5D1B5 /* MIDINoteEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDINoteEvent.swift; sourceTree = "<group>"; };
 		DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerUITests.swift; sourceTree = "<group>"; };
+		E8686E36CB4C4266AD2E5081 /* LeadVoiceBufferTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadVoiceBufferTests.swift; sourceTree = "<group>"; };
 		FF7B1C3E1270E92A00567610 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,6 +84,7 @@
 		53409B8D97B25028ABD7B07C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E8686E36CB4C4266AD2E5081 /* LeadVoiceBufferTests.swift */,
 				D3D0FFEA0E1C83A8C5E9551F /* MIDINoteEventTests.swift */,
 			);
 			path = Models;
@@ -116,6 +121,7 @@
 		F65151B1E04D7B27ED15FA06 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A07B161209CDB6DED2185DFE /* LeadVoiceBuffer.swift */,
 				D8E5351C7DACB7D5D8B5D1B5 /* MIDINoteEvent.swift */,
 			);
 			path = Models;
@@ -219,6 +225,7 @@
 			files = (
 				CE40CF66D9CE63DD6DBD5057 /* AppEnvironment.swift in Sources */,
 				5609CEA746FE2913AE3A0994 /* ContentView.swift in Sources */,
+				25DD5B0E70FAB332372455AE /* LeadVoiceBuffer.swift in Sources */,
 				239ABE359B9847EA8483B255 /* MIDINoteEvent.swift in Sources */,
 				382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */,
 			);
@@ -228,6 +235,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B816FD171A04FAB597AA877F /* LeadVoiceBufferTests.swift in Sources */,
 				B8BFC9EF4A8EC6A3F0443EE3 /* MIDINoteEventTests.swift in Sources */,
 				5EE6630D3A408C586EB0B940 /* ToplinerTests.swift in Sources */,
 			);
