@@ -34,6 +34,17 @@ final class AudioCaptureViewModel {
     private(set) var pitchTrace: [PitchSample]
     private(set) var draftMIDINotes: [MIDINoteEvent]
     private(set) var errorMessage: String?
+    private var storedBPM: Double
+    private var storedCountInBars: Int
+    var bpm: Double {
+        get { storedBPM }
+        set { storedBPM = min(max(newValue, 40), 240) }
+    }
+    var countInBars: Int {
+        get { storedCountInBars }
+        set { storedCountInBars = min(max(newValue, 0), 4) }
+    }
+    var isMetronomeEnabled: Bool
 
     init(
         recorder: AudioRecordingManaging = SystemAudioRecorder(),
@@ -44,7 +55,10 @@ final class AudioCaptureViewModel {
         capturedBuffer: CapturedAudioBuffer? = nil,
         pitchTrace: [PitchSample] = [],
         draftMIDINotes: [MIDINoteEvent] = [],
-        errorMessage: String? = nil
+        errorMessage: String? = nil,
+        bpm: Double = 120,
+        countInBars: Int = 1,
+        isMetronomeEnabled: Bool = true
     ) {
         self.recorder = recorder
         self.pitchTracker = pitchTracker
@@ -55,6 +69,9 @@ final class AudioCaptureViewModel {
         self.pitchTrace = pitchTrace
         self.draftMIDINotes = draftMIDINotes
         self.errorMessage = errorMessage
+        self.storedBPM = min(max(bpm, 40), 240)
+        self.storedCountInBars = min(max(countInBars, 0), 4)
+        self.isMetronomeEnabled = isMetronomeEnabled
     }
 
     func requestPermission() {
@@ -91,7 +108,7 @@ final class AudioCaptureViewModel {
         let trace = buffer.map { pitchTracker.track(buffer: $0) } ?? []
         capturedBuffer = buffer
         pitchTrace = trace
-        draftMIDINotes = pitchSegmenter.segment(trace: trace, bpm: 120)
+        draftMIDINotes = pitchSegmenter.segment(trace: trace, bpm: bpm)
         isRecording = false
     }
 

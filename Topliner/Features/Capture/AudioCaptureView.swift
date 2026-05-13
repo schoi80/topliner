@@ -4,172 +4,204 @@ struct AudioCaptureView: View {
     @State private var viewModel = AudioCaptureViewModel()
 
     var body: some View {
-        VStack(spacing: 24) {
-            header
-            recordingStatus
-            captureControls
-            capturedBufferSummary
-            pitchRollPreview
-            pitchTraceSummary
-            draftMIDINotesSummary
-            Spacer()
+        GeometryReader { proxy in
+            VStack(spacing: StudioLayout.panelSpacing) {
+                captureTransport
+
+                HStack(spacing: StudioLayout.panelSpacing) {
+                    captureLane
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                    takesPanel
+                        .frame(width: min(StudioLayout.harmonyPanelWidth, max(260, proxy.size.width * 0.30)))
+                        .frame(maxHeight: .infinity)
+                }
+            }
+            .padding(StudioLayout.screenPadding)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(StudioTheme.background.ignoresSafeArea())
         }
-        .padding(24)
         .navigationTitle("Capture")
     }
 
-    private var header: some View {
-        VStack(spacing: 8) {
-            Image(systemName: viewModel.isRecording ? "waveform.circle.fill" : "mic.circle")
-                .font(.system(size: 56))
-                .foregroundStyle(viewModel.isRecording ? .red : .blue)
-
-            Text("Record a vocal idea")
-                .font(.title2.weight(.semibold))
-
-            Text("Capture humming or singing so Topliner can turn it into pitch events in the next stage.")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-        }
-    }
-
-    private var recordingStatus: some View {
-        VStack(spacing: 8) {
-            Label(statusText, systemImage: statusIcon)
-                .font(.headline)
-                .foregroundStyle(statusColor)
-
-            if let errorMessage = viewModel.errorMessage {
-                Text(errorMessage)
-                    .font(.footnote)
-                    .foregroundStyle(.red)
-                    .multilineTextAlignment(.center)
+    private var captureTransport: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Capture Takes")
+                    .font(.headline.weight(.bold))
+                    .foregroundStyle(StudioTheme.textPrimary)
+                Label(statusText, systemImage: statusIcon)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(statusColor)
             }
-        }
-    }
 
-    private var captureControls: some View {
-        VStack(spacing: 12) {
+            Spacer(minLength: 12)
+
+            Stepper(value: $viewModel.bpm, in: 40...240, step: 1) {
+                StudioControlChip(title: "BPM", value: "\(Int(viewModel.bpm))", systemImage: "metronome", isActive: true, tint: StudioTheme.orange)
+            }
+            .labelsHidden()
+            .frame(maxWidth: 170)
+
+            Stepper(value: $viewModel.countInBars, in: 0...4, step: 1) {
+                StudioControlChip(title: "Count-in", value: "\(viewModel.countInBars)b", systemImage: "timer", isActive: viewModel.countInBars > 0, tint: StudioTheme.violet)
+            }
+            .labelsHidden()
+            .frame(maxWidth: 170)
+
+            Button {
+                viewModel.isMetronomeEnabled.toggle()
+            } label: {
+                StudioControlChip(title: "Click", value: viewModel.isMetronomeEnabled ? "On" : "Off", systemImage: "speaker.wave.2", isActive: viewModel.isMetronomeEnabled, tint: StudioTheme.cyan)
+            }
+            .buttonStyle(.plain)
+
             Button {
                 viewModel.toggleRecording()
             } label: {
-                Label(viewModel.isRecording ? "Stop Recording" : "Record", systemImage: viewModel.isRecording ? "stop.fill" : "record.circle")
-                    .frame(maxWidth: .infinity)
+                Label(viewModel.isRecording ? "Stop" : "Record", systemImage: viewModel.isRecording ? "stop.fill" : "record.circle.fill")
+                    .font(.headline.weight(.bold))
+                    .frame(minWidth: 118, minHeight: StudioLayout.minimumTouchTarget)
             }
             .buttonStyle(.borderedProminent)
-            .tint(viewModel.isRecording ? .red : .blue)
-            .controlSize(.large)
-
-            Button("Request Microphone Permission") {
-                viewModel.requestPermission()
-            }
-            .buttonStyle(.bordered)
-            .disabled(viewModel.isRecording)
+            .tint(viewModel.isRecording ? StudioTheme.danger : StudioTheme.orange)
         }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .background(
+            RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
+                .fill(StudioTheme.surface.opacity(0.94))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
+                .stroke(StudioTheme.border, lineWidth: 1)
+        )
     }
 
-    @ViewBuilder
-    private var capturedBufferSummary: some View {
-        if let buffer = viewModel.capturedBuffer {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Captured buffer")
-                    .font(.headline)
+    private var captureLane: some View {
+        StudioPanel("Performance Lane", subtitle: "Sing or hum; Topliner converts the take into editable MIDI") {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(spacing: 12) {
+                    Image(systemName: viewModel.isRecording ? "waveform.circle.fill" : "mic.circle")
+                        .font(.system(size: 58, weight: .semibold))
+                        .foregroundStyle(viewModel.isRecording ? StudioTheme.danger : StudioTheme.cyan)
 
-                Text("\(buffer.samples.count) samples at \(Int(buffer.sampleRate)) Hz")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
-        } else {
-            Text("No audio captured yet.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-        }
-    }
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(viewModel.isRecording ? "Recording live input" : "Ready for a new take")
+                            .font(.title3.weight(.bold))
+                            .foregroundStyle(StudioTheme.textPrimary)
+                        Text("Count-in \(viewModel.countInBars) bars · \(Int(viewModel.bpm)) BPM · click \(viewModel.isMetronomeEnabled ? "enabled" : "muted")")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(StudioTheme.textSecondary)
+                    }
 
-    @ViewBuilder
-    private var pitchRollPreview: some View {
-        let ghostTrace = viewModel.isRecording ? viewModel.pitchTrace : []
-        let renderedNotes = viewModel.isRecording ? [] : viewModel.draftMIDINotes
+                    Spacer()
 
-        if !ghostTrace.isEmpty || !renderedNotes.isEmpty {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(viewModel.isRecording ? "Live pitch trace" : "Quantized capture")
-                    .font(.headline)
+                    Button("Request Mic") {
+                        viewModel.requestPermission()
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(StudioTheme.cyan)
+                    .disabled(viewModel.isRecording)
+                }
+
+                if let errorMessage = viewModel.errorMessage {
+                    Text(errorMessage)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(StudioTheme.danger)
+                        .lineLimit(2)
+                }
 
                 PianoRollView(
-                    notes: renderedNotes,
+                    notes: viewModel.isRecording ? [] : viewModel.draftMIDINotes,
                     selectedNoteID: nil,
                     totalBeats: 16,
                     pitchRange: 48...84,
                     currentBeat: nil,
-                    pitchTrace: ghostTrace,
-                    bpm: 120
+                    pitchTrace: viewModel.isRecording ? viewModel.pitchTrace : [],
+                    bpm: viewModel.bpm
                 )
-                .frame(height: 220)
-                .background(.black.opacity(0.82), in: RoundedRectangle(cornerRadius: 16))
+                .frame(maxHeight: .infinity)
+                .background(StudioTheme.background.opacity(0.72), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .stroke(StudioTheme.border, lineWidth: 1)
+                )
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
-    @ViewBuilder
-    private var pitchTraceSummary: some View {
-        if !viewModel.pitchTrace.isEmpty {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Pitch trace")
-                    .font(.headline)
+    private var takesPanel: some View {
+        StudioPanel("Takes", subtitle: takeSubtitle) {
+            VStack(alignment: .leading, spacing: 14) {
+                metricRow(title: "Audio", value: capturedBufferText, icon: "waveform")
+                metricRow(title: "Pitch", value: "\(viewModel.pitchTrace.count) samples", icon: "point.3.connected.trianglepath.dotted")
+                metricRow(title: "MIDI", value: "\(viewModel.draftMIDINotes.count) notes", icon: "pianokeys")
 
-                Text("\(viewModel.pitchTrace.count) pitch samples detected")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                Divider().overlay(StudioTheme.border)
 
-                if let firstPitch = viewModel.pitchTrace.first?.midiNote,
-                   let lastPitch = viewModel.pitchTrace.last?.midiNote {
-                    Text("MIDI \(firstPitch) → \(lastPitch)")
+                if !viewModel.draftMIDINotes.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Latest quantized take")
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(StudioTheme.textSecondary)
+                        ForEach(viewModel.draftMIDINotes.prefix(4)) { note in
+                            Text("MIDI \(note.pitch) · beat \(formattedBeat(note.startBeat)) · dur \(formattedBeat(note.durationBeats))")
+                                .font(.caption.monospaced())
+                                .foregroundStyle(StudioTheme.textPrimary)
+                                .lineLimit(1)
+                        }
+                    }
+                } else {
+                    Text("Recorded takes will appear here with pitch trace and quantized MIDI summaries.")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(StudioTheme.textMuted)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
+
+                Spacer(minLength: 8)
+
+                Button {
+                    // Composer handoff will wire into project routing in a later persistence slice.
+                } label: {
+                    Label("Edit in Composer", systemImage: "square.and.pencil")
+                        .font(.caption.weight(.bold))
+                        .frame(maxWidth: .infinity, minHeight: StudioLayout.minimumTouchTarget)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(StudioTheme.violet)
+                .disabled(viewModel.draftMIDINotes.isEmpty)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
-        } else if viewModel.capturedBuffer != nil {
-            Text("No confident pitch samples detected yet.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
         }
     }
 
-    @ViewBuilder
-    private var draftMIDINotesSummary: some View {
-        if !viewModel.draftMIDINotes.isEmpty {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Draft MIDI notes")
-                    .font(.headline)
+    private var takeSubtitle: String {
+        viewModel.isRecording ? "Armed and listening" : "Latest capture summary"
+    }
 
-                Text("\(viewModel.draftMIDINotes.count) notes segmented and quantized")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+    private var capturedBufferText: String {
+        guard let buffer = viewModel.capturedBuffer else { return "No take" }
+        return "\(buffer.samples.count) @ \(Int(buffer.sampleRate)) Hz"
+    }
 
-                if let firstNote = viewModel.draftMIDINotes.first,
-                   let lastNote = viewModel.draftMIDINotes.last {
-                    Text("MIDI \(firstNote.pitch) at beat \(formattedBeat(firstNote.startBeat)) → MIDI \(lastNote.pitch)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+    private func metricRow(title: String, value: String, icon: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .frame(width: 24)
+                .foregroundStyle(StudioTheme.cyan)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.caption2.weight(.bold))
+                    .foregroundStyle(StudioTheme.textMuted)
+                Text(value)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(StudioTheme.textPrimary)
+                    .lineLimit(1)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(.green.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
-        } else if !viewModel.pitchTrace.isEmpty {
-            Text("No draft MIDI notes survived segmentation yet.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+            Spacer()
         }
+        .padding(10)
+        .background(StudioTheme.elevatedSurface.opacity(0.72), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
     private func formattedBeat(_ beat: Double) -> String {
@@ -203,21 +235,19 @@ struct AudioCaptureView: View {
     }
 
     private var statusColor: Color {
-        if viewModel.isRecording { return .red }
+        if viewModel.isRecording { return StudioTheme.danger }
 
         switch viewModel.permissionStatus {
         case .unknown:
-            return .secondary
+            return StudioTheme.textMuted
         case .granted:
-            return .green
+            return StudioTheme.lime
         case .denied:
-            return .red
+            return StudioTheme.danger
         }
     }
 }
 
 #Preview {
-    NavigationStack {
-        AudioCaptureView()
-    }
+    AudioCaptureView()
 }

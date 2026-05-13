@@ -12,6 +12,37 @@ final class AudioCaptureViewModelCoreTests: XCTestCase {
         XCTAssertNil(viewModel.errorMessage)
     }
 
+    func testCaptureSessionControlsClampBPMAndCountIn() {
+        let viewModel = AudioCaptureViewModel()
+
+        viewModel.bpm = 400
+        viewModel.countInBars = 8
+        viewModel.isMetronomeEnabled = true
+
+        XCTAssertEqual(viewModel.bpm, 240)
+        XCTAssertEqual(viewModel.countInBars, 4)
+        XCTAssertTrue(viewModel.isMetronomeEnabled)
+    }
+
+    func testStopRecordingSegmentsUsingSessionBPM() {
+        let buffer = CapturedAudioBuffer(samples: [0.1, 0.2, 0.3], sampleRate: 44_100)
+        let recorder = MockAudioRecorder(permissionResult: .granted, stopResult: buffer)
+        let pitchTrace = [PitchSample(timestamp: 0.0, frequency: 440.0, midiNote: 69, amplitude: 0.5)]
+        let segmenter = MockPitchTraceSegmenter(notesToReturn: [])
+        let viewModel = AudioCaptureViewModel(
+            recorder: recorder,
+            pitchTracker: MockPitchTracker(samplesToReturn: pitchTrace),
+            pitchSegmenter: segmenter,
+            permissionStatus: .granted
+        )
+        viewModel.bpm = 96
+
+        viewModel.startRecording()
+        viewModel.stopRecording()
+
+        XCTAssertEqual(segmenter.segmentCalls, [PitchTraceSegmenterCall(trace: pitchTrace, bpm: 96)])
+    }
+
     func testRequestPermissionStoresGrantedStatus() {
         let recorder = MockAudioRecorder(permissionResult: .granted)
         let viewModel = AudioCaptureViewModel(recorder: recorder)
