@@ -9,6 +9,7 @@ struct AudioCaptureView: View {
             recordingStatus
             captureControls
             capturedBufferSummary
+            pitchTraceSummary
             Spacer()
         }
         .padding(24)
@@ -82,6 +83,34 @@ struct AudioCaptureView: View {
             .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
         } else {
             Text("No audio captured yet.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    @ViewBuilder
+    private var pitchTraceSummary: some View {
+        if !viewModel.pitchTrace.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Pitch trace")
+                    .font(.headline)
+
+                Text("\(viewModel.pitchTrace.count) pitch samples detected")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                if let firstPitch = viewModel.pitchTrace.first?.midiNote,
+                   let lastPitch = viewModel.pitchTrace.last?.midiNote {
+                    Text("MIDI \(firstPitch) → \(lastPitch)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background(.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
+        } else if viewModel.capturedBuffer != nil {
+            Text("No confident pitch samples detected yet.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }

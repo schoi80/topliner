@@ -46,17 +46,25 @@ final class AudioCaptureViewModelCoreTests: XCTestCase {
         XCTAssertEqual(viewModel.errorMessage, "Microphone permission is required to record audio.")
     }
 
-    func testStopRecordingStoresCapturedBufferAndClearsRecordingState() {
-        let expectedBuffer = CapturedAudioBuffer(samples: [0.1, -0.2, 0.3], sampleRate: 44_100)
-        let recorder = MockAudioRecorder(permissionResult: .granted, stopResult: expectedBuffer)
-        let viewModel = AudioCaptureViewModel(recorder: recorder)
-        viewModel.startRecording()
+    func testStopRecordingStoresCapturedBufferTranscribesPitchTraceAndClearsRecordingState() {
+        let buffer = CapturedAudioBuffer(samples: [0.1, 0.2, 0.3], sampleRate: 44_100)
+        let recorder = MockAudioRecorder(permissionResult: .granted, stopResult: buffer)
+        let pitchTracker = MockPitchTracker(samplesToReturn: [
+            PitchSample(timestamp: 0.0, frequency: 440.0, midiNote: 69, amplitude: 0.5)
+        ])
+        let viewModel = AudioCaptureViewModel(
+            recorder: recorder,
+            pitchTracker: pitchTracker,
+            permissionStatus: .granted
+        )
 
+        viewModel.startRecording()
         viewModel.stopRecording()
 
         XCTAssertFalse(viewModel.isRecording)
-        XCTAssertEqual(viewModel.capturedBuffer, expectedBuffer)
-        XCTAssertEqual(recorder.stopCallCount, 1)
+        XCTAssertEqual(viewModel.capturedBuffer, buffer)
+        XCTAssertEqual(viewModel.pitchTrace, pitchTracker.samplesToReturn)
+        XCTAssertEqual(pitchTracker.buffersTracked, [buffer])
     }
 
     func testToggleRecordingStartsThenStops() {
@@ -97,5 +105,19 @@ private final class MockAudioRecorder: AudioRecordingManaging {
     func stopRecording() -> CapturedAudioBuffer? {
         stopCallCount += 1
         return stopResult
+    }
+}
+
+private final class MockPitchTracker: PitchTrackingManaging {
+    var samplesToReturn: [PitchSample]
+    private(set) var buffersTracked: [CapturedAudioBuffer] = []
+
+    init(samplesToReturn: [PitchSample]) {
+        self.samplesToReturn = samplesToReturn
+    }
+
+    func track(buffer: CapturedAudioBuffer) -> [PitchSample] {
+        buffersTracked.append(buffer)
+        return samplesToReturn
     }
 }

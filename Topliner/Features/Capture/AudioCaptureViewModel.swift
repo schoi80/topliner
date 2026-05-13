@@ -25,23 +25,29 @@ protocol AudioRecordingManaging: AnyObject {
 @Observable
 final class AudioCaptureViewModel {
     private let recorder: AudioRecordingManaging
+    private let pitchTracker: PitchTrackingManaging
 
     private(set) var permissionStatus: MicrophonePermissionStatus
     private(set) var isRecording: Bool
     private(set) var capturedBuffer: CapturedAudioBuffer?
+    private(set) var pitchTrace: [PitchSample]
     private(set) var errorMessage: String?
 
     init(
         recorder: AudioRecordingManaging = SystemAudioRecorder(),
+        pitchTracker: PitchTrackingManaging = PitchTrackingService(),
         permissionStatus: MicrophonePermissionStatus = .unknown,
         isRecording: Bool = false,
         capturedBuffer: CapturedAudioBuffer? = nil,
+        pitchTrace: [PitchSample] = [],
         errorMessage: String? = nil
     ) {
         self.recorder = recorder
+        self.pitchTracker = pitchTracker
         self.permissionStatus = permissionStatus
         self.isRecording = isRecording
         self.capturedBuffer = capturedBuffer
+        self.pitchTrace = pitchTrace
         self.errorMessage = errorMessage
     }
 
@@ -63,6 +69,7 @@ final class AudioCaptureViewModel {
         do {
             try recorder.startRecording()
             capturedBuffer = nil
+            pitchTrace = []
             errorMessage = nil
             isRecording = true
         } catch {
@@ -73,7 +80,9 @@ final class AudioCaptureViewModel {
 
     func stopRecording() {
         guard isRecording else { return }
-        capturedBuffer = recorder.stopRecording()
+        let buffer = recorder.stopRecording()
+        capturedBuffer = buffer
+        pitchTrace = buffer.map { pitchTracker.track(buffer: $0) } ?? []
         isRecording = false
     }
 
