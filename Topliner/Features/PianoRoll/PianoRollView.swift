@@ -8,6 +8,8 @@ struct PianoRollView: View {
     var pitchRange: ClosedRange<Int> = 48...84
     var quantizeGrid: Double = 0.25
     var currentBeat: Double?
+    var pitchTrace: [PitchSample]
+    var bpm: Double
     var onTap: ((CGPoint, PianoRollGeometry) -> Void)?
     var onDrag: ((CGPoint, PianoRollGeometry) -> Void)?
     var onResize: ((CGPoint, PianoRollGeometry) -> Void)?
@@ -20,6 +22,8 @@ struct PianoRollView: View {
         pitchRange: ClosedRange<Int> = 48...84,
         quantizeGrid: Double = 0.25,
         currentBeat: Double? = nil,
+        pitchTrace: [PitchSample] = [],
+        bpm: Double = 120,
         onTap: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
         onDrag: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
         onResize: ((CGPoint, PianoRollGeometry) -> Void)? = nil
@@ -31,6 +35,8 @@ struct PianoRollView: View {
         self.pitchRange = pitchRange
         self.quantizeGrid = quantizeGrid
         self.currentBeat = currentBeat
+        self.pitchTrace = pitchTrace
+        self.bpm = bpm
         self.onTap = onTap
         self.onDrag = onDrag
         self.onResize = onResize
@@ -39,6 +45,17 @@ struct PianoRollView: View {
     var body: some View {
         ZStack {
             PianoRollGridView(totalBeats: totalBeats, beatsPerBar: beatsPerBar, pitchRange: pitchRange)
+
+            if !pitchTrace.isEmpty {
+                PitchTraceView(
+                    samples: pitchTrace,
+                    bpm: bpm,
+                    totalBeats: totalBeats,
+                    pitchRange: pitchRange,
+                    quantizeGrid: quantizeGrid
+                )
+            }
+
             PianoRollCanvasView(
                 notes: notes,
                 selectedNoteID: selectedNoteID,

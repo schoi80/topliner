@@ -9,6 +9,7 @@ struct AudioCaptureView: View {
             recordingStatus
             captureControls
             capturedBufferSummary
+            pitchRollPreview
             pitchTraceSummary
             draftMIDINotesSummary
             Spacer()
@@ -86,6 +87,32 @@ struct AudioCaptureView: View {
             Text("No audio captured yet.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
+        }
+    }
+
+    @ViewBuilder
+    private var pitchRollPreview: some View {
+        let ghostTrace = viewModel.isRecording ? viewModel.pitchTrace : []
+        let renderedNotes = viewModel.isRecording ? [] : viewModel.draftMIDINotes
+
+        if !ghostTrace.isEmpty || !renderedNotes.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(viewModel.isRecording ? "Live pitch trace" : "Quantized capture")
+                    .font(.headline)
+
+                PianoRollView(
+                    notes: renderedNotes,
+                    selectedNoteID: nil,
+                    totalBeats: 16,
+                    pitchRange: 48...84,
+                    currentBeat: nil,
+                    pitchTrace: ghostTrace,
+                    bpm: 120
+                )
+                .frame(height: 220)
+                .background(.black.opacity(0.82), in: RoundedRectangle(cornerRadius: 16))
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
