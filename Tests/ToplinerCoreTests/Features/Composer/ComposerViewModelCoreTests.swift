@@ -144,6 +144,54 @@ final class ComposerViewModelCoreTests: XCTestCase {
         XCTAssertEqual(viewModel.leadVoice.notes, [note])
     }
 
+    func testDeleteSelectedNoteRemovesOnlySelectedNoteAndClearsSelection() {
+        let selectedID = UUID()
+        let selectedNote = MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 0, durationBeats: 1, velocity: 100)
+        let remainingNote = MIDINoteEvent(pitch: 64, startBeat: 1, durationBeats: 1, velocity: 100)
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(notes: [selectedNote, remainingNote], source: .pianoRoll, quantizeGrid: 0.25),
+            selectedNoteID: selectedID
+        )
+
+        viewModel.deleteSelectedNote()
+
+        XCTAssertEqual(viewModel.leadVoice.notes, [remainingNote])
+        XCTAssertNil(viewModel.selectedNoteID)
+    }
+
+    func testDeleteSelectedNoteWithNoSelectionDoesNotMutateNotes() {
+        let note = MIDINoteEvent(pitch: 60, startBeat: 0, durationBeats: 1, velocity: 100)
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(notes: [note], source: .pianoRoll, quantizeGrid: 0.25),
+            selectedNoteID: nil
+        )
+
+        viewModel.deleteSelectedNote()
+
+        XCTAssertEqual(viewModel.leadVoice.notes, [note])
+        XCTAssertNil(viewModel.selectedNoteID)
+    }
+
+    func testClearLeadNotesRemovesAllNotesAndClearsSelection() {
+        let selectedID = UUID()
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(
+                notes: [
+                    MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 0, durationBeats: 1, velocity: 100),
+                    MIDINoteEvent(pitch: 64, startBeat: 1, durationBeats: 1, velocity: 100)
+                ],
+                source: .pianoRoll,
+                quantizeGrid: 0.25
+            ),
+            selectedNoteID: selectedID
+        )
+
+        viewModel.clearLeadNotes()
+
+        XCTAssertTrue(viewModel.leadVoice.notes.isEmpty)
+        XCTAssertNil(viewModel.selectedNoteID)
+    }
+
     private func makeGeometry() -> PianoRollGeometry {
         PianoRollGeometry(size: CGSize(width: 400, height: 480), pitchRange: 60...71, totalBeats: 16, quantizeGrid: 0.25)
     }

@@ -50,6 +50,17 @@ final class ComposerViewModel {
         leadVoice.notes[noteIndex].durationBeats = max(minimumDuration, endBeat - note.startBeat)
     }
 
+    func deleteSelectedNote() {
+        guard let selectedNoteID else { return }
+        leadVoice.notes.removeAll { $0.id == selectedNoteID }
+        self.selectedNoteID = nil
+    }
+
+    func clearLeadNotes() {
+        leadVoice.notes.removeAll()
+        selectedNoteID = nil
+    }
+
     private func note(at point: CGPoint, geometry: PianoRollGeometry) -> MIDINoteEvent? {
         leadVoice.notes.first { note in
             geometry.rect(for: note).contains(point)
