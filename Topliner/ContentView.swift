@@ -16,6 +16,13 @@ struct ContentView: View {
             .tabItem {
                 Label("Capture", systemImage: "mic")
             }
+
+            NavigationStack {
+                MIDISettingsView()
+            }
+            .tabItem {
+                Label("MIDI", systemImage: "cable.connector")
+            }
         }
     }
 }
