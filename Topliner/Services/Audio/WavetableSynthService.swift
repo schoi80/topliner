@@ -103,13 +103,13 @@ final class AudioKitWavetableVoiceManager: SynthVoiceManaging {
 
         mixer.addInput(amplitudeEnvelope)
         oscillator.start()
-        amplitudeEnvelope.start()
+        amplitudeEnvelope.openGate()
         activeVoices[pitch] = ActiveVoice(oscillator: oscillator, envelope: amplitudeEnvelope)
     }
 
     func noteOff(pitch: Int) {
         guard let activeVoice = activeVoices.removeValue(forKey: pitch) else { return }
-        activeVoice.envelope.stop()
+        activeVoice.envelope.closeGate()
         activeVoice.oscillator.stop()
         mixer.removeInput(activeVoice.envelope)
     }

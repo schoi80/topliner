@@ -98,6 +98,7 @@ struct ComposerView: View {
     private var editingControls: some View {
         HStack(spacing: 12) {
             selectionStatus
+            playbackStatus
 
             Spacer()
 
@@ -162,6 +163,19 @@ struct ComposerView: View {
 
         playbackController.advance(elapsedSeconds: tickDate.timeIntervalSince(lastPlaybackTick))
         self.lastPlaybackTick = tickDate
+    }
+
+    @ViewBuilder
+    private var playbackStatus: some View {
+        if let errorMessage = playbackController.lastErrorMessage {
+            Text("Playback error: \(errorMessage)")
+                .font(.caption)
+                .foregroundStyle(.red.opacity(0.9))
+        } else if playbackController.isPlaying {
+            Text("Playing local synth")
+                .font(.caption)
+                .foregroundStyle(.cyan.opacity(0.85))
+        }
     }
 
     private var selectionStatus: some View {
