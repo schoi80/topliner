@@ -27,7 +27,8 @@ let package = Package(
             sources: [
                 "Models",
                 "Services",
-                "Features"
+                "Features",
+                "Design"
             ],
             resources: [
                 .process("Resources")
