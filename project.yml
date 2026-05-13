@@ -60,6 +60,13 @@ targets:
         NSBonjourServices:
           - _apple-midi._udp
         UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
   ToplinerTests:
     type: bundle.unit-test
     platform: iOS
