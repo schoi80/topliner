@@ -18,7 +18,8 @@ let package = Package(
             ],
             sources: [
                 "Models",
-                "Services"
+                "Services",
+                "Features"
             ]
         ),
         .testTarget(
