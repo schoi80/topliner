@@ -19,6 +19,7 @@
 		4167E67476054C47391BFC1A /* PianoRollInteractionLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27893BC0B37F8E1F533D28A9 /* PianoRollInteractionLayer.swift */; };
 		49E18EAACB2FBF75E1309270 /* WavetableSynthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362DF5451886E5A3F16B9A6C /* WavetableSynthService.swift */; };
 		4C57C13B0FBE00C7C9968FCD /* PianoRollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975B631614EC8652C81A8E9 /* PianoRollView.swift */; };
+		4F21D77D221CD43612425BF3 /* SequencerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED24371F43AB591882807DFB /* SequencerService.swift */; };
 		51C8C3444171C3CA4CBFADB3 /* AudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = 446311AC6E85D34D57B33617 /* AudioKit */; };
 		5609CEA746FE2913AE3A0994 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8210A972A1FB695D7396E190 /* ContentView.swift */; };
 		5EE6630D3A408C586EB0B940 /* ToplinerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */; };
@@ -85,6 +86,7 @@
 		DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerUITests.swift; sourceTree = "<group>"; };
 		E5385D1D9C62FCA7DBBFC2A0 /* PianoRollGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollGeometry.swift; sourceTree = "<group>"; };
 		E8686E36CB4C4266AD2E5081 /* LeadVoiceBufferTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadVoiceBufferTests.swift; sourceTree = "<group>"; };
+		ED24371F43AB591882807DFB /* SequencerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequencerService.swift; sourceTree = "<group>"; };
 		EF15F22A4F56ABEB0C15AC05 /* QuantizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantizerTests.swift; sourceTree = "<group>"; };
 		FF7B1C3E1270E92A00567610 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,6 +109,7 @@
 			children = (
 				A7B8B8C40411107DE47863A2 /* AudioEngineService.swift */,
 				25A54A6FEE587DDEF253D1A8 /* PlayheadController.swift */,
+				ED24371F43AB591882807DFB /* SequencerService.swift */,
 				362DF5451886E5A3F16B9A6C /* WavetableSynthService.swift */,
 			);
 			path = Audio;
@@ -395,6 +398,7 @@
 				2453B053C1E417D2811F03C7 /* PlayheadView.swift in Sources */,
 				00187A3B76EAFCF335BEA1D8 /* ProjectDocument.swift in Sources */,
 				00C4D684BE50674A92759339 /* Quantizer.swift in Sources */,
+				4F21D77D221CD43612425BF3 /* SequencerService.swift in Sources */,
 				382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */,
 				49E18EAACB2FBF75E1309270 /* WavetableSynthService.swift in Sources */,
 			);
