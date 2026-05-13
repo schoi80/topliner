@@ -6,10 +6,34 @@ import Observation
 final class ComposerViewModel {
     var leadVoice: LeadVoiceBuffer
     var selectedNoteID: UUID?
+    var isMetronomeEnabled: Bool
+    private var storedBPM: Double
+    private var storedBarLength: Int
 
-    init(leadVoice: LeadVoiceBuffer = LeadVoiceBuffer(notes: [], source: .pianoRoll, quantizeGrid: 0.25), selectedNoteID: UUID? = nil) {
+    var bpm: Double {
+        get { storedBPM }
+        set { storedBPM = min(max(newValue, 40), 240) }
+    }
+
+    var barLength: Int {
+        get { storedBarLength }
+        set { storedBarLength = min(max(newValue, 1), 16) }
+    }
+
+    var totalBeats: Double { Double(barLength * 4) }
+
+    init(
+        leadVoice: LeadVoiceBuffer = LeadVoiceBuffer(notes: [], source: .pianoRoll, quantizeGrid: 0.25),
+        selectedNoteID: UUID? = nil,
+        bpm: Double = 120,
+        barLength: Int = 4,
+        isMetronomeEnabled: Bool = false
+    ) {
         self.leadVoice = leadVoice
         self.selectedNoteID = selectedNoteID
+        storedBPM = min(max(bpm, 40), 240)
+        storedBarLength = min(max(barLength, 1), 16)
+        self.isMetronomeEnabled = isMetronomeEnabled
     }
 
     func handlePianoRollTap(at point: CGPoint, geometry: PianoRollGeometry) {

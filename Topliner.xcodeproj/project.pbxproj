@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		00187A3B76EAFCF335BEA1D8 /* ProjectDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4883D6C746BD6E01973297 /* ProjectDocument.swift */; };
 		00C4D684BE50674A92759339 /* Quantizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5BE041BEAF32A395E3066 /* Quantizer.swift */; };
+		0163034DDF47141B782452B3 /* ComposerTransportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24568B2567E01F88EF8C9110 /* ComposerTransportView.swift */; };
 		026F5F0EE850E9A4D03F6282 /* StudioTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073D7A2E9AED6AE944E73365 /* StudioTheme.swift */; };
+		09CFFFF7D0404F7FAFABC414 /* ComposerEditingToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1285F240EEE04A4D7E0DFF6 /* ComposerEditingToolbar.swift */; };
 		0FF610E30F68EAAC008C2099 /* NetworkMIDISettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE701E550ADB29066F7EAD0C /* NetworkMIDISettingsView.swift */; };
 		13F2963117F8B80D1DF74864 /* MockChordGenerationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3812313DC91BE5BF0B130B6 /* MockChordGenerationProvider.swift */; };
 		166C571A149B76D7E50FC585 /* PianoRollGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5385D1D9C62FCA7DBBFC2A0 /* PianoRollGeometry.swift */; };
@@ -22,6 +24,7 @@
 		25DD5B0E70FAB332372455AE /* LeadVoiceBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B161209CDB6DED2185DFE /* LeadVoiceBuffer.swift */; };
 		2A012A63578B0226F2D58A02 /* PitchTraceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59948628CE9FA46096AD49 /* PitchTraceView.swift */; };
 		2BC74FD12B675203F44DBD7F /* ProjectStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26DE5896C9CFD7BAE37D667 /* ProjectStore.swift */; };
+		3110015869897041F4B9057F /* ComposerHarmonyPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF09CB69F676A7089336749C /* ComposerHarmonyPanel.swift */; };
 		324A0B2A74AE430F3D4E57D6 /* StylePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C0BA3BE6E2A6E55DD9BAE0 /* StylePickerView.swift */; };
 		360945DF45D74A9C156E2149 /* ComposerPlaybackController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC7CA95013829834AA9D11 /* ComposerPlaybackController.swift */; };
 		382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BA5711C11F0FBE52EE2E0A /* ToplinerApp.swift */; };
@@ -98,6 +101,7 @@
 		073D7A2E9AED6AE944E73365 /* StudioTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioTheme.swift; sourceTree = "<group>"; };
 		08B63EAF1BFC9305A9FBFE40 /* PitchTraceSegmenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchTraceSegmenter.swift; sourceTree = "<group>"; };
 		2064C1620978F59E70897489 /* ProjectDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDocumentTests.swift; sourceTree = "<group>"; };
+		24568B2567E01F88EF8C9110 /* ComposerTransportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerTransportView.swift; sourceTree = "<group>"; };
 		25A54A6FEE587DDEF253D1A8 /* PlayheadController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayheadController.swift; sourceTree = "<group>"; };
 		27893BC0B37F8E1F533D28A9 /* PianoRollInteractionLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollInteractionLayer.swift; sourceTree = "<group>"; };
 		3259CC79C51A46872DACD7A8 /* PromptBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilder.swift; sourceTree = "<group>"; };
@@ -139,6 +143,7 @@
 		A975B631614EC8652C81A8E9 /* PianoRollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollView.swift; sourceTree = "<group>"; };
 		AD87081B5DBF24CBF8612106 /* harmonic_styles.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = harmonic_styles.json; sourceTree = "<group>"; };
 		AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerTests.swift; sourceTree = "<group>"; };
+		AF09CB69F676A7089336749C /* ComposerHarmonyPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerHarmonyPanel.swift; sourceTree = "<group>"; };
 		B203B73864C10C0AFB3AC7D7 /* MIDIFileExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIFileExporter.swift; sourceTree = "<group>"; };
 		B7340BCC2CB8059C78FDE2B9 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		BAE473382DB4B20F486A4934 /* PianoRollGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollGeometryTests.swift; sourceTree = "<group>"; };
@@ -152,6 +157,7 @@
 		D9C5D03D157939B469777D1A /* TransportBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportBar.swift; sourceTree = "<group>"; };
 		DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerUITests.swift; sourceTree = "<group>"; };
 		DFA13BEF12E1F37D76E480FE /* MIDISettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDISettingsViewModel.swift; sourceTree = "<group>"; };
+		E1285F240EEE04A4D7E0DFF6 /* ComposerEditingToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerEditingToolbar.swift; sourceTree = "<group>"; };
 		E5385D1D9C62FCA7DBBFC2A0 /* PianoRollGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollGeometry.swift; sourceTree = "<group>"; };
 		E8686E36CB4C4266AD2E5081 /* LeadVoiceBufferTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadVoiceBufferTests.swift; sourceTree = "<group>"; };
 		EB59948628CE9FA46096AD49 /* PitchTraceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchTraceView.swift; sourceTree = "<group>"; };
@@ -440,6 +446,9 @@
 		F13CF6BB0DD03185F2CA42A9 /* Composer */ = {
 			isa = PBXGroup;
 			children = (
+				E1285F240EEE04A4D7E0DFF6 /* ComposerEditingToolbar.swift */,
+				AF09CB69F676A7089336749C /* ComposerHarmonyPanel.swift */,
+				24568B2567E01F88EF8C9110 /* ComposerTransportView.swift */,
 				6C23FFF46F4DFC560D8EB61F /* ComposerView.swift */,
 				7F1F8100E672D649F65FA8D5 /* ComposerViewModel.swift */,
 			);
@@ -594,7 +603,10 @@
 				E159D53E98FF50FD6522B40F /* ChordSymbolParser.swift in Sources */,
 				2235D87438FD1E96CC131561 /* ChordValidator.swift in Sources */,
 				C41E7C7BDEC8FCE511EE4E4B /* ChordVoicer.swift in Sources */,
+				09CFFFF7D0404F7FAFABC414 /* ComposerEditingToolbar.swift in Sources */,
+				3110015869897041F4B9057F /* ComposerHarmonyPanel.swift in Sources */,
 				360945DF45D74A9C156E2149 /* ComposerPlaybackController.swift in Sources */,
+				0163034DDF47141B782452B3 /* ComposerTransportView.swift in Sources */,
 				416258E155A33F6E18319D8C /* ComposerView.swift in Sources */,
 				B584B0A9F2F2FB16E7017427 /* ComposerViewModel.swift in Sources */,
 				5609CEA746FE2913AE3A0994 /* ContentView.swift in Sources */,
