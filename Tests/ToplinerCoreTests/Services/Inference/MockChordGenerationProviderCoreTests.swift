@@ -62,6 +62,57 @@ final class MockChordGenerationProviderCoreTests: XCTestCase {
         }
     }
 
+    func testMockVariesProgressionWhenMelodyChanges() throws {
+        let provider = MockChordGenerationProvider(styleLibrary: try .defaultLibrary())
+        let lowOpening = ChordGenerationRequest(
+            styleID: "neo_soul",
+            key: "C",
+            bpm: 92,
+            melodyNotes: [MIDINoteEvent(pitch: 60, startBeat: 0, durationBeats: 1, velocity: 96)],
+            totalBeats: 8,
+            complexity: .balanced
+        )
+        let highOpening = ChordGenerationRequest(
+            styleID: "neo_soul",
+            key: "C",
+            bpm: 92,
+            melodyNotes: [MIDINoteEvent(pitch: 71, startBeat: 0.5, durationBeats: 1, velocity: 96)],
+            totalBeats: 8,
+            complexity: .balanced
+        )
+
+        let lowProgression = try provider.generateProgression(for: lowOpening)
+        let highProgression = try provider.generateProgression(for: highOpening)
+
+        XCTAssertNotEqual(lowProgression.chords.map(\.romanNumeral), highProgression.chords.map(\.romanNumeral))
+        XCTAssertNotEqual(lowProgression.chords.map(\.symbol), highProgression.chords.map(\.symbol))
+    }
+
+    func testMockComplexityChangesChordDensityAndExtensions() throws {
+        let provider = MockChordGenerationProvider(styleLibrary: try .defaultLibrary())
+        let melody = [MIDINoteEvent(pitch: 64, startBeat: 0, durationBeats: 1, velocity: 96)]
+        let simple = try provider.generateProgression(for: ChordGenerationRequest(
+            styleID: "neo_soul",
+            key: "C",
+            bpm: 92,
+            melodyNotes: melody,
+            totalBeats: 8,
+            complexity: .simple
+        ))
+        let advanced = try provider.generateProgression(for: ChordGenerationRequest(
+            styleID: "neo_soul",
+            key: "C",
+            bpm: 92,
+            melodyNotes: melody,
+            totalBeats: 8,
+            complexity: .advanced
+        ))
+
+        XCTAssertLessThan(simple.chords.count, advanced.chords.count)
+        XCTAssertNotEqual(simple.chords.map(\.symbol), advanced.chords.map(\.symbol))
+        XCTAssertTrue(advanced.chords.contains { $0.symbol.contains("9") || $0.symbol.contains("13") || $0.symbol.contains("alt") })
+    }
+
     func testMockUsesSeedChordCountToDistributeDurationsAcrossTotalBeats() throws {
         let style = HarmonicStyle(
             id: "test_style",

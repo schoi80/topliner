@@ -26,6 +26,7 @@ struct ChordGenerationPromptBuilder {
         - Return exactly one JSON object matching the response schema.
         - Use the requested styleID and key exactly as supplied.
         - Generate chords that support the melodyNotes rhythm and pitch contour.
+        - Match requested complexity: simple = fewer/basic chords, balanced = style seed density, advanced = richer extensions/color.
         - All startBeat and durationBeats values must align to \(formatNumber(quantizeGridBeats))-beat grid.
         - Chord events must cover useful portions of the requested totalBeats without negative starts or durations.
         - MIDI values must be integers in the 0...127 range.
@@ -58,6 +59,7 @@ struct ChordGenerationPromptBuilder {
           "key": "\(escaped(request.key))",
           "bpm": \(formatNumber(request.bpm)),
           "totalBeats": \(formatNumber(request.totalBeats)),
+          "complexity": "\(request.complexity.rawValue)",
           "melodyNotes": [
         \(notes)
           ]

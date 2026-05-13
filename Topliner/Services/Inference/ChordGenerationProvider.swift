@@ -6,6 +6,7 @@ struct ChordGenerationRequest: Equatable {
     var bpm: Double
     var melodyNotes: [MIDINoteEvent]
     var totalBeats: Double
+    var complexity: ChordGenerationComplexity = .balanced
 }
 
 enum ChordGenerationError: Error, Equatable {

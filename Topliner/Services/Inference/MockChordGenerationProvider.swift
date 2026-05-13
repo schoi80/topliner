@@ -12,12 +12,13 @@ struct MockChordGenerationProvider: ChordGenerationProviding {
         guard let style = styleLibrary.style(id: request.styleID) else {
             throw ChordGenerationError.unknownStyle(request.styleID)
         }
-        guard let seed = style.progressionSeeds.first, !seed.chords.isEmpty else {
+        guard style.progressionSeeds.contains(where: { !$0.chords.isEmpty }) else {
             throw ChordGenerationError.emptyProgressionSeed(style.id)
         }
-
-        let duration = request.totalBeats / Double(seed.chords.count)
-        let events = seed.chords.enumerated().map { index, romanChord in
+        let seed = selectedSeed(for: request, style: style)
+        let romanChords = chords(from: seed, complexity: request.complexity)
+        let duration = request.totalBeats / Double(romanChords.count)
+        let events = romanChords.enumerated().map { index, romanChord in
             let resolvedChord = ResolvedChord(romanChord: romanChord, key: request.key)
             return ChordEvent(
                 symbol: resolvedChord.symbol,
@@ -34,8 +35,69 @@ struct MockChordGenerationProvider: ChordGenerationProviding {
             styleID: style.id,
             key: request.key,
             chords: events,
-            explanation: "Mock progression using \(style.displayName) seed \"\(seed.name)\"."
+            explanation: "Mock progression (\(request.complexity.displayName.lowercased())) using \(style.displayName) seed \"\(seed.name)\" and \(request.melodyNotes.count) melody note(s)."
         )
+    }
+
+    private func selectedSeed(for request: ChordGenerationRequest, style: HarmonicStyle) -> ProgressionSeed {
+        let nonEmptySeeds = style.progressionSeeds.filter { !$0.chords.isEmpty }
+        guard !nonEmptySeeds.isEmpty else {
+            return ProgressionSeed(name: "Fallback", chords: ["I", "IV", "V", "I"])
+        }
+        guard nonEmptySeeds.count > 1, let firstNote = request.melodyNotes.sorted(by: melodySort).first else {
+            return nonEmptySeeds[0]
+        }
+
+        let melodyBucket = melodicSeedBucket(for: firstNote.pitch)
+        return nonEmptySeeds[melodyBucket % nonEmptySeeds.count]
+    }
+
+    private func melodySort(_ lhs: MIDINoteEvent, _ rhs: MIDINoteEvent) -> Bool {
+        if lhs.startBeat == rhs.startBeat { return lhs.pitch < rhs.pitch }
+        return lhs.startBeat < rhs.startBeat
+    }
+
+    private func melodicSeedBucket(for pitch: Int) -> Int {
+        let pitchClass = (pitch % 12 + 12) % 12
+        switch pitchClass {
+        case 0, 2, 4, 5, 7: return 0
+        default: return 1
+        }
+    }
+
+    private func chords(from seed: ProgressionSeed, complexity: ChordGenerationComplexity) -> [String] {
+        switch complexity {
+        case .simple:
+            return Array(seed.chords.prefix(max(1, min(2, seed.chords.count)))).map(simplified)
+        case .balanced:
+            return seed.chords
+        case .advanced:
+            return seed.chords.map(enriched)
+        }
+    }
+
+    private func simplified(_ romanChord: String) -> String {
+        let parsed = RomanChordParser.parse(romanChord)
+        return parsed.originalPrefix + simplifiedSuffix(for: parsed)
+    }
+
+    private func simplifiedSuffix(for parsed: ParsedRomanChord) -> String {
+        if parsed.symbolSuffix.hasPrefix("m") { return "m" }
+        if parsed.symbolSuffix.contains("sus") { return "sus" }
+        if parsed.symbolSuffix.contains("7") { return "7" }
+        return ""
+    }
+
+    private func enriched(_ romanChord: String) -> String {
+        let parsed = RomanChordParser.parse(romanChord)
+        if parsed.symbolSuffix.contains("alt") { return parsed.originalPrefix + "7alt" }
+        if parsed.symbolSuffix.contains("13") { return parsed.originalPrefix + "13" }
+        if parsed.symbolSuffix.contains("9") { return parsed.originalPrefix + parsed.symbolSuffix }
+        if parsed.symbolSuffix.contains("maj") { return parsed.originalPrefix + "maj9" }
+        if parsed.symbolSuffix.hasPrefix("m") { return parsed.originalPrefix + "m9" }
+        if parsed.symbolSuffix.contains("sus") { return parsed.originalPrefix + "13sus" }
+        if parsed.symbolSuffix.contains("7") { return parsed.originalPrefix + "9" }
+        return parsed.originalPrefix + (parsed.originalPrefix.first?.isLowercase == true ? "m9" : "add9")
     }
 }
 
@@ -60,6 +122,7 @@ private struct ResolvedChord {
 private struct ParsedRomanChord {
     var offsetSemitones: Int
     var symbolSuffix: String
+    var originalPrefix: String
 }
 
 private enum RomanChordParser {
@@ -70,7 +133,11 @@ private enum RomanChordParser {
         let suffixStart = withoutAccidental.index(withoutAccidental.startIndex, offsetBy: numeral.count)
         let rawSuffix = String(withoutAccidental[suffixStart...])
         let offset = interval(for: numeral) + accidental.semitones
-        return ParsedRomanChord(offsetSemitones: offset, symbolSuffix: suffix(forNumeral: numeral, rawSuffix: rawSuffix))
+        return ParsedRomanChord(
+            offsetSemitones: offset,
+            symbolSuffix: suffix(forNumeral: numeral, rawSuffix: rawSuffix),
+            originalPrefix: String(romanChord.prefix(accidental.characterCount + numeral.count))
+        )
     }
 
     private static func accidentalPrefix(in value: String) -> (semitones: Int, characterCount: Int) {

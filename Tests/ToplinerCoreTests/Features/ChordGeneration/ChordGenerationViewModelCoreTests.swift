@@ -30,7 +30,7 @@ final class ChordGenerationViewModelCoreTests: XCTestCase {
         viewModel.generateChords(melodyNotes: melody, key: "C", bpm: 120, totalBeats: 16)
 
         XCTAssertEqual(provider.requests, [
-            ChordGenerationRequest(styleID: "neo_soul", key: "C", bpm: 120, melodyNotes: melody, totalBeats: 16)
+            ChordGenerationRequest(styleID: "neo_soul", key: "C", bpm: 120, melodyNotes: melody, totalBeats: 16, complexity: .advanced)
         ])
         XCTAssertEqual(viewModel.generatedProgression, expectedProgression)
         XCTAssertNil(viewModel.errorMessage)
@@ -102,6 +102,36 @@ final class ChordGenerationViewModelCoreTests: XCTestCase {
         XCTAssertEqual(viewModel.generatedChordNotes.map(\.startBeat), [4, 4, 4, 4])
         XCTAssertEqual(viewModel.generatedChordNotes.map(\.durationBeats), [2, 2, 2, 2])
         XCTAssertEqual(viewModel.generatedChordNotes.map(\.velocity), [82, 82, 82, 82])
+    }
+
+    func testGenerateRequestIncludesSelectedComplexity() throws {
+        let styleLibrary = try StyleLibrary.defaultLibrary()
+        let provider = RecordingChordProvider()
+        let viewModel = ChordGenerationViewModel(styleLibrary: styleLibrary, provider: provider)
+
+        viewModel.selectedComplexity = .simple
+        viewModel.generateChords(melodyNotes: [], key: "C", bpm: 120, totalBeats: 16)
+
+        XCTAssertEqual(provider.requests.last?.complexity, .simple)
+    }
+
+    func testClearGeneratedChordsRemovesProgressionOverlayAndErrors() throws {
+        let styleLibrary = try StyleLibrary.defaultLibrary()
+        let viewModel = ChordGenerationViewModel(styleLibrary: styleLibrary, provider: RecordingChordProvider())
+        viewModel.generatedProgression = ChordProgression(
+            styleID: "neo_soul",
+            key: "C",
+            chords: [ChordEvent(symbol: "C", rootMidiNote: 60, midiNotes: [60, 64, 67], startBeat: 0, durationBeats: 4)],
+            explanation: nil
+        )
+        viewModel.errorMessage = "Previous error"
+
+        viewModel.clearGeneratedChords()
+
+        XCTAssertNil(viewModel.generatedProgression)
+        XCTAssertNil(viewModel.errorMessage)
+        XCTAssertTrue(viewModel.generatedChordNotes.isEmpty)
+        XCTAssertNil(viewModel.chordLaneSummary)
     }
 }
 

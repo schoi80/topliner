@@ -86,7 +86,8 @@ final class ChordGenerationViewModel {
             key: key,
             bpm: bpm,
             melodyNotes: melodyNotes,
-            totalBeats: totalBeats
+            totalBeats: totalBeats,
+            complexity: selectedComplexity
         )
 
         do {
@@ -96,6 +97,11 @@ final class ChordGenerationViewModel {
         }
 
         isGenerating = false
+    }
+
+    func clearGeneratedChords() {
+        generatedProgression = nil
+        errorMessage = nil
     }
 
     private func friendlyMessage(for error: Error) -> String {

@@ -68,6 +68,9 @@ struct ComposerView: View {
             Button("Cancel", role: .cancel) {}
             Button("Clear", role: .destructive) {
                 viewModel.clearLeadNotes()
+                chordGenerationViewModel.clearGeneratedChords()
+                playbackController.reset()
+                lastPlaybackTick = nil
             }
         } message: {
             Text("This removes every note from the piano roll.")
