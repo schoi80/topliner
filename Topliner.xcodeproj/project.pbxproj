@@ -44,6 +44,7 @@
 		D8ADD207369825D3FD82CD82 /* PianoRollGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE473382DB4B20F486A4934 /* PianoRollGeometryTests.swift */; };
 		DADD99A0BF093D22C20ABB5C /* ChordProgression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327E7B31202E51E6F4D80795 /* ChordProgression.swift */; };
 		DAE4A3927A71C34B80E6B868 /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3259CC79C51A46872DACD7A8 /* PromptBuilder.swift */; };
+		E159D53E98FF50FD6522B40F /* ChordSymbolParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1AD773B37342EC36F1ED01 /* ChordSymbolParser.swift */; };
 		E2DFAC43990AEE7DE091B78F /* ToplinerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */; };
 		F3A5AD46C8A93268396E64C0 /* PitchTraceSegmenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B63EAF1BFC9305A9FBFE40 /* PitchTraceSegmenter.swift */; };
 		F4CE2F991B613BB43A6CCC6B /* ChordGenerationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4877A66BF7647BCD79B4B7 /* ChordGenerationProvider.swift */; };
@@ -110,6 +111,7 @@
 		EB59948628CE9FA46096AD49 /* PitchTraceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchTraceView.swift; sourceTree = "<group>"; };
 		ED24371F43AB591882807DFB /* SequencerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequencerService.swift; sourceTree = "<group>"; };
 		EF15F22A4F56ABEB0C15AC05 /* QuantizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantizerTests.swift; sourceTree = "<group>"; };
+		EF1AD773B37342EC36F1ED01 /* ChordSymbolParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChordSymbolParser.swift; sourceTree = "<group>"; };
 		FF7B1C3E1270E92A00567610 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -246,6 +248,7 @@
 		7FBCFD7F7D2337476FD819CF /* Theory */ = {
 			isa = PBXGroup;
 			children = (
+				EF1AD773B37342EC36F1ED01 /* ChordSymbolParser.swift */,
 				BFF5BE041BEAF32A395E3066 /* Quantizer.swift */,
 				05A409ACD8A1483FE54BDD6B /* StyleLibrary.swift */,
 			);
@@ -465,6 +468,7 @@
 				F4CE2F991B613BB43A6CCC6B /* ChordGenerationProvider.swift in Sources */,
 				C7DA76D1FC9C1667466C3CCB /* ChordGenerationResponseParser.swift in Sources */,
 				DADD99A0BF093D22C20ABB5C /* ChordProgression.swift in Sources */,
+				E159D53E98FF50FD6522B40F /* ChordSymbolParser.swift in Sources */,
 				416258E155A33F6E18319D8C /* ComposerView.swift in Sources */,
 				B584B0A9F2F2FB16E7017427 /* ComposerViewModel.swift in Sources */,
 				5609CEA746FE2913AE3A0994 /* ContentView.swift in Sources */,
