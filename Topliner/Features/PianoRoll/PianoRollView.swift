@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PianoRollView: View {
     var notes: [MIDINoteEvent]
+    var chordNotes: [MIDINoteEvent]
     var selectedNoteID: UUID?
     var totalBeats: Double = 16
     var beatsPerBar: Int = 4
@@ -16,6 +17,7 @@ struct PianoRollView: View {
 
     init(
         notes: [MIDINoteEvent],
+        chordNotes: [MIDINoteEvent] = [],
         selectedNoteID: UUID?,
         totalBeats: Double = 16,
         beatsPerBar: Int = 4,
@@ -29,6 +31,7 @@ struct PianoRollView: View {
         onResize: ((CGPoint, PianoRollGeometry) -> Void)? = nil
     ) {
         self.notes = notes
+        self.chordNotes = chordNotes
         self.selectedNoteID = selectedNoteID
         self.totalBeats = totalBeats
         self.beatsPerBar = beatsPerBar
@@ -58,6 +61,7 @@ struct PianoRollView: View {
 
             PianoRollCanvasView(
                 notes: notes,
+                chordNotes: chordNotes,
                 selectedNoteID: selectedNoteID,
                 totalBeats: totalBeats,
                 pitchRange: pitchRange,

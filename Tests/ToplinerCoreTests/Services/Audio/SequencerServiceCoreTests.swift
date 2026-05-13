@@ -17,12 +17,12 @@ final class SequencerServiceCoreTests: XCTestCase {
         sequencer.schedule(leadNotes: [note])
 
         XCTAssertEqual(sequencer.scheduledEvents, [
-            SequencerEvent(beat: 1.5, kind: .noteOn, pitch: 64, velocity: 96),
-            SequencerEvent(beat: 2.25, kind: .noteOff, pitch: 64, velocity: 0)
+            SequencerEvent(beat: 1.5, kind: .noteOn, pitch: 64, velocity: 96, track: .lead),
+            SequencerEvent(beat: 2.25, kind: .noteOff, pitch: 64, velocity: 0, track: .lead)
         ])
     }
 
-    func testScheduleCreatesEventsForEveryChordTone() {
+    func testScheduleCreatesEventsForEveryChordToneOnChordTrack() {
         let playback = MockSequencerPlayback()
         let sequencer = SequencerService(playback: playback, bpm: 120, loopBeats: 16)
         let chord = ChordEvent(
@@ -39,8 +39,8 @@ final class SequencerServiceCoreTests: XCTestCase {
 
         XCTAssertEqual(sequencer.scheduledEvents.filter { $0.kind == .noteOn }.map(\.pitch), [60, 64, 67, 71])
         XCTAssertEqual(sequencer.scheduledEvents.filter { $0.kind == .noteOff }.map(\.pitch), [60, 64, 67, 71])
-        XCTAssertTrue(sequencer.scheduledEvents.filter { $0.kind == .noteOn }.allSatisfy { $0.beat == 4 && $0.velocity == 90 })
-        XCTAssertTrue(sequencer.scheduledEvents.filter { $0.kind == .noteOff }.allSatisfy { $0.beat == 6 })
+        XCTAssertTrue(sequencer.scheduledEvents.filter { $0.kind == .noteOn }.allSatisfy { $0.beat == 4 && $0.velocity == 90 && $0.track == .chords })
+        XCTAssertTrue(sequencer.scheduledEvents.filter { $0.kind == .noteOff }.allSatisfy { $0.beat == 6 && $0.track == .chords })
     }
 
     func testAdvanceTriggersEventsBetweenPreviousAndCurrentBeat() {
@@ -54,8 +54,8 @@ final class SequencerServiceCoreTests: XCTestCase {
 
         XCTAssertEqual(sequencer.currentBeat, 1, accuracy: 0.0001)
         XCTAssertEqual(playback.events, [
-            .noteOn(pitch: 60, velocity: 100),
-            .noteOff(pitch: 60)
+            .noteOn(pitch: 60, velocity: 100, track: .lead),
+            .noteOff(pitch: 60, track: .lead)
         ])
     }
 
@@ -73,10 +73,10 @@ final class SequencerServiceCoreTests: XCTestCase {
 
         XCTAssertEqual(sequencer.currentBeat, 0.25, accuracy: 0.0001)
         XCTAssertEqual(playback.events, [
-            .noteOn(pitch: 64, velocity: 80),
-            .noteOn(pitch: 60, velocity: 100),
-            .noteOff(pitch: 60),
-            .noteOn(pitch: 64, velocity: 80)
+            .noteOn(pitch: 64, velocity: 80, track: .lead),
+            .noteOn(pitch: 60, velocity: 100, track: .lead),
+            .noteOff(pitch: 60, track: .lead),
+            .noteOn(pitch: 64, velocity: 80, track: .lead)
         ])
     }
 
@@ -91,25 +91,25 @@ final class SequencerServiceCoreTests: XCTestCase {
 
         XCTAssertFalse(sequencer.isPlaying)
         XCTAssertEqual(playback.events, [
-            .noteOn(pitch: 60, velocity: 100),
-            .noteOff(pitch: 60)
+            .noteOn(pitch: 60, velocity: 100, track: .lead),
+            .noteOff(pitch: 60, track: .lead)
         ])
     }
 }
 
 private final class MockSequencerPlayback: SequencerPlaybackManaging {
     enum Event: Equatable {
-        case noteOn(pitch: Int, velocity: Int)
-        case noteOff(pitch: Int)
+        case noteOn(pitch: Int, velocity: Int, track: SequencerTrack)
+        case noteOff(pitch: Int, track: SequencerTrack)
     }
 
     private(set) var events: [Event] = []
 
-    func noteOn(pitch: Int, velocity: Int) {
-        events.append(.noteOn(pitch: pitch, velocity: velocity))
+    func noteOn(pitch: Int, velocity: Int, track: SequencerTrack) {
+        events.append(.noteOn(pitch: pitch, velocity: velocity, track: track))
     }
 
-    func noteOff(pitch: Int) {
-        events.append(.noteOff(pitch: pitch))
+    func noteOff(pitch: Int, track: SequencerTrack) {
+        events.append(.noteOff(pitch: pitch, track: track))
     }
 }

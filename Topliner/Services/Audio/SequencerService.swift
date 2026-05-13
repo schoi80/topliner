@@ -1,9 +1,14 @@
 import Foundation
 import Observation
 
+enum SequencerTrack: Equatable {
+    case lead
+    case chords
+}
+
 protocol SequencerPlaybackManaging: AnyObject {
-    func noteOn(pitch: Int, velocity: Int)
-    func noteOff(pitch: Int)
+    func noteOn(pitch: Int, velocity: Int, track: SequencerTrack)
+    func noteOff(pitch: Int, track: SequencerTrack)
 }
 
 enum SequencerEventKind: Equatable {
@@ -16,6 +21,7 @@ struct SequencerEvent: Equatable {
     var kind: SequencerEventKind
     var pitch: Int
     var velocity: Int
+    var track: SequencerTrack = .lead
 }
 
 @Observable
@@ -59,7 +65,8 @@ final class SequencerService {
                     beat: note.startBeat,
                     kind: .noteOn,
                     pitch: note.pitch,
-                    velocity: note.velocity
+                    velocity: note.velocity,
+                    track: .lead
                 )
             )
             events.append(
@@ -67,7 +74,8 @@ final class SequencerService {
                     beat: note.endBeat,
                     kind: .noteOff,
                     pitch: note.pitch,
-                    velocity: 0
+                    velocity: 0,
+                    track: .lead
                 )
             )
         }
@@ -79,7 +87,8 @@ final class SequencerService {
                         beat: chord.startBeat,
                         kind: .noteOn,
                         pitch: pitch,
-                        velocity: 90
+                        velocity: 90,
+                        track: .chords
                     )
                 )
                 events.append(
@@ -87,7 +96,8 @@ final class SequencerService {
                         beat: chord.startBeat + chord.durationBeats,
                         kind: .noteOff,
                         pitch: pitch,
-                        velocity: 0
+                        velocity: 0,
+                        track: .chords
                     )
                 )
             }
@@ -104,7 +114,9 @@ final class SequencerService {
 
     func stop() {
         guard isPlaying else { return }
-        activePitches.sorted().forEach { playback.noteOff(pitch: $0) }
+        activePitches.sorted().forEach { key in
+            playback.noteOff(pitch: Self.pitch(fromActivePitchKey: key), track: Self.track(fromActivePitchKey: key))
+        }
         activePitches.removeAll()
         isPlaying = false
     }
@@ -166,11 +178,11 @@ final class SequencerService {
     private func trigger(_ event: SequencerEvent) {
         switch event.kind {
         case .noteOn:
-            playback.noteOn(pitch: event.pitch, velocity: event.velocity)
-            activePitches.insert(event.pitch)
+            playback.noteOn(pitch: event.pitch, velocity: event.velocity, track: event.track)
+            activePitches.insert(Self.activePitchKey(pitch: event.pitch, track: event.track))
         case .noteOff:
-            playback.noteOff(pitch: event.pitch)
-            activePitches.remove(event.pitch)
+            playback.noteOff(pitch: event.pitch, track: event.track)
+            activePitches.remove(Self.activePitchKey(pitch: event.pitch, track: event.track))
         }
     }
 
@@ -183,7 +195,20 @@ final class SequencerService {
         if lhs.beat != rhs.beat { return lhs.beat < rhs.beat }
         if lhs.kind != rhs.kind { return lhs.kind == .noteOff }
         if lhs.pitch != rhs.pitch { return lhs.pitch < rhs.pitch }
+        if lhs.track != rhs.track { return lhs.track == .chords }
         return lhs.velocity < rhs.velocity
+    }
+
+    private static func activePitchKey(pitch: Int, track: SequencerTrack) -> Int {
+        pitch + (track == .chords ? 1_000 : 0)
+    }
+
+    private static func pitch(fromActivePitchKey key: Int) -> Int {
+        key >= 1_000 ? key - 1_000 : key
+    }
+
+    private static func track(fromActivePitchKey key: Int) -> SequencerTrack {
+        key >= 1_000 ? .chords : .lead
     }
 }
 

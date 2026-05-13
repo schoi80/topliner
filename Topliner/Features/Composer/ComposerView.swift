@@ -1,3 +1,4 @@
+import AudioKit
 import SwiftUI
 
 struct ComposerView: View {
@@ -10,16 +11,22 @@ struct ComposerView: View {
     private let playbackTimer = Timer.publish(every: 1.0 / 60.0, on: .main, in: .common).autoconnect()
 
     init() {
-        let voiceManager = AudioKitWavetableVoiceManager()
-        let synthService = WavetableSynthService(voice: voiceManager)
-        let audioEngine = AudioEngineService(engine: AudioKitEngineManager(inputs: [voiceManager.outputNode]))
+        let leadVoiceManager = AudioKitWavetableVoiceManager(waveform: Table(.sine))
+        let chordVoiceManager = AudioKitWavetableVoiceManager(waveform: Table(.triangle))
+        let leadSynthService = WavetableSynthService(voice: leadVoiceManager)
+        let chordSynthService = WavetableSynthService(
+            voice: chordVoiceManager,
+            envelope: SynthEnvelope(attackDuration: 0.015, decayDuration: 0.28, sustainLevel: 0.55, releaseDuration: 0.45)
+        )
+        let audioEngine = AudioEngineService(engine: AudioKitEngineManager(inputs: [leadVoiceManager.outputNode, chordVoiceManager.outputNode]))
 
         _viewModel = State(initialValue: ComposerViewModel(leadVoice: Self.sampleLeadVoice))
         _chordGenerationViewModel = State(initialValue: ChordGenerationViewModel())
         _playbackController = State(
             initialValue: ComposerPlaybackController(
                 audioEngine: audioEngine,
-                playback: synthService,
+                leadPlayback: leadSynthService,
+                chordPlayback: chordSynthService,
                 bpm: 120,
                 totalBeats: 16
             )
@@ -45,6 +52,7 @@ struct ComposerView: View {
 
             PianoRollView(
                 notes: viewModel.leadVoice.notes,
+                chordNotes: chordGenerationViewModel.generatedChordNotes,
                 selectedNoteID: viewModel.selectedNoteID,
                 quantizeGrid: viewModel.leadVoice.quantizeGrid,
                 currentBeat: playbackController.currentBeat,

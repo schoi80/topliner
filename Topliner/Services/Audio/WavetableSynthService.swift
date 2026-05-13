@@ -37,7 +37,7 @@ final class WavetableSynthService {
         activePitches = []
     }
 
-    func noteOn(pitch: Int, velocity: Int) {
+    func noteOn(pitch: Int, velocity: Int, track: SequencerTrack = .lead) {
         let amplitude = normalizedAmplitude(for: velocity)
         let frequency = Self.frequency(forMIDINote: pitch)
 
@@ -50,7 +50,7 @@ final class WavetableSynthService {
         activePitches.insert(pitch)
     }
 
-    func noteOff(pitch: Int) {
+    func noteOff(pitch: Int, track: SequencerTrack = .lead) {
         voice.noteOff(pitch: pitch)
         activePitches.remove(pitch)
     }
@@ -76,12 +76,14 @@ final class AudioKitWavetableVoiceManager: SynthVoiceManaging {
     }
 
     private let mixer: Mixer
+    private let waveform: Table
     private var activeVoices: [Int: ActiveVoice]
 
     var outputNode: Node { mixer }
 
-    init(mixer: Mixer = Mixer()) {
+    init(mixer: Mixer = Mixer(), waveform: Table = Table(.sine)) {
         self.mixer = mixer
+        self.waveform = waveform
         activeVoices = [:]
     }
 
@@ -89,7 +91,7 @@ final class AudioKitWavetableVoiceManager: SynthVoiceManaging {
         noteOff(pitch: pitch)
 
         let oscillator = Oscillator(
-            waveform: Table(.sine),
+            waveform: waveform,
             frequency: AUValue(frequency),
             amplitude: AUValue(amplitude)
         )

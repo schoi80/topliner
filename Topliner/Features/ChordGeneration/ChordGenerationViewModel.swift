@@ -58,6 +58,19 @@ final class ChordGenerationViewModel {
         return progression.chords.map(\.symbol).joined(separator: " · ")
     }
 
+    var generatedChordNotes: [MIDINoteEvent] {
+        generatedProgression?.chords.flatMap { chord in
+            chord.midiNotes.map { pitch in
+                MIDINoteEvent(
+                    pitch: pitch,
+                    startBeat: chord.startBeat,
+                    durationBeats: chord.durationBeats,
+                    velocity: 82
+                )
+            }
+        } ?? []
+    }
+
     func generateChords(
         melodyNotes: [MIDINoteEvent],
         key: String,

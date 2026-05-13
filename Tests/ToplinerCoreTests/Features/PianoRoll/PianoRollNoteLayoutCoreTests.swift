@@ -70,6 +70,24 @@ final class PianoRollNoteLayoutCoreTests: XCTestCase {
         XCTAssertEqual(drawableNotes.map(\.note.pitch), [60])
     }
 
+    func testChordOverlayNotesAreMarkedAsChordTrackAndSortedBehindLeadNotes() {
+        let leadNote = MIDINoteEvent(pitch: 64, startBeat: 0, durationBeats: 1, velocity: 100)
+        let chordNote = MIDINoteEvent(pitch: 60, startBeat: 0, durationBeats: 2, velocity: 82)
+        let layout = PianoRollNoteLayout(
+            notes: [leadNote],
+            chordNotes: [chordNote],
+            selectedNoteID: nil,
+            geometry: makeGeometry()
+        )
+
+        let drawableNotes = layout.drawableNotes()
+
+        XCTAssertEqual(drawableNotes.map(\.note), [chordNote, leadNote])
+        XCTAssertEqual(drawableNotes.map(\.track), [.chords, .lead])
+        XCTAssertFalse(drawableNotes[0].isEditable)
+        XCTAssertTrue(drawableNotes[1].isEditable)
+    }
+
     private func makeGeometry() -> PianoRollGeometry {
         PianoRollGeometry(size: CGSize(width: 400, height: 480), pitchRange: 60...71, totalBeats: 16, quantizeGrid: 0.25)
     }

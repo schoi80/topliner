@@ -77,6 +77,32 @@ final class ChordGenerationViewModelCoreTests: XCTestCase {
 
         XCTAssertEqual(viewModel.chordLaneSummary, "Cmaj9 · Am9")
     }
+
+    func testGeneratedChordNotesExpandChordTonesForPianoRollOverlay() throws {
+        let styleLibrary = try StyleLibrary.defaultLibrary()
+        let viewModel = ChordGenerationViewModel(styleLibrary: styleLibrary, provider: RecordingChordProvider())
+        viewModel.generatedProgression = ChordProgression(
+            styleID: "neo_soul",
+            key: "C",
+            chords: [
+                ChordEvent(
+                    symbol: "Cmaj7",
+                    rootMidiNote: 60,
+                    midiNotes: [60, 64, 67, 71],
+                    startBeat: 4,
+                    durationBeats: 2,
+                    romanNumeral: "Imaj7",
+                    confidence: 0.9
+                )
+            ],
+            explanation: nil
+        )
+
+        XCTAssertEqual(viewModel.generatedChordNotes.map(\.pitch), [60, 64, 67, 71])
+        XCTAssertEqual(viewModel.generatedChordNotes.map(\.startBeat), [4, 4, 4, 4])
+        XCTAssertEqual(viewModel.generatedChordNotes.map(\.durationBeats), [2, 2, 2, 2])
+        XCTAssertEqual(viewModel.generatedChordNotes.map(\.velocity), [82, 82, 82, 82])
+    }
 }
 
 private final class RecordingChordProvider: ChordGenerationProviding {

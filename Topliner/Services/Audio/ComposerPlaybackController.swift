@@ -34,6 +34,23 @@ final class ComposerPlaybackController {
         lastErrorMessage = nil
     }
 
+    convenience init(
+        audioEngine: AudioEnginePlaybackManaging,
+        leadPlayback: SequencerPlaybackManaging,
+        chordPlayback: SequencerPlaybackManaging,
+        bpm: Double,
+        totalBeats: Double,
+        currentBeat: Double = 0
+    ) {
+        self.init(
+            audioEngine: audioEngine,
+            playback: TrackRoutingSequencerPlayback(leadPlayback: leadPlayback, chordPlayback: chordPlayback),
+            bpm: bpm,
+            totalBeats: totalBeats,
+            currentBeat: currentBeat
+        )
+    }
+
     func start(leadNotes: [MIDINoteEvent], chordProgression: ChordProgression? = nil) throws {
         guard !isPlaying else { return }
 
@@ -69,5 +86,30 @@ final class ComposerPlaybackController {
         sequencer.advance(elapsedSeconds: elapsedSeconds)
         currentBeat = sequencer.currentBeat
         isPlaying = sequencer.isPlaying
+    }
+}
+
+final class TrackRoutingSequencerPlayback: SequencerPlaybackManaging {
+    private let leadPlayback: SequencerPlaybackManaging
+    private let chordPlayback: SequencerPlaybackManaging
+
+    init(leadPlayback: SequencerPlaybackManaging, chordPlayback: SequencerPlaybackManaging) {
+        self.leadPlayback = leadPlayback
+        self.chordPlayback = chordPlayback
+    }
+
+    func noteOn(pitch: Int, velocity: Int, track: SequencerTrack) {
+        playback(for: track).noteOn(pitch: pitch, velocity: velocity, track: track)
+    }
+
+    func noteOff(pitch: Int, track: SequencerTrack) {
+        playback(for: track).noteOff(pitch: pitch, track: track)
+    }
+
+    private func playback(for track: SequencerTrack) -> SequencerPlaybackManaging {
+        switch track {
+        case .lead: return leadPlayback
+        case .chords: return chordPlayback
+        }
     }
 }
