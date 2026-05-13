@@ -7,6 +7,25 @@ struct PianoRollView: View {
     var beatsPerBar: Int = 4
     var pitchRange: ClosedRange<Int> = 48...84
     var quantizeGrid: Double = 0.25
+    var onTap: ((CGPoint, PianoRollGeometry) -> Void)?
+
+    init(
+        notes: [MIDINoteEvent],
+        selectedNoteID: UUID?,
+        totalBeats: Double = 16,
+        beatsPerBar: Int = 4,
+        pitchRange: ClosedRange<Int> = 48...84,
+        quantizeGrid: Double = 0.25,
+        onTap: ((CGPoint, PianoRollGeometry) -> Void)? = nil
+    ) {
+        self.notes = notes
+        self.selectedNoteID = selectedNoteID
+        self.totalBeats = totalBeats
+        self.beatsPerBar = beatsPerBar
+        self.pitchRange = pitchRange
+        self.quantizeGrid = quantizeGrid
+        self.onTap = onTap
+    }
 
     var body: some View {
         ZStack {
@@ -18,6 +37,15 @@ struct PianoRollView: View {
                 pitchRange: pitchRange,
                 quantizeGrid: quantizeGrid
             )
+
+            if let onTap {
+                PianoRollInteractionLayer(
+                    totalBeats: totalBeats,
+                    pitchRange: pitchRange,
+                    quantizeGrid: quantizeGrid,
+                    onTap: onTap
+                )
+            }
         }
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
