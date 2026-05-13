@@ -17,6 +17,7 @@
 		382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BA5711C11F0FBE52EE2E0A /* ToplinerApp.swift */; };
 		416258E155A33F6E18319D8C /* ComposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C23FFF46F4DFC560D8EB61F /* ComposerView.swift */; };
 		4167E67476054C47391BFC1A /* PianoRollInteractionLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27893BC0B37F8E1F533D28A9 /* PianoRollInteractionLayer.swift */; };
+		49E18EAACB2FBF75E1309270 /* WavetableSynthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362DF5451886E5A3F16B9A6C /* WavetableSynthService.swift */; };
 		4C57C13B0FBE00C7C9968FCD /* PianoRollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975B631614EC8652C81A8E9 /* PianoRollView.swift */; };
 		51C8C3444171C3CA4CBFADB3 /* AudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = 446311AC6E85D34D57B33617 /* AudioKit */; };
 		5609CEA746FE2913AE3A0994 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8210A972A1FB695D7396E190 /* ContentView.swift */; };
@@ -60,6 +61,7 @@
 		25A54A6FEE587DDEF253D1A8 /* PlayheadController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayheadController.swift; sourceTree = "<group>"; };
 		27893BC0B37F8E1F533D28A9 /* PianoRollInteractionLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollInteractionLayer.swift; sourceTree = "<group>"; };
 		327E7B31202E51E6F4D80795 /* ChordProgression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChordProgression.swift; sourceTree = "<group>"; };
+		362DF5451886E5A3F16B9A6C /* WavetableSynthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WavetableSynthService.swift; sourceTree = "<group>"; };
 		666428F59A91F4715331A535 /* ToplinerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ToplinerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C23FFF46F4DFC560D8EB61F /* ComposerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerView.swift; sourceTree = "<group>"; };
 		6D4883D6C746BD6E01973297 /* ProjectDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDocument.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 			children = (
 				A7B8B8C40411107DE47863A2 /* AudioEngineService.swift */,
 				25A54A6FEE587DDEF253D1A8 /* PlayheadController.swift */,
+				362DF5451886E5A3F16B9A6C /* WavetableSynthService.swift */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -393,6 +396,7 @@
 				00187A3B76EAFCF335BEA1D8 /* ProjectDocument.swift in Sources */,
 				00C4D684BE50674A92759339 /* Quantizer.swift in Sources */,
 				382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */,
+				49E18EAACB2FBF75E1309270 /* WavetableSynthService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
