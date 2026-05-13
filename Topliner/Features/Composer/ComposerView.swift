@@ -17,6 +17,11 @@ struct ComposerView: View {
                 bpm: playheadController.bpm,
                 totalBeats: playheadController.totalBeats
             )
+            MIDIExportShareView(
+                leadNotes: viewModel.leadVoice.notes,
+                chordProgression: chordGenerationViewModel.generatedProgression,
+                bpm: playheadController.bpm
+            )
 
             PianoRollView(
                 notes: viewModel.leadVoice.notes,

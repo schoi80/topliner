@@ -35,6 +35,7 @@
 		72D0C327DB71087EF5A8223F /* harmonic_styles.json in Resources */ = {isa = PBXBuildFile; fileRef = AD87081B5DBF24CBF8612106 /* harmonic_styles.json */; };
 		7CCEB567CFAC7546D1955C4D /* ChordProgressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB951C36768A9F88668558E /* ChordProgressionTests.swift */; };
 		88C12EDE788FDFFBF271A99E /* PianoRollGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7F8C92FB959C3E75E1D867 /* PianoRollGridView.swift */; };
+		9D736D5190577CFCAA9C5289 /* MIDIExportShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542BBD49E9A3D72697063BAD /* MIDIExportShareView.swift */; };
 		9F5688C943636BF411CA4E8A /* ProjectDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2064C1620978F59E70897489 /* ProjectDocumentTests.swift */; };
 		AF638EFF1D7107D46EA0AD14 /* ChordGenerationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58854C5E3149AD5FB8074AAE /* ChordGenerationViewModel.swift */; };
 		B1DAF0803F23D526D08D28F7 /* AudioCaptureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86588CC8F63AB37BAADE2893 /* AudioCaptureViewModel.swift */; };
@@ -50,6 +51,7 @@
 		C7DA76D1FC9C1667466C3CCB /* ChordGenerationResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44802CE0FC8E6FC6721DA47B /* ChordGenerationResponseParser.swift */; };
 		C8BC4FB6A9870AEEC685E91F /* PitchTrackingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA1165FB5CE1990C924FA99 /* PitchTrackingService.swift */; };
 		CC4B21FA4E5335C06A17C597 /* PianoRollCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767DC646984C1FB44A34B2E2 /* PianoRollCanvasView.swift */; };
+		CE3D9552C2101C495DD8253A /* MIDIFileExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B203B73864C10C0AFB3AC7D7 /* MIDIFileExporter.swift */; };
 		CE40CF66D9CE63DD6DBD5057 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AA5A8E6673FC30C20831CE /* AppEnvironment.swift */; };
 		CF71136EF220082E954A9AFD /* MIDISettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA13BEF12E1F37D76E480FE /* MIDISettingsViewModel.swift */; };
 		D322E492EF4B4FBBBE79D7E1 /* StyleLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A409ACD8A1483FE54BDD6B /* StyleLibrary.swift */; };
@@ -97,6 +99,7 @@
 		4A5321C06AF291F666721858 /* BluetoothMIDIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothMIDIService.swift; sourceTree = "<group>"; };
 		4B4877A66BF7647BCD79B4B7 /* ChordGenerationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChordGenerationProvider.swift; sourceTree = "<group>"; };
 		4C576C8C5627FB48A48D0AD6 /* ChordGenerationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChordGenerationView.swift; sourceTree = "<group>"; };
+		542BBD49E9A3D72697063BAD /* MIDIExportShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIExportShareView.swift; sourceTree = "<group>"; };
 		58854C5E3149AD5FB8074AAE /* ChordGenerationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChordGenerationViewModel.swift; sourceTree = "<group>"; };
 		59602830A87E1C50D9877812 /* ChordValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChordValidator.swift; sourceTree = "<group>"; };
 		6050549CCEFCFE4FEDBDD24A /* NetworkMIDIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMIDIService.swift; sourceTree = "<group>"; };
@@ -122,6 +125,7 @@
 		A975B631614EC8652C81A8E9 /* PianoRollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollView.swift; sourceTree = "<group>"; };
 		AD87081B5DBF24CBF8612106 /* harmonic_styles.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = harmonic_styles.json; sourceTree = "<group>"; };
 		AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerTests.swift; sourceTree = "<group>"; };
+		B203B73864C10C0AFB3AC7D7 /* MIDIFileExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIFileExporter.swift; sourceTree = "<group>"; };
 		B7340BCC2CB8059C78FDE2B9 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		BAE473382DB4B20F486A4934 /* PianoRollGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollGeometryTests.swift; sourceTree = "<group>"; };
 		BFF5BE041BEAF32A395E3066 /* Quantizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quantizer.swift; sourceTree = "<group>"; };
@@ -181,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				0201AD92BBEE27C3D15C1982 /* BluetoothMIDIPairingView.swift */,
+				542BBD49E9A3D72697063BAD /* MIDIExportShareView.swift */,
 				71875E2DD06E5F6E5D8E0CCB /* MIDISettingsView.swift */,
 				DFA13BEF12E1F37D76E480FE /* MIDISettingsViewModel.swift */,
 				CE701E550ADB29066F7EAD0C /* NetworkMIDISettingsView.swift */,
@@ -265,6 +270,7 @@
 			isa = PBXGroup;
 			children = (
 				4A5321C06AF291F666721858 /* BluetoothMIDIService.swift */,
+				B203B73864C10C0AFB3AC7D7 /* MIDIFileExporter.swift */,
 				3B6DCB336F5E42DD6530E98B /* MIDIOutputService.swift */,
 				6050549CCEFCFE4FEDBDD24A /* NetworkMIDIService.swift */,
 			);
@@ -553,6 +559,8 @@
 				5609CEA746FE2913AE3A0994 /* ContentView.swift in Sources */,
 				25DD5B0E70FAB332372455AE /* LeadVoiceBuffer.swift in Sources */,
 				C0EB0AACF8DC3AE9AD1CCBD6 /* LiteRTChordGenerationProvider.swift in Sources */,
+				9D736D5190577CFCAA9C5289 /* MIDIExportShareView.swift in Sources */,
+				CE3D9552C2101C495DD8253A /* MIDIFileExporter.swift in Sources */,
 				239ABE359B9847EA8483B255 /* MIDINoteEvent.swift in Sources */,
 				576B50BD942C89DBA86C0D70 /* MIDIOutputService.swift in Sources */,
 				C5A0ACD2EF6F8B83608105FD /* MIDISettingsView.swift in Sources */,
