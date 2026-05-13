@@ -86,6 +86,8 @@ Use for:
    - progression preview
    - apply/export affordance
 8. Avoid building generic future-proof navigation. Implement only the screen states we need now.
+9. Do not use the default bottom iOS `TabView` chrome in landscape. It steals vertical real estate from the piano roll. Use compact in-app navigation chips in the top studio chrome instead.
+10. Do not embed the generic `ChordGenerationView` inside the Composer right rail. It was designed for a wider standalone layout and becomes cramped in the rail. Composer needs a compact rail-native harmony module.
 
 ---
 
@@ -269,7 +271,7 @@ git commit -m "refactor: extract composer landscape subviews"
 - `ComposerView` uses `GeometryReader` or proportional frames to fit landscape.
 - No `ScrollView` is introduced in Composer.
 - Piano roll gets the largest area.
-- ChordGeneration remains visible in the right panel.
+- ChordGeneration remains visible as a compact rail-native harmony module; do not embed the generic `ChordGenerationView` in the rail.
 - Existing playback, clear, regenerate, BPM, bars, and metronome behavior still works.
 - MIDI export remains reachable; if it does not fit, expose it as a compact toolbar action or panel button rather than a separate vertical row.
 
@@ -285,6 +287,68 @@ xcodebuild -scheme Topliner -destination 'generic/platform=iOS Simulator' build
 ```bash
 git add Topliner/Features/Composer Topliner/Features/PianoRoll
 git commit -m "feat: add landscape composer workspace"
+```
+
+---
+
+### Task 5A: Replace Bottom Tabs with Compact Landscape App Shell
+
+**Objective:** Remove the default bottom `TabView` chrome and render Compose/Capture/Projects/MIDI through compact top navigation that preserves vertical space.
+
+**Files:**
+- Create: `Topliner/App/ToplinerSection.swift`
+- Create: `Topliner/App/ToplinerAppShell.swift`
+- Modify: `Topliner/ContentView.swift`
+- Test: `Tests/ToplinerCoreTests/App/ToplinerSectionCoreTests.swift`
+
+**Acceptance criteria:**
+- `ContentView` no longer uses `TabView`.
+- Navigation options are compact chips, not bottom tabs.
+- Active screen content fills the landscape viewport.
+- MIDI still opens `MIDISettingsView`, preserving its existing scroll behavior.
+
+**Verification commands:**
+
+```bash
+swift test --filter ToplinerSectionCoreTests
+xcodegen generate >/dev/null && xcodebuild -scheme Topliner -destination 'generic/platform=iOS Simulator' -jobs 1 -quiet build
+```
+
+**Commit:**
+
+```bash
+git add Topliner/App Topliner/ContentView.swift Tests/ToplinerCoreTests/App Topliner.xcodeproj/project.pbxproj
+git commit -m "feat: add compact landscape app shell"
+```
+
+---
+
+### Task 5B: Replace Composer Rail ChordGeneration with Compact Harmony Module
+
+**Objective:** Replace the cramped embedded `ChordGenerationView` inside `ComposerHarmonyPanel` with compact controls designed for a narrow right rail.
+
+**Files:**
+- Modify: `Topliner/Features/Composer/ComposerHarmonyPanel.swift`
+- Test: `Tests/ToplinerCoreTests/Features/Composer/ComposerHarmonyPanelModelCoreTests.swift`
+
+**Acceptance criteria:**
+- The rail uses compact vertical controls: progression preview, style menu, complexity picker, Generate/Regenerate button, status/export actions.
+- The generic `ChordGenerationView` is not embedded in `ComposerHarmonyPanel`.
+- Generate/Regenerate still calls `ChordGenerationViewModel.generateChords(...)` with melody, key, BPM, and total beats.
+- The current progression remains visible as compact chord chips.
+
+**Verification commands:**
+
+```bash
+swift test --filter 'ComposerHarmonyPanelModelCoreTests|ChordGenerationViewModelCoreTests'
+xcodegen generate >/dev/null && xcodebuild -scheme Topliner -destination 'generic/platform=iOS Simulator' -jobs 1 -quiet build
+```
+
+**Commit:**
+
+```bash
+git add Topliner/Features/Composer Tests/ToplinerCoreTests/Features/Composer Topliner.xcodeproj/project.pbxproj
+git commit -m "feat: compact composer harmony rail"
 ```
 
 ---
