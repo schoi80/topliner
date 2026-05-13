@@ -9,6 +9,13 @@ settings:
     SWIFT_VERSION: "5.9"
     MARKETING_VERSION: "1.0"
     CURRENT_PROJECT_VERSION: "1"
+packages:
+  AudioKit:
+    url: https://github.com/AudioKit/AudioKit.git
+    from: 5.7.2
+  SoundpipeAudioKit:
+    url: https://github.com/AudioKit/SoundpipeAudioKit.git
+    from: 5.7.4
 schemes:
   Topliner:
     build:
@@ -25,6 +32,11 @@ targets:
     platform: iOS
     sources:
       - Topliner
+    dependencies:
+      - package: AudioKit
+        product: AudioKit
+      - package: SoundpipeAudioKit
+        product: SoundpipeAudioKit
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.schoi80.topliner

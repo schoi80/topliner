@@ -7,9 +7,17 @@ let package = Package(
     products: [
         .library(name: "ToplinerCore", targets: ["ToplinerCore"])
     ],
+    dependencies: [
+        .package(url: "https://github.com/AudioKit/AudioKit.git", from: "5.7.2"),
+        .package(url: "https://github.com/AudioKit/SoundpipeAudioKit.git", from: "5.7.4")
+    ],
     targets: [
         .target(
             name: "ToplinerCore",
+            dependencies: [
+                .product(name: "AudioKit", package: "AudioKit"),
+                .product(name: "SoundpipeAudioKit", package: "SoundpipeAudioKit")
+            ],
             path: "Topliner",
             exclude: [
                 "App",
