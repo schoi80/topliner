@@ -20,6 +20,12 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Topliner uses Bluetooth to pair with MIDI controllers and hosts for wireless MIDI output.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_apple-midi._udp</string>
+	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Topliner uses the local network for RTP-MIDI connections with nearby Macs and DAWs.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Topliner needs microphone access to record vocal ideas and convert them into MIDI notes.</string>
 	<key>UILaunchScreen</key>
