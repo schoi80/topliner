@@ -18,6 +18,13 @@ struct ContentView: View {
             }
 
             NavigationStack {
+                ProjectBrowserView()
+            }
+            .tabItem {
+                Label("Projects", systemImage: "folder")
+            }
+
+            NavigationStack {
                 MIDISettingsView()
             }
             .tabItem {
