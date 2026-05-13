@@ -1,6 +1,8 @@
 .build/
 DerivedData/
 *.xcresult
+*.xcuserdata/
+xcuserdata/
 .DS_Store
 Topliner/Resources/Models/*.litertlm
 Topliner/Resources/Models/*.tflite
