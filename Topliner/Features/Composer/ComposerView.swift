@@ -79,7 +79,13 @@ struct ComposerView: View {
                     isPlaying: playbackController.isPlaying,
                     playbackErrorMessage: playbackController.lastErrorMessage,
                     onDelete: viewModel.deleteSelectedNote,
-                    onClear: { isShowingClearConfirmation = true }
+                    onClear: { isShowingClearConfirmation = true },
+                    onNudgeLeft: { viewModel.nudgeSelectedNote(byBeats: -viewModel.leadVoice.quantizeGrid) },
+                    onNudgeRight: { viewModel.nudgeSelectedNote(byBeats: viewModel.leadVoice.quantizeGrid) },
+                    onShorten: { viewModel.adjustSelectedNoteDuration(byBeats: -viewModel.leadVoice.quantizeGrid) },
+                    onLengthen: { viewModel.adjustSelectedNoteDuration(byBeats: viewModel.leadVoice.quantizeGrid) },
+                    onVelocityDown: { viewModel.adjustSelectedNoteVelocity(by: -8) },
+                    onVelocityUp: { viewModel.adjustSelectedNoteVelocity(by: 8) }
                 )
             }
             .padding(StudioLayout.screenPadding)

@@ -106,6 +106,36 @@ final class ComposerViewModel {
         selectedNoteID = copiedNote.id
     }
 
+    func nudgeSelectedNote(byBeats beatDelta: Double) {
+        guard let selectedNote else { return }
+        updateSelectedNote(
+            pitch: selectedNote.pitch,
+            startBeat: selectedNote.startBeat + beatDelta,
+            durationBeats: selectedNote.durationBeats,
+            velocity: selectedNote.velocity
+        )
+    }
+
+    func adjustSelectedNoteVelocity(by velocityDelta: Int) {
+        guard let selectedNote else { return }
+        updateSelectedNote(
+            pitch: selectedNote.pitch,
+            startBeat: selectedNote.startBeat,
+            durationBeats: selectedNote.durationBeats,
+            velocity: selectedNote.velocity + velocityDelta
+        )
+    }
+
+    func adjustSelectedNoteDuration(byBeats beatDelta: Double) {
+        guard let selectedNote else { return }
+        updateSelectedNote(
+            pitch: selectedNote.pitch,
+            startBeat: selectedNote.startBeat,
+            durationBeats: selectedNote.durationBeats + beatDelta,
+            velocity: selectedNote.velocity
+        )
+    }
+
     func clearLeadNotes() {
         leadVoice.notes.removeAll()
         selectedNoteID = nil

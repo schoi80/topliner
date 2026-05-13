@@ -65,7 +65,7 @@ struct PianoRollInteractionLayer: View {
                 rect: geometry.rect(for: selectedNote),
                 isSelected: true
             )
-            if drawableNote.resizeHandleRect?.contains(point) == true {
+            if drawableNote.resizeHandleHitRect?.contains(point) == true {
                 return .resize
             }
         }

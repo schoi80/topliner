@@ -7,6 +7,12 @@ struct ComposerEditingToolbar: View {
     var playbackErrorMessage: String?
     var onDelete: () -> Void
     var onClear: () -> Void
+    var onNudgeLeft: () -> Void = {}
+    var onNudgeRight: () -> Void = {}
+    var onShorten: () -> Void = {}
+    var onLengthen: () -> Void = {}
+    var onVelocityDown: () -> Void = {}
+    var onVelocityUp: () -> Void = {}
 
     var body: some View {
         HStack(spacing: 10) {
@@ -19,10 +25,25 @@ struct ComposerEditingToolbar: View {
             )
 
             StudioControlChip(title: "Notes", value: "\(noteCount)", systemImage: "music.note")
-            StudioControlChip(title: "Quantize", value: "1/16", systemImage: "grid")
-            StudioControlChip(title: "Velocity", value: "100", systemImage: "slider.horizontal.3")
-            StudioControlChip(title: "Duration", value: "Beat", systemImage: "arrow.left.and.right")
-            StudioControlChip(title: "Nudge", value: "±", systemImage: "arrow.left.arrow.right")
+            StudioControlChip(title: "Snap", value: "1/16", systemImage: "grid")
+
+            toolbarGroup("Velocity", systemImage: "slider.horizontal.3") {
+                Button("−") { onVelocityDown() }
+                Button("+") { onVelocityUp() }
+            }
+            .disabled(selectedNoteID == nil)
+
+            toolbarGroup("Duration", systemImage: "arrow.left.and.right") {
+                Button("−") { onShorten() }
+                Button("+") { onLengthen() }
+            }
+            .disabled(selectedNoteID == nil)
+
+            toolbarGroup("Nudge", systemImage: "arrow.left.arrow.right") {
+                Button("◀") { onNudgeLeft() }
+                Button("▶") { onNudgeRight() }
+            }
+            .disabled(selectedNoteID == nil)
 
             Spacer(minLength: 8)
 
@@ -56,6 +77,31 @@ struct ComposerEditingToolbar: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
+                .stroke(StudioTheme.border, lineWidth: 1)
+        )
+    }
+
+    private func toolbarGroup<Content: View>(_ title: String, systemImage: String, @ViewBuilder content: () -> Content) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: systemImage)
+                .font(.caption)
+                .foregroundStyle(StudioTheme.textMuted)
+            Text(title)
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(StudioTheme.textSecondary)
+            content()
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .tint(StudioTheme.cyan)
+        }
+        .frame(minHeight: StudioLayout.minimumTouchTarget)
+        .padding(.horizontal, 8)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(StudioTheme.elevatedSurface.opacity(0.78))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .stroke(StudioTheme.border, lineWidth: 1)
         )
     }

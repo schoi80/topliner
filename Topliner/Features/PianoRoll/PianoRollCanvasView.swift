@@ -10,8 +10,21 @@ struct PianoRollDrawableNote: Equatable {
 
     var resizeHandleRect: CGRect? {
         guard isSelected, isEditable else { return nil }
-        let width = min(8, rect.width)
+        let width = min(max(24, rect.width * 0.24), rect.width)
         return CGRect(x: rect.maxX - width, y: rect.minY, width: width, height: rect.height)
+    }
+
+    var resizeHandleHitRect: CGRect? {
+        guard let resizeHandleRect else { return nil }
+        let minTouchSize: CGFloat = 44
+        let width = max(minTouchSize, resizeHandleRect.width)
+        let height = max(minTouchSize, resizeHandleRect.height)
+        return CGRect(
+            x: resizeHandleRect.maxX - width,
+            y: resizeHandleRect.midY - height / 2,
+            width: width,
+            height: height
+        )
     }
 }
 
@@ -98,9 +111,15 @@ struct PianoRollCanvasView: View {
         context.fill(path, with: .color(fill))
         context.stroke(path, with: .color(stroke), lineWidth: drawableNote.isSelected ? 2 : 1)
 
+        if drawableNote.isSelected {
+            let haloPath = Path(roundedRect: drawableNote.rect.insetBy(dx: -3, dy: -3), cornerRadius: 8)
+            context.stroke(haloPath, with: .color(Color(red: 0.42, green: 0.95, blue: 1.0).opacity(0.58)), lineWidth: 2)
+        }
+
         if let resizeHandleRect = drawableNote.resizeHandleRect {
-            let handlePath = Path(roundedRect: resizeHandleRect.insetBy(dx: 1.5, dy: 5), cornerRadius: 3)
-            context.fill(handlePath, with: .color(Color.white.opacity(0.78)))
+            let handlePath = Path(roundedRect: resizeHandleRect.insetBy(dx: 3, dy: 5), cornerRadius: 5)
+            context.fill(handlePath, with: .color(Color.white.opacity(0.82)))
+            context.stroke(handlePath, with: .color(Color.black.opacity(0.28)), lineWidth: 1)
         }
     }
 }

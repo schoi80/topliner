@@ -194,6 +194,48 @@ final class ComposerViewModelCoreTests: XCTestCase {
         XCTAssertEqual(viewModel.selectedNoteID, copiedNote.id)
     }
 
+    func testNudgeSelectedNoteMovesByQuantizeGrid() {
+        let selectedID = UUID()
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(notes: [
+                MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 1, durationBeats: 1, velocity: 100)
+            ], source: .pianoRoll, quantizeGrid: 0.25)
+        )
+        viewModel.selectedNoteID = selectedID
+
+        viewModel.nudgeSelectedNote(byBeats: 0.25)
+
+        XCTAssertEqual(viewModel.selectedNote?.startBeat, 1.25)
+    }
+
+    func testAdjustSelectedNoteVelocityClampsMidiRange() {
+        let selectedID = UUID()
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(notes: [
+                MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 1, durationBeats: 1, velocity: 120)
+            ], source: .pianoRoll, quantizeGrid: 0.25)
+        )
+        viewModel.selectedNoteID = selectedID
+
+        viewModel.adjustSelectedNoteVelocity(by: 20)
+
+        XCTAssertEqual(viewModel.selectedNote?.velocity, 127)
+    }
+
+    func testAdjustSelectedNoteDurationClampsToQuantizeGrid() {
+        let selectedID = UUID()
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(notes: [
+                MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 1, durationBeats: 0.25, velocity: 100)
+            ], source: .pianoRoll, quantizeGrid: 0.25)
+        )
+        viewModel.selectedNoteID = selectedID
+
+        viewModel.adjustSelectedNoteDuration(byBeats: -1)
+
+        XCTAssertEqual(viewModel.selectedNote?.durationBeats, 0.25)
+    }
+
     func testDeleteSelectedNoteRemovesOnlySelectedNoteAndClearsSelection() {
         let selectedID = UUID()
         let selectedNote = MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 0, durationBeats: 1, velocity: 100)

@@ -41,7 +41,21 @@ final class PianoRollNoteLayoutCoreTests: XCTestCase {
 
         let drawableNote = layout.drawableNotes()[0]
 
-        XCTAssertEqual(drawableNote.resizeHandleRect, CGRect(x: 142, y: 440, width: 8, height: 40))
+        XCTAssertEqual(drawableNote.resizeHandleRect, CGRect(x: 126, y: 440, width: 24, height: 40))
+    }
+
+    func testSelectedNoteHasLargerTouchTargetAroundResizeHandle() {
+        let selectedID = UUID()
+        let layout = PianoRollNoteLayout(
+            notes: [MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 4, durationBeats: 0.25, velocity: 100)],
+            selectedNoteID: selectedID,
+            geometry: makeGeometry()
+        )
+
+        let drawableNote = layout.drawableNotes()[0]
+
+        XCTAssertEqual(drawableNote.resizeHandleHitRect, CGRect(x: 62.25, y: 438, width: 44, height: 44))
+        XCTAssertTrue(drawableNote.resizeHandleHitRect?.contains(CGPoint(x: 92, y: 460)) == true)
     }
 
     func testUnselectedNoteDoesNotHaveResizeHandleRect() {
