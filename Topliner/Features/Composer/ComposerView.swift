@@ -68,14 +68,7 @@ struct ComposerView: View {
                             .stroke(StudioTheme.border, lineWidth: 1)
                     )
 
-                    ComposerHarmonyPanel(
-                        viewModel: chordGenerationViewModel,
-                        melodyNotes: viewModel.leadVoice.notes,
-                        generatedProgression: chordGenerationViewModel.generatedProgression,
-                        key: "C",
-                        bpm: viewModel.bpm,
-                        totalBeats: viewModel.totalBeats
-                    )
+                    rightRail
                     .frame(width: min(StudioLayout.harmonyPanelWidth, max(248, proxy.size.width * 0.28)))
                     .frame(maxHeight: .infinity)
                 }
@@ -106,6 +99,30 @@ struct ComposerView: View {
         }
         .onReceive(playbackTimer) { tickDate in
             advancePlaybackIfNeeded(at: tickDate)
+        }
+    }
+
+    @ViewBuilder
+    private var rightRail: some View {
+        if viewModel.selectedNote != nil {
+            ComposerSelectedNotePanel(
+                composerViewModel: viewModel,
+                chordViewModel: chordGenerationViewModel,
+                melodyNotes: viewModel.leadVoice.notes,
+                generatedProgression: chordGenerationViewModel.generatedProgression,
+                key: "C",
+                bpm: viewModel.bpm,
+                totalBeats: viewModel.totalBeats
+            )
+        } else {
+            ComposerHarmonyPanel(
+                viewModel: chordGenerationViewModel,
+                melodyNotes: viewModel.leadVoice.notes,
+                generatedProgression: chordGenerationViewModel.generatedProgression,
+                key: "C",
+                bpm: viewModel.bpm,
+                totalBeats: viewModel.totalBeats
+            )
         }
     }
 

@@ -144,6 +144,56 @@ final class ComposerViewModelCoreTests: XCTestCase {
         XCTAssertEqual(viewModel.leadVoice.notes, [note])
     }
 
+    func testSelectedNoteReturnsCurrentSelection() {
+        let selectedID = UUID()
+        let selectedNote = MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 0, durationBeats: 1, velocity: 100)
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(notes: [selectedNote], source: .pianoRoll, quantizeGrid: 0.25),
+            selectedNoteID: selectedID
+        )
+
+        XCTAssertEqual(viewModel.selectedNote, selectedNote)
+    }
+
+    func testUpdateSelectedNoteClampsMidiValuesAndQuantizesTiming() {
+        let selectedID = UUID()
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(
+                notes: [MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 0, durationBeats: 1, velocity: 100)],
+                source: .pianoRoll,
+                quantizeGrid: 0.25
+            ),
+            selectedNoteID: selectedID
+        )
+
+        viewModel.updateSelectedNote(pitch: 200, startBeat: 1.13, durationBeats: 0.02, velocity: 190)
+
+        let editedNote = viewModel.leadVoice.notes[0]
+        XCTAssertEqual(editedNote.pitch, 127)
+        XCTAssertEqual(editedNote.startBeat, 1.25, accuracy: 0.0001)
+        XCTAssertEqual(editedNote.durationBeats, 0.25, accuracy: 0.0001)
+        XCTAssertEqual(editedNote.velocity, 127)
+    }
+
+    func testDuplicateSelectedNoteOffsetsCopyAndSelectsIt() throws {
+        let selectedID = UUID()
+        let selectedNote = MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 2, durationBeats: 1, velocity: 96)
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(notes: [selectedNote], source: .pianoRoll, quantizeGrid: 0.25),
+            selectedNoteID: selectedID
+        )
+
+        viewModel.duplicateSelectedNote()
+
+        XCTAssertEqual(viewModel.leadVoice.notes.count, 2)
+        let copiedNote = try XCTUnwrap(viewModel.leadVoice.notes.first { $0.id != selectedID })
+        XCTAssertEqual(copiedNote.pitch, 60)
+        XCTAssertEqual(copiedNote.startBeat, 3, accuracy: 0.0001)
+        XCTAssertEqual(copiedNote.durationBeats, 1, accuracy: 0.0001)
+        XCTAssertEqual(copiedNote.velocity, 96)
+        XCTAssertEqual(viewModel.selectedNoteID, copiedNote.id)
+    }
+
     func testDeleteSelectedNoteRemovesOnlySelectedNoteAndClearsSelection() {
         let selectedID = UUID()
         let selectedNote = MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 0, durationBeats: 1, velocity: 100)

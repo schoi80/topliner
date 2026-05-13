@@ -22,6 +22,11 @@ final class ComposerViewModel {
 
     var totalBeats: Double { Double(barLength * 4) }
 
+    var selectedNote: MIDINoteEvent? {
+        guard let selectedNoteID else { return nil }
+        return leadVoice.notes.first { $0.id == selectedNoteID }
+    }
+
     init(
         leadVoice: LeadVoiceBuffer = LeadVoiceBuffer(notes: [], source: .pianoRoll, quantizeGrid: 0.25),
         selectedNoteID: UUID? = nil,
@@ -78,6 +83,27 @@ final class ComposerViewModel {
         guard let selectedNoteID else { return }
         leadVoice.notes.removeAll { $0.id == selectedNoteID }
         self.selectedNoteID = nil
+    }
+
+    func updateSelectedNote(pitch: Int, startBeat: Double, durationBeats: Double, velocity: Int) {
+        guard let selectedNoteID,
+              let noteIndex = leadVoice.notes.firstIndex(where: { $0.id == selectedNoteID })
+        else { return }
+
+        let grid = leadVoice.quantizeGrid
+        leadVoice.notes[noteIndex].pitch = min(max(pitch, 0), 127)
+        leadVoice.notes[noteIndex].startBeat = max(0, Quantizer.quantizeBeat(startBeat, grid: grid))
+        leadVoice.notes[noteIndex].durationBeats = max(grid, Quantizer.quantizeBeat(durationBeats, grid: grid))
+        leadVoice.notes[noteIndex].velocity = min(max(velocity, 0), 127)
+    }
+
+    func duplicateSelectedNote() {
+        guard let selectedNote else { return }
+        var copiedNote = selectedNote
+        copiedNote.id = UUID()
+        copiedNote.startBeat = Quantizer.quantizeBeat(selectedNote.startBeat + selectedNote.durationBeats, grid: leadVoice.quantizeGrid)
+        leadVoice.notes.append(copiedNote)
+        selectedNoteID = copiedNote.id
     }
 
     func clearLeadNotes() {
