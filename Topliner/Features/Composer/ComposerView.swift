@@ -1,10 +1,30 @@
 import SwiftUI
 
 struct ComposerView: View {
-    @State private var viewModel = ComposerViewModel(leadVoice: Self.sampleLeadVoice)
-    @State private var chordGenerationViewModel = ChordGenerationViewModel()
-    @State private var playheadController = PlayheadController(bpm: 120, totalBeats: 16)
+    @State private var viewModel: ComposerViewModel
+    @State private var chordGenerationViewModel: ChordGenerationViewModel
+    @State private var playbackController: ComposerPlaybackController
     @State private var isShowingClearConfirmation = false
+    @State private var lastPlaybackTick: Date?
+
+    private let playbackTimer = Timer.publish(every: 1.0 / 60.0, on: .main, in: .common).autoconnect()
+
+    init() {
+        let voiceManager = AudioKitWavetableVoiceManager()
+        let synthService = WavetableSynthService(voice: voiceManager)
+        let audioEngine = AudioEngineService(engine: AudioKitEngineManager(inputs: [voiceManager.outputNode]))
+
+        _viewModel = State(initialValue: ComposerViewModel(leadVoice: Self.sampleLeadVoice))
+        _chordGenerationViewModel = State(initialValue: ChordGenerationViewModel())
+        _playbackController = State(
+            initialValue: ComposerPlaybackController(
+                audioEngine: audioEngine,
+                playback: synthService,
+                bpm: 120,
+                totalBeats: 16
+            )
+        )
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -14,20 +34,20 @@ struct ComposerView: View {
                 viewModel: chordGenerationViewModel,
                 melodyNotes: viewModel.leadVoice.notes,
                 key: "C",
-                bpm: playheadController.bpm,
-                totalBeats: playheadController.totalBeats
+                bpm: playbackController.bpm,
+                totalBeats: playbackController.totalBeats
             )
             MIDIExportShareView(
                 leadNotes: viewModel.leadVoice.notes,
                 chordProgression: chordGenerationViewModel.generatedProgression,
-                bpm: playheadController.bpm
+                bpm: playbackController.bpm
             )
 
             PianoRollView(
                 notes: viewModel.leadVoice.notes,
                 selectedNoteID: viewModel.selectedNoteID,
                 quantizeGrid: viewModel.leadVoice.quantizeGrid,
-                currentBeat: playheadController.currentBeat,
+                currentBeat: playbackController.currentBeat,
                 onTap: viewModel.handlePianoRollTap,
                 onDrag: viewModel.handlePianoRollDrag,
                 onResize: viewModel.handlePianoRollResize
@@ -43,6 +63,9 @@ struct ComposerView: View {
             }
         } message: {
             Text("This removes every note from the piano roll.")
+        }
+        .onReceive(playbackTimer) { tickDate in
+            advancePlaybackIfNeeded(at: tickDate)
         }
     }
 
@@ -85,18 +108,15 @@ struct ComposerView: View {
             .buttonStyle(.bordered)
             .tint(.red)
 
-            Button(playheadController.isPlaying ? "Stop" : "Play") {
-                if playheadController.isPlaying {
-                    playheadController.stop()
-                } else {
-                    playheadController.start()
-                }
+            Button(playbackController.isPlaying ? "Stop" : "Play") {
+                togglePlayback()
             }
             .buttonStyle(.borderedProminent)
             .tint(.cyan)
 
             Button("Reset") {
-                playheadController.reset()
+                playbackController.reset()
+                lastPlaybackTick = nil
             }
             .buttonStyle(.bordered)
             .tint(.cyan)
@@ -108,6 +128,40 @@ struct ComposerView: View {
             .buttonStyle(.bordered)
             .tint(.orange)
         }
+    }
+
+    private func togglePlayback() {
+        if playbackController.isPlaying {
+            playbackController.stop()
+            lastPlaybackTick = nil
+        } else {
+            do {
+                playbackController.bpm = 120
+                playbackController.totalBeats = 16
+                try playbackController.start(
+                    leadNotes: viewModel.leadVoice.notes,
+                    chordProgression: chordGenerationViewModel.generatedProgression
+                )
+                lastPlaybackTick = Date()
+            } catch {
+                lastPlaybackTick = nil
+            }
+        }
+    }
+
+    private func advancePlaybackIfNeeded(at tickDate: Date) {
+        guard playbackController.isPlaying else {
+            lastPlaybackTick = nil
+            return
+        }
+
+        guard let lastPlaybackTick else {
+            self.lastPlaybackTick = tickDate
+            return
+        }
+
+        playbackController.advance(elapsedSeconds: tickDate.timeIntervalSince(lastPlaybackTick))
+        self.lastPlaybackTick = tickDate
     }
 
     private var selectionStatus: some View {

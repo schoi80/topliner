@@ -15,8 +15,15 @@ protocol AudioEngineManaging: AnyObject {
     func stop()
 }
 
+protocol AudioEnginePlaybackManaging: AnyObject {
+    var isRunning: Bool { get }
+
+    func start() throws
+    func stop()
+}
+
 @Observable
-final class AudioEngineService {
+final class AudioEngineService: AudioEnginePlaybackManaging {
     private let session: AudioSessionManaging
     private let engine: AudioEngineManaging
 
@@ -75,9 +82,10 @@ final class AudioKitEngineManager: AudioEngineManaging {
     private let engine: AudioEngine
     private let outputMixer: Mixer
 
-    init(engine: AudioEngine = AudioEngine()) {
+    init(engine: AudioEngine = AudioEngine(), inputs: [Node] = []) {
         self.engine = engine
         outputMixer = Mixer()
+        inputs.forEach { outputMixer.addInput($0) }
         self.engine.output = outputMixer
     }
 
