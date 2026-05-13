@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00187A3B76EAFCF335BEA1D8 /* ProjectDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4883D6C746BD6E01973297 /* ProjectDocument.swift */; };
+		00C4D684BE50674A92759339 /* Quantizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5BE041BEAF32A395E3066 /* Quantizer.swift */; };
 		239ABE359B9847EA8483B255 /* MIDINoteEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E5351C7DACB7D5D8B5D1B5 /* MIDINoteEvent.swift */; };
 		25DD5B0E70FAB332372455AE /* LeadVoiceBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B161209CDB6DED2185DFE /* LeadVoiceBuffer.swift */; };
 		382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BA5711C11F0FBE52EE2E0A /* ToplinerApp.swift */; };
@@ -17,6 +18,7 @@
 		9F5688C943636BF411CA4E8A /* ProjectDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2064C1620978F59E70897489 /* ProjectDocumentTests.swift */; };
 		B816FD171A04FAB597AA877F /* LeadVoiceBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8686E36CB4C4266AD2E5081 /* LeadVoiceBufferTests.swift */; };
 		B8BFC9EF4A8EC6A3F0443EE3 /* MIDINoteEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D0FFEA0E1C83A8C5E9551F /* MIDINoteEventTests.swift */; };
+		BE6A9C534881829E69C7F443 /* QuantizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF15F22A4F56ABEB0C15AC05 /* QuantizerTests.swift */; };
 		CE40CF66D9CE63DD6DBD5057 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AA5A8E6673FC30C20831CE /* AppEnvironment.swift */; };
 		DADD99A0BF093D22C20ABB5C /* ChordProgression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327E7B31202E51E6F4D80795 /* ChordProgression.swift */; };
 		E2DFAC43990AEE7DE091B78F /* ToplinerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */; };
@@ -51,11 +53,13 @@
 		84BA5711C11F0FBE52EE2E0A /* ToplinerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerApp.swift; sourceTree = "<group>"; };
 		A07B161209CDB6DED2185DFE /* LeadVoiceBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadVoiceBuffer.swift; sourceTree = "<group>"; };
 		AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerTests.swift; sourceTree = "<group>"; };
+		BFF5BE041BEAF32A395E3066 /* Quantizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quantizer.swift; sourceTree = "<group>"; };
 		D3D0FFEA0E1C83A8C5E9551F /* MIDINoteEventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDINoteEventTests.swift; sourceTree = "<group>"; };
 		D3DD77054BF4908FDD9F7991 /* ToplinerUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ToplinerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E5351C7DACB7D5D8B5D1B5 /* MIDINoteEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDINoteEvent.swift; sourceTree = "<group>"; };
 		DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerUITests.swift; sourceTree = "<group>"; };
 		E8686E36CB4C4266AD2E5081 /* LeadVoiceBufferTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadVoiceBufferTests.swift; sourceTree = "<group>"; };
+		EF15F22A4F56ABEB0C15AC05 /* QuantizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantizerTests.swift; sourceTree = "<group>"; };
 		FF7B1C3E1270E92A00567610 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,6 +78,7 @@
 			children = (
 				AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */,
 				53409B8D97B25028ABD7B07C /* Models */,
+				FAFC0E2F42044EEC242152F6 /* Services */,
 			);
 			path = ToplinerTests;
 			sourceTree = "<group>";
@@ -85,8 +90,17 @@
 				FF7B1C3E1270E92A00567610 /* Info.plist */,
 				2503C157B5CD4F01B809FED7 /* App */,
 				F65151B1E04D7B27ED15FA06 /* Models */,
+				4A703860FE63443AB8EF1C1D /* Services */,
 			);
 			path = Topliner;
+			sourceTree = "<group>";
+		};
+		4A703860FE63443AB8EF1C1D /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				7FBCFD7F7D2337476FD819CF /* Theory */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		53409B8D97B25028ABD7B07C /* Models */ = {
@@ -120,12 +134,28 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		7FBCFD7F7D2337476FD819CF /* Theory */ = {
+			isa = PBXGroup;
+			children = (
+				BFF5BE041BEAF32A395E3066 /* Quantizer.swift */,
+			);
+			path = Theory;
+			sourceTree = "<group>";
+		};
 		B5A258C6DC19E2E37FEBC4A8 /* ToplinerUITests */ = {
 			isa = PBXGroup;
 			children = (
 				DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */,
 			);
 			path = ToplinerUITests;
+			sourceTree = "<group>";
+		};
+		CFE7A38D724EB3E9F8A60BCE /* Theory */ = {
+			isa = PBXGroup;
+			children = (
+				EF15F22A4F56ABEB0C15AC05 /* QuantizerTests.swift */,
+			);
+			path = Theory;
 			sourceTree = "<group>";
 		};
 		F65151B1E04D7B27ED15FA06 /* Models */ = {
@@ -137,6 +167,14 @@
 				6D4883D6C746BD6E01973297 /* ProjectDocument.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		FAFC0E2F42044EEC242152F6 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				CFE7A38D724EB3E9F8A60BCE /* Theory */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -241,6 +279,7 @@
 				25DD5B0E70FAB332372455AE /* LeadVoiceBuffer.swift in Sources */,
 				239ABE359B9847EA8483B255 /* MIDINoteEvent.swift in Sources */,
 				00187A3B76EAFCF335BEA1D8 /* ProjectDocument.swift in Sources */,
+				00C4D684BE50674A92759339 /* Quantizer.swift in Sources */,
 				382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -253,6 +292,7 @@
 				B816FD171A04FAB597AA877F /* LeadVoiceBufferTests.swift in Sources */,
 				B8BFC9EF4A8EC6A3F0443EE3 /* MIDINoteEventTests.swift in Sources */,
 				9F5688C943636BF411CA4E8A /* ProjectDocumentTests.swift in Sources */,
+				BE6A9C534881829E69C7F443 /* QuantizerTests.swift in Sources */,
 				5EE6630D3A408C586EB0B940 /* ToplinerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
