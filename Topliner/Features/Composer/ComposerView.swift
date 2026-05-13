@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ComposerView: View {
     @State private var viewModel = ComposerViewModel(leadVoice: Self.sampleLeadVoice)
+    @State private var chordGenerationViewModel = ChordGenerationViewModel()
     @State private var playheadController = PlayheadController(bpm: 120, totalBeats: 16)
     @State private var isShowingClearConfirmation = false
 
@@ -9,6 +10,13 @@ struct ComposerView: View {
         VStack(alignment: .leading, spacing: 16) {
             header
             editingControls
+            ChordGenerationView(
+                viewModel: chordGenerationViewModel,
+                melodyNotes: viewModel.leadVoice.notes,
+                key: "C",
+                bpm: playheadController.bpm,
+                totalBeats: playheadController.totalBeats
+            )
 
             PianoRollView(
                 notes: viewModel.leadVoice.notes,
