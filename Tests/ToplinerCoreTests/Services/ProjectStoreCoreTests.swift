@@ -51,6 +51,26 @@ final class ProjectStoreCoreTests: XCTestCase {
         XCTAssertEqual(try store.list().count, 2)
     }
 
+    func testProjectBrowserFiltersProjectsBySearchQuery() throws {
+        let store = try makeStore()
+        try store.save(ProjectDocument(title: "Neon Hook", bpm: 96, key: "C"))
+        try store.save(ProjectDocument(title: "Ballad Draft", bpm: 72, key: "F"))
+        let viewModel = ProjectBrowserViewModel(store: store)
+
+        viewModel.searchQuery = "neon"
+
+        XCTAssertEqual(viewModel.filteredProjects.map(\.title), ["Neon Hook"])
+    }
+
+    func testProjectBrowserSelectsFirstProjectAfterRefresh() throws {
+        let store = try makeStore()
+        let project = ProjectDocument(title: "Selected", updatedAt: Date(timeIntervalSince1970: 20))
+        try store.save(project)
+        let viewModel = ProjectBrowserViewModel(store: store)
+
+        XCTAssertEqual(viewModel.selectedProject?.id, project.id)
+    }
+
     func testProjectBrowserCreatesAndDeletesProjectsThroughStore() throws {
         let store = try makeStore()
         let viewModel = ProjectBrowserViewModel(store: store)
