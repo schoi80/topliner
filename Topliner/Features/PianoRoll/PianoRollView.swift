@@ -9,6 +9,7 @@ struct PianoRollView: View {
     var quantizeGrid: Double = 0.25
     var onTap: ((CGPoint, PianoRollGeometry) -> Void)?
     var onDrag: ((CGPoint, PianoRollGeometry) -> Void)?
+    var onResize: ((CGPoint, PianoRollGeometry) -> Void)?
 
     init(
         notes: [MIDINoteEvent],
@@ -18,7 +19,8 @@ struct PianoRollView: View {
         pitchRange: ClosedRange<Int> = 48...84,
         quantizeGrid: Double = 0.25,
         onTap: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
-        onDrag: ((CGPoint, PianoRollGeometry) -> Void)? = nil
+        onDrag: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
+        onResize: ((CGPoint, PianoRollGeometry) -> Void)? = nil
     ) {
         self.notes = notes
         self.selectedNoteID = selectedNoteID
@@ -28,6 +30,7 @@ struct PianoRollView: View {
         self.quantizeGrid = quantizeGrid
         self.onTap = onTap
         self.onDrag = onDrag
+        self.onResize = onResize
     }
 
     var body: some View {
@@ -43,11 +46,14 @@ struct PianoRollView: View {
 
             if let onTap {
                 PianoRollInteractionLayer(
+                    notes: notes,
+                    selectedNoteID: selectedNoteID,
                     totalBeats: totalBeats,
                     pitchRange: pitchRange,
                     quantizeGrid: quantizeGrid,
                     onTap: onTap,
-                    onDrag: onDrag
+                    onDrag: onDrag,
+                    onResize: onResize
                 )
             }
         }

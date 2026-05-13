@@ -31,6 +31,29 @@ final class PianoRollNoteLayoutCoreTests: XCTestCase {
         XCTAssertTrue(drawableNotes[0].isSelected)
     }
 
+    func testSelectedNoteHasTrailingResizeHandleRect() {
+        let selectedID = UUID()
+        let layout = PianoRollNoteLayout(
+            notes: [MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 4, durationBeats: 2, velocity: 100)],
+            selectedNoteID: selectedID,
+            geometry: makeGeometry()
+        )
+
+        let drawableNote = layout.drawableNotes()[0]
+
+        XCTAssertEqual(drawableNote.resizeHandleRect, CGRect(x: 142, y: 440, width: 8, height: 40))
+    }
+
+    func testUnselectedNoteDoesNotHaveResizeHandleRect() {
+        let layout = PianoRollNoteLayout(
+            notes: [MIDINoteEvent(pitch: 60, startBeat: 4, durationBeats: 2, velocity: 100)],
+            selectedNoteID: nil,
+            geometry: makeGeometry()
+        )
+
+        XCTAssertNil(layout.drawableNotes()[0].resizeHandleRect)
+    }
+
     func testFiltersNotesOutsideVisiblePitchRange() {
         let layout = PianoRollNoteLayout(
             notes: [

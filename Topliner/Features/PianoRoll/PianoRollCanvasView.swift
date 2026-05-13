@@ -4,6 +4,12 @@ struct PianoRollDrawableNote: Equatable {
     var note: MIDINoteEvent
     var rect: CGRect
     var isSelected: Bool
+
+    var resizeHandleRect: CGRect? {
+        guard isSelected else { return nil }
+        let width = min(8, rect.width)
+        return CGRect(x: rect.maxX - width, y: rect.minY, width: width, height: rect.height)
+    }
 }
 
 struct PianoRollNoteLayout {
@@ -59,6 +65,11 @@ struct PianoRollCanvasView: View {
 
         context.fill(path, with: .color(fill))
         context.stroke(path, with: .color(stroke), lineWidth: drawableNote.isSelected ? 2 : 1)
+
+        if let resizeHandleRect = drawableNote.resizeHandleRect {
+            let handlePath = Path(roundedRect: resizeHandleRect.insetBy(dx: 1.5, dy: 5), cornerRadius: 3)
+            context.fill(handlePath, with: .color(Color.white.opacity(0.78)))
+        }
     }
 }
 

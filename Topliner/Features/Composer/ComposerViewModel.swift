@@ -39,6 +39,17 @@ final class ComposerViewModel {
         leadVoice.notes[noteIndex].startBeat = max(0, noteStart.beat)
     }
 
+    func handlePianoRollResize(to point: CGPoint, geometry: PianoRollGeometry) {
+        guard let selectedNoteID,
+              let noteIndex = leadVoice.notes.firstIndex(where: { $0.id == selectedNoteID })
+        else { return }
+
+        let note = leadVoice.notes[noteIndex]
+        let endBeat = Quantizer.quantizeBeat(geometry.beat(atX: point.x), grid: geometry.quantizeGrid)
+        let minimumDuration = geometry.quantizeGrid
+        leadVoice.notes[noteIndex].durationBeats = max(minimumDuration, endBeat - note.startBeat)
+    }
+
     private func note(at point: CGPoint, geometry: PianoRollGeometry) -> MIDINoteEvent? {
         leadVoice.notes.first { note in
             geometry.rect(for: note).contains(point)

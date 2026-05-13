@@ -92,6 +92,58 @@ final class ComposerViewModelCoreTests: XCTestCase {
         XCTAssertEqual(viewModel.leadVoice.notes, [note])
     }
 
+    func testResizeSelectedNoteChangesDurationToQuantizedDraggedEndBeat() {
+        let selectedID = UUID()
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(
+                notes: [MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 2, durationBeats: 1, velocity: 88)],
+                source: .pianoRoll,
+                quantizeGrid: 0.25
+            ),
+            selectedNoteID: selectedID
+        )
+        let geometry = makeGeometry()
+
+        viewModel.handlePianoRollResize(to: CGPoint(x: 113, y: 1), geometry: geometry)
+
+        let resizedNote = viewModel.leadVoice.notes[0]
+        XCTAssertEqual(resizedNote.id, selectedID)
+        XCTAssertEqual(resizedNote.pitch, 60)
+        XCTAssertEqual(resizedNote.startBeat, 2, accuracy: 0.0001)
+        XCTAssertEqual(resizedNote.durationBeats, 2.5, accuracy: 0.0001)
+        XCTAssertEqual(resizedNote.velocity, 88)
+    }
+
+    func testResizeSelectedNoteClampsToMinimumQuantizeGridDuration() {
+        let selectedID = UUID()
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(
+                notes: [MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 4, durationBeats: 2, velocity: 100)],
+                source: .pianoRoll,
+                quantizeGrid: 0.25
+            ),
+            selectedNoteID: selectedID
+        )
+        let geometry = makeGeometry()
+
+        viewModel.handlePianoRollResize(to: CGPoint(x: 50, y: 1), geometry: geometry)
+
+        XCTAssertEqual(viewModel.leadVoice.notes[0].durationBeats, 0.25, accuracy: 0.0001)
+    }
+
+    func testResizeWithoutSelectedNoteDoesNotMutateNotes() {
+        let note = MIDINoteEvent(pitch: 60, startBeat: 0, durationBeats: 1, velocity: 100)
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(notes: [note], source: .pianoRoll, quantizeGrid: 0.25),
+            selectedNoteID: nil
+        )
+        let geometry = makeGeometry()
+
+        viewModel.handlePianoRollResize(to: CGPoint(x: 113, y: 1), geometry: geometry)
+
+        XCTAssertEqual(viewModel.leadVoice.notes, [note])
+    }
+
     private func makeGeometry() -> PianoRollGeometry {
         PianoRollGeometry(size: CGSize(width: 400, height: 480), pitchRange: 60...71, totalBeats: 16, quantizeGrid: 0.25)
     }
