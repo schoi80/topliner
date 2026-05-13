@@ -29,6 +29,16 @@ final class ComposerViewModel {
         selectedNoteID = note.id
     }
 
+    func handlePianoRollDrag(to point: CGPoint, geometry: PianoRollGeometry) {
+        guard let selectedNoteID,
+              let noteIndex = leadVoice.notes.firstIndex(where: { $0.id == selectedNoteID })
+        else { return }
+
+        let noteStart = geometry.noteStart(at: point)
+        leadVoice.notes[noteIndex].pitch = noteStart.pitch
+        leadVoice.notes[noteIndex].startBeat = max(0, noteStart.beat)
+    }
+
     private func note(at point: CGPoint, geometry: PianoRollGeometry) -> MIDINoteEvent? {
         leadVoice.notes.first { note in
             geometry.rect(for: note).contains(point)

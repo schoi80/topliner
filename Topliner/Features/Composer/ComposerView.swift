@@ -11,7 +11,8 @@ struct ComposerView: View {
                 notes: viewModel.leadVoice.notes,
                 selectedNoteID: viewModel.selectedNoteID,
                 quantizeGrid: viewModel.leadVoice.quantizeGrid,
-                onTap: viewModel.handlePianoRollTap
+                onTap: viewModel.handlePianoRollTap,
+                onDrag: viewModel.handlePianoRollDrag
             )
             .frame(minHeight: 320)
         }
