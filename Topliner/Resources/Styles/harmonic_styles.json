@@ -1,0 +1,139 @@
+{
+  "styles": [
+    {
+      "id": "neo_soul",
+      "displayName": "Neo-soul",
+      "promptInstructions": "Use lush extended chords, smooth chromatic passing motion, minor 9ths, major 9ths, altered dominants, and gentle voice leading that supports a modern R&B topline.",
+      "progressionSeeds": [
+        {
+          "name": "Velvet turnaround",
+          "chords": ["Imaj9", "III7alt", "vi9", "V13sus"]
+        },
+        {
+          "name": "Descending color",
+          "chords": ["iv9", "bVII13", "Imaj9", "VI7alt"]
+        }
+      ]
+    },
+    {
+      "id": "jazz",
+      "displayName": "Jazz",
+      "promptInstructions": "Favor functional harmony, ii-V-I movement, secondary dominants, tritone substitutions, and tasteful extensions while preserving clear melodic support.",
+      "progressionSeeds": [
+        {
+          "name": "Major ii-V-I",
+          "chords": ["ii7", "V7", "Imaj7", "VI7"]
+        },
+        {
+          "name": "Minor cadence",
+          "chords": ["iiø7", "V7alt", "i6", "bVImaj7"]
+        }
+      ]
+    },
+    {
+      "id": "gospel_rnb",
+      "displayName": "Gospel R&B",
+      "promptInstructions": "Use church-influenced passing chords, strong plagal motion, soulful dominant approaches, suspended colors, and rich turnarounds for vocal lift.",
+      "progressionSeeds": [
+        {
+          "name": "Sunday lift",
+          "chords": ["Imaj9", "IVmaj9", "iv6", "Imaj9"]
+        },
+        {
+          "name": "Pre-chorus climb",
+          "chords": ["vi7", "ii9", "V13sus", "Imaj9"]
+        }
+      ]
+    },
+    {
+      "id": "city_pop",
+      "displayName": "City pop",
+      "promptInstructions": "Blend bright major-key pop harmony with jazzy extensions, smooth modulations, secondary dominants, and upbeat late-night sophistication.",
+      "progressionSeeds": [
+        {
+          "name": "Night drive",
+          "chords": ["Imaj7", "VII7", "iii7", "VI7"]
+        },
+        {
+          "name": "Harbor chorus",
+          "chords": ["IVmaj7", "V7", "iii7", "vi7"]
+        }
+      ]
+    },
+    {
+      "id": "bossa_nova",
+      "displayName": "Bossa nova",
+      "promptInstructions": "Use relaxed jazz harmony, soft chromatic approach chords, extended dominants, and gently syncopated harmonic rhythm for a warm bossa feel.",
+      "progressionSeeds": [
+        {
+          "name": "Coastal ii-V",
+          "chords": ["Imaj7", "VI7b9", "ii9", "V13"]
+        },
+        {
+          "name": "Soft minor color",
+          "chords": ["i6", "iv9", "bVII13", "IIImaj7"]
+        }
+      ]
+    },
+    {
+      "id": "blues",
+      "displayName": "Blues",
+      "promptInstructions": "Use blues form awareness, dominant color, call-and-response space, blue-note-friendly changes, and turnarounds that leave room for expressive vocals.",
+      "progressionSeeds": [
+        {
+          "name": "Twelve-bar dominant",
+          "chords": ["I7", "IV7", "I7", "V7"]
+        },
+        {
+          "name": "Minor blues",
+          "chords": ["i7", "iv7", "i7", "V7alt"]
+        }
+      ]
+    },
+    {
+      "id": "funk",
+      "displayName": "Funk",
+      "promptInstructions": "Prioritize groove, short repeating vamps, dominant 9th and 13th colors, modal harmony, and space for syncopated toplines.",
+      "progressionSeeds": [
+        {
+          "name": "One-chord pocket",
+          "chords": ["i9", "i9", "bVII13", "i9"]
+        },
+        {
+          "name": "Dominant vamp",
+          "chords": ["I9", "IV9", "I9", "bVII9"]
+        }
+      ]
+    },
+    {
+      "id": "synthwave",
+      "displayName": "Synthwave",
+      "promptInstructions": "Use cinematic minor-key progressions, retro pop cadences, sustained harmonic pads, and emotional modal interchange suitable for analog synth textures.",
+      "progressionSeeds": [
+        {
+          "name": "Neon minor",
+          "chords": ["i", "bVI", "bIII", "bVII"]
+        },
+        {
+          "name": "Arcade anthem",
+          "chords": ["I", "V", "vi", "IV"]
+        }
+      ]
+    },
+    {
+      "id": "cinematic",
+      "displayName": "Cinematic",
+      "promptInstructions": "Favor dramatic arcs, modal mixture, suspended harmony, pedal tones, and broad emotional movement that can support film-score style melodies.",
+      "progressionSeeds": [
+        {
+          "name": "Heroic lift",
+          "chords": ["i", "bVI", "bVII", "IVsus"]
+        },
+        {
+          "name": "Tender resolve",
+          "chords": ["Iadd9", "V6", "vi7", "IVmaj9"]
+        }
+      ]
+    }
+  ]
+}

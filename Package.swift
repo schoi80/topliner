@@ -28,6 +28,9 @@ let package = Package(
                 "Models",
                 "Services",
                 "Features"
+            ],
+            resources: [
+                .process("Resources")
             ]
         ),
         .testTarget(

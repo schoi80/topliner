@@ -24,6 +24,7 @@
 		51C8C3444171C3CA4CBFADB3 /* AudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = 446311AC6E85D34D57B33617 /* AudioKit */; };
 		5609CEA746FE2913AE3A0994 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8210A972A1FB695D7396E190 /* ContentView.swift */; };
 		5EE6630D3A408C586EB0B940 /* ToplinerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */; };
+		72D0C327DB71087EF5A8223F /* harmonic_styles.json in Resources */ = {isa = PBXBuildFile; fileRef = AD87081B5DBF24CBF8612106 /* harmonic_styles.json */; };
 		7CCEB567CFAC7546D1955C4D /* ChordProgressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB951C36768A9F88668558E /* ChordProgressionTests.swift */; };
 		88C12EDE788FDFFBF271A99E /* PianoRollGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7F8C92FB959C3E75E1D867 /* PianoRollGridView.swift */; };
 		9F5688C943636BF411CA4E8A /* ProjectDocumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2064C1620978F59E70897489 /* ProjectDocumentTests.swift */; };
@@ -37,6 +38,7 @@
 		C8BC4FB6A9870AEEC685E91F /* PitchTrackingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA1165FB5CE1990C924FA99 /* PitchTrackingService.swift */; };
 		CC4B21FA4E5335C06A17C597 /* PianoRollCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767DC646984C1FB44A34B2E2 /* PianoRollCanvasView.swift */; };
 		CE40CF66D9CE63DD6DBD5057 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AA5A8E6673FC30C20831CE /* AppEnvironment.swift */; };
+		D322E492EF4B4FBBBE79D7E1 /* StyleLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A409ACD8A1483FE54BDD6B /* StyleLibrary.swift */; };
 		D8ADD207369825D3FD82CD82 /* PianoRollGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE473382DB4B20F486A4934 /* PianoRollGeometryTests.swift */; };
 		DADD99A0BF093D22C20ABB5C /* ChordProgression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327E7B31202E51E6F4D80795 /* ChordProgression.swift */; };
 		E2DFAC43990AEE7DE091B78F /* ToplinerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */; };
@@ -62,6 +64,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		05A409ACD8A1483FE54BDD6B /* StyleLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleLibrary.swift; sourceTree = "<group>"; };
 		05AA5A8E6673FC30C20831CE /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		08B63EAF1BFC9305A9FBFE40 /* PitchTraceSegmenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchTraceSegmenter.swift; sourceTree = "<group>"; };
 		2064C1620978F59E70897489 /* ProjectDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDocumentTests.swift; sourceTree = "<group>"; };
@@ -85,6 +88,7 @@
 		A07B161209CDB6DED2185DFE /* LeadVoiceBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadVoiceBuffer.swift; sourceTree = "<group>"; };
 		A7B8B8C40411107DE47863A2 /* AudioEngineService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngineService.swift; sourceTree = "<group>"; };
 		A975B631614EC8652C81A8E9 /* PianoRollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollView.swift; sourceTree = "<group>"; };
+		AD87081B5DBF24CBF8612106 /* harmonic_styles.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = harmonic_styles.json; sourceTree = "<group>"; };
 		AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerTests.swift; sourceTree = "<group>"; };
 		BAE473382DB4B20F486A4934 /* PianoRollGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollGeometryTests.swift; sourceTree = "<group>"; };
 		BFF5BE041BEAF32A395E3066 /* Quantizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quantizer.swift; sourceTree = "<group>"; };
@@ -155,6 +159,7 @@
 				2503C157B5CD4F01B809FED7 /* App */,
 				944A1018A2BEF6D47B493C17 /* Features */,
 				F65151B1E04D7B27ED15FA06 /* Models */,
+				E54B1418CB8169CA68FFAD33 /* Resources */,
 				4A703860FE63443AB8EF1C1D /* Services */,
 			);
 			path = Topliner;
@@ -166,6 +171,14 @@
 				BAE473382DB4B20F486A4934 /* PianoRollGeometryTests.swift */,
 			);
 			path = PianoRoll;
+			sourceTree = "<group>";
+		};
+		460F8AB5EE03205FE1AE7F0F /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				AD87081B5DBF24CBF8612106 /* harmonic_styles.json */,
+			);
+			path = Styles;
 			sourceTree = "<group>";
 		};
 		4A703860FE63443AB8EF1C1D /* Services */ = {
@@ -225,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				BFF5BE041BEAF32A395E3066 /* Quantizer.swift */,
+				05A409ACD8A1483FE54BDD6B /* StyleLibrary.swift */,
 			);
 			path = Theory;
 			sourceTree = "<group>";
@@ -273,6 +287,14 @@
 			path = Features;
 			sourceTree = "<group>";
 		};
+		E54B1418CB8169CA68FFAD33 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				460F8AB5EE03205FE1AE7F0F /* Styles */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		F13CF6BB0DD03185F2CA42A9 /* Composer */ = {
 			isa = PBXGroup;
 			children = (
@@ -309,6 +331,7 @@
 			buildConfigurationList = 115B648CD99F784F55C70C46 /* Build configuration list for PBXNativeTarget "Topliner" */;
 			buildPhases = (
 				4D5B5F5767A6817911A1EAA4 /* Sources */,
+				68F0C5368C0FDD9A3FEAD53F /* Resources */,
 				E4839E37635EAB1CCB2C5427 /* Frameworks */,
 			);
 			buildRules = (
@@ -399,6 +422,17 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		68F0C5368C0FDD9A3FEAD53F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72D0C327DB71087EF5A8223F /* harmonic_styles.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4D5B5F5767A6817911A1EAA4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -427,6 +461,7 @@
 				00187A3B76EAFCF335BEA1D8 /* ProjectDocument.swift in Sources */,
 				00C4D684BE50674A92759339 /* Quantizer.swift in Sources */,
 				4F21D77D221CD43612425BF3 /* SequencerService.swift in Sources */,
+				D322E492EF4B4FBBBE79D7E1 /* StyleLibrary.swift in Sources */,
 				382C66C9B776EE1E6A9BE008 /* ToplinerApp.swift in Sources */,
 				49E18EAACB2FBF75E1309270 /* WavetableSynthService.swift in Sources */,
 			);
