@@ -7,6 +7,7 @@ struct PianoRollView: View {
     var beatsPerBar: Int = 4
     var pitchRange: ClosedRange<Int> = 48...84
     var quantizeGrid: Double = 0.25
+    var currentBeat: Double?
     var onTap: ((CGPoint, PianoRollGeometry) -> Void)?
     var onDrag: ((CGPoint, PianoRollGeometry) -> Void)?
     var onResize: ((CGPoint, PianoRollGeometry) -> Void)?
@@ -18,6 +19,7 @@ struct PianoRollView: View {
         beatsPerBar: Int = 4,
         pitchRange: ClosedRange<Int> = 48...84,
         quantizeGrid: Double = 0.25,
+        currentBeat: Double? = nil,
         onTap: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
         onDrag: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
         onResize: ((CGPoint, PianoRollGeometry) -> Void)? = nil
@@ -28,6 +30,7 @@ struct PianoRollView: View {
         self.beatsPerBar = beatsPerBar
         self.pitchRange = pitchRange
         self.quantizeGrid = quantizeGrid
+        self.currentBeat = currentBeat
         self.onTap = onTap
         self.onDrag = onDrag
         self.onResize = onResize
@@ -43,6 +46,10 @@ struct PianoRollView: View {
                 pitchRange: pitchRange,
                 quantizeGrid: quantizeGrid
             )
+
+            if let currentBeat {
+                PlayheadView(currentBeat: currentBeat, totalBeats: totalBeats)
+            }
 
             if let onTap {
                 PianoRollInteractionLayer(

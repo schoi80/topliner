@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ComposerView: View {
     @State private var viewModel = ComposerViewModel(leadVoice: Self.sampleLeadVoice)
+    @State private var playheadController = PlayheadController(bpm: 120, totalBeats: 16)
     @State private var isShowingClearConfirmation = false
 
     var body: some View {
@@ -13,6 +14,7 @@ struct ComposerView: View {
                 notes: viewModel.leadVoice.notes,
                 selectedNoteID: viewModel.selectedNoteID,
                 quantizeGrid: viewModel.leadVoice.quantizeGrid,
+                currentBeat: playheadController.currentBeat,
                 onTap: viewModel.handlePianoRollTap,
                 onDrag: viewModel.handlePianoRollDrag,
                 onResize: viewModel.handlePianoRollResize
@@ -69,6 +71,22 @@ struct ComposerView: View {
             .disabled(viewModel.selectedNoteID == nil)
             .buttonStyle(.bordered)
             .tint(.red)
+
+            Button(playheadController.isPlaying ? "Stop" : "Play") {
+                if playheadController.isPlaying {
+                    playheadController.stop()
+                } else {
+                    playheadController.start()
+                }
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.cyan)
+
+            Button("Reset") {
+                playheadController.reset()
+            }
+            .buttonStyle(.bordered)
+            .tint(.cyan)
 
             Button("Clear") {
                 isShowingClearConfirmation = true
