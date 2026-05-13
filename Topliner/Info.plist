@@ -18,6 +18,8 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Topliner needs microphone access to record vocal ideas and convert them into MIDI notes.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 </dict>

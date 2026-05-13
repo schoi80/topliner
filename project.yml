@@ -48,6 +48,7 @@ targets:
       properties:
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        NSMicrophoneUsageDescription: Topliner needs microphone access to record vocal ideas and convert them into MIDI notes.
         UILaunchScreen: {}
   ToplinerTests:
     type: bundle.unit-test
