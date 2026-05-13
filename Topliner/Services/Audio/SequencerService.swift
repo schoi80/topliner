@@ -114,10 +114,7 @@ final class SequencerService {
 
     func stop() {
         guard isPlaying else { return }
-        activePitches.sorted().forEach { key in
-            playback.noteOff(pitch: Self.pitch(fromActivePitchKey: key), track: Self.track(fromActivePitchKey: key))
-        }
-        activePitches.removeAll()
+        stopActiveNotesForLoopWrap()
         isPlaying = false
     }
 
@@ -147,6 +144,7 @@ final class SequencerService {
             triggerEvents(after: previousBeat, through: unwrappedBeat)
         } else {
             triggerEvents(after: previousBeat, beforeLoopEnd: loopBeats)
+            stopActiveNotesForLoopWrap()
             triggerEvents(fromLoopStartThrough: nextBeat)
         }
     }
@@ -173,6 +171,13 @@ final class SequencerService {
         scheduledEvents
             .filter { $0.beat == beat }
             .forEach(trigger)
+    }
+
+    private func stopActiveNotesForLoopWrap() {
+        activePitches.sorted().forEach { key in
+            playback.noteOff(pitch: Self.pitch(fromActivePitchKey: key), track: Self.track(fromActivePitchKey: key))
+        }
+        activePitches.removeAll()
     }
 
     private func trigger(_ event: SequencerEvent) {

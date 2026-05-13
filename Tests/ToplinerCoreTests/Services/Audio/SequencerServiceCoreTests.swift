@@ -61,22 +61,68 @@ final class SequencerServiceCoreTests: XCTestCase {
 
     func testAdvanceLoopsRegionAndTriggersWrappedEvents() {
         let playback = MockSequencerPlayback()
-        let sequencer = SequencerService(playback: playback, bpm: 60, loopBeats: 4)
+        let sequencer = SequencerService(playback: playback, bpm: 60, loopBeats: 4, currentBeat: 3.25)
         sequencer.schedule(leadNotes: [
             MIDINoteEvent(pitch: 60, startBeat: 3.5, durationBeats: 0.25, velocity: 100),
             MIDINoteEvent(pitch: 64, startBeat: 0, durationBeats: 0.5, velocity: 80)
         ])
 
         sequencer.start()
-        sequencer.currentBeat = 3.25
         sequencer.advance(elapsedSeconds: 1)
 
         XCTAssertEqual(sequencer.currentBeat, 0.25, accuracy: 0.0001)
         XCTAssertEqual(playback.events, [
-            .noteOn(pitch: 64, velocity: 80, track: .lead),
             .noteOn(pitch: 60, velocity: 100, track: .lead),
             .noteOff(pitch: 60, track: .lead),
             .noteOn(pitch: 64, velocity: 80, track: .lead)
+        ])
+    }
+
+    func testLoopWrapTurnsOffActiveNotesBeforeRestartingAtLoopStart() {
+        let playback = MockSequencerPlayback()
+        let sequencer = SequencerService(playback: playback, bpm: 60, loopBeats: 4, currentBeat: 3.25)
+        sequencer.schedule(leadNotes: [
+            MIDINoteEvent(pitch: 67, startBeat: 3.5, durationBeats: 1, velocity: 100),
+            MIDINoteEvent(pitch: 60, startBeat: 0, durationBeats: 0.5, velocity: 80)
+        ])
+
+        sequencer.start()
+        sequencer.advance(elapsedSeconds: 1)
+
+        XCTAssertEqual(sequencer.currentBeat, 0.25, accuracy: 0.0001)
+        XCTAssertEqual(playback.events, [
+            .noteOn(pitch: 67, velocity: 100, track: .lead),
+            .noteOff(pitch: 67, track: .lead),
+            .noteOn(pitch: 60, velocity: 80, track: .lead)
+        ])
+    }
+
+    func testLoopWrapTurnsOffChordTrackNotesBeforeRestartingAtLoopStart() {
+        let playback = MockSequencerPlayback()
+        let sequencer = SequencerService(playback: playback, bpm: 60, loopBeats: 4, currentBeat: 2.75)
+        let chord = ChordEvent(
+            symbol: "Cmaj7",
+            rootMidiNote: 60,
+            midiNotes: [60, 64],
+            startBeat: 3,
+            durationBeats: 2,
+            romanNumeral: "Imaj7",
+            confidence: 0.9
+        )
+        sequencer.schedule(
+            leadNotes: [],
+            chordProgression: ChordProgression(styleID: "neo-soul", key: "C", chords: [chord])
+        )
+
+        sequencer.start()
+        sequencer.advance(elapsedSeconds: 1.5)
+
+        XCTAssertEqual(sequencer.currentBeat, 0.25, accuracy: 0.0001)
+        XCTAssertEqual(playback.events, [
+            .noteOn(pitch: 60, velocity: 90, track: .chords),
+            .noteOn(pitch: 64, velocity: 90, track: .chords),
+            .noteOff(pitch: 60, track: .chords),
+            .noteOff(pitch: 64, track: .chords)
         ])
     }
 
