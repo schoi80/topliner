@@ -2,3 +2,8 @@
 DerivedData/
 *.xcresult
 .DS_Store
+Topliner/Resources/Models/*.litertlm
+Topliner/Resources/Models/*.tflite
+Topliner/Resources/Models/*.bin
+Topliner/Resources/Models/*.gguf
+!Topliner/Resources/Models/.gitkeep
