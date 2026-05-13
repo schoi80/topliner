@@ -4,6 +4,7 @@ import Observation
 enum SequencerTrack: Equatable {
     case lead
     case chords
+    case metronome
 }
 
 protocol SequencerPlaybackManaging: AnyObject {
@@ -56,7 +57,7 @@ final class SequencerService {
         return beats * 60 / bpm
     }
 
-    func schedule(leadNotes: [MIDINoteEvent], chordProgression: ChordProgression? = nil) {
+    func schedule(leadNotes: [MIDINoteEvent], chordProgression: ChordProgression? = nil, metronomeEnabled: Bool = false) {
         var events: [SequencerEvent] = []
 
         for note in leadNotes {
@@ -103,7 +104,27 @@ final class SequencerService {
             }
         }
 
+        if metronomeEnabled {
+            events.append(contentsOf: metronomeEvents())
+        }
+
         scheduledEvents = events.sorted(by: Self.sortEvents)
+    }
+
+    private func metronomeEvents() -> [SequencerEvent] {
+        guard loopBeats > 0 else { return [] }
+        let clickDuration = 0.08
+        let beatCount = Int(loopBeats.rounded(.down))
+        return (0..<beatCount).flatMap { beat in
+            let isDownbeat = beat % 4 == 0
+            let pitch = isDownbeat ? 84 : 76
+            let velocity = isDownbeat ? 110 : 84
+            let startBeat = Double(beat)
+            return [
+                SequencerEvent(beat: startBeat, kind: .noteOn, pitch: pitch, velocity: velocity, track: .metronome),
+                SequencerEvent(beat: min(startBeat + clickDuration, loopBeats), kind: .noteOff, pitch: pitch, velocity: 0, track: .metronome)
+            ]
+        }
     }
 
     func start() {
@@ -205,15 +226,20 @@ final class SequencerService {
     }
 
     private static func activePitchKey(pitch: Int, track: SequencerTrack) -> Int {
-        pitch + (track == .chords ? 1_000 : 0)
+        switch track {
+        case .lead: return pitch
+        case .chords: return pitch + 1_000
+        case .metronome: return pitch + 2_000
+        }
     }
 
     private static func pitch(fromActivePitchKey key: Int) -> Int {
-        key >= 1_000 ? key - 1_000 : key
+        key >= 2_000 ? key - 2_000 : (key >= 1_000 ? key - 1_000 : key)
     }
 
     private static func track(fromActivePitchKey key: Int) -> SequencerTrack {
-        key >= 1_000 ? .chords : .lead
+        if key >= 2_000 { return .metronome }
+        return key >= 1_000 ? .chords : .lead
     }
 }
 

@@ -113,6 +113,50 @@ final class MockChordGenerationProviderCoreTests: XCTestCase {
         XCTAssertTrue(advanced.chords.contains { $0.symbol.contains("9") || $0.symbol.contains("13") || $0.symbol.contains("alt") })
     }
 
+    func testMockRegenerationUsesDifferentVariantThanPreviousProgression() throws {
+        let provider = MockChordGenerationProvider(styleLibrary: try .defaultLibrary())
+        let baseRequest = ChordGenerationRequest(
+            styleID: "neo_soul",
+            key: "C",
+            bpm: 92,
+            melodyNotes: [MIDINoteEvent(pitch: 60, startBeat: 0, durationBeats: 1, velocity: 96)],
+            totalBeats: 8,
+            complexity: .balanced
+        )
+        let first = try provider.generateProgression(for: baseRequest)
+        let regenerated = try provider.generateProgression(for: ChordGenerationRequest(
+            styleID: "neo_soul",
+            key: "C",
+            bpm: 92,
+            melodyNotes: baseRequest.melodyNotes,
+            totalBeats: 8,
+            complexity: .balanced,
+            previousProgression: first,
+            variantIndex: 1
+        ))
+
+        XCTAssertNotEqual(first.chords.map(\.romanNumeral), regenerated.chords.map(\.romanNumeral))
+        XCTAssertTrue(regenerated.explanation?.contains("variant 2") == true)
+    }
+
+    func testAdvancedMockAddsPassingTurnaroundSecondaryAndNeighborChords() throws {
+        let provider = MockChordGenerationProvider(styleLibrary: try .defaultLibrary())
+        let progression = try provider.generateProgression(for: ChordGenerationRequest(
+            styleID: "neo_soul",
+            key: "C",
+            bpm: 92,
+            melodyNotes: [MIDINoteEvent(pitch: 64, startBeat: 0, durationBeats: 1, velocity: 96)],
+            totalBeats: 8,
+            complexity: .advanced
+        ))
+        let romans = progression.chords.compactMap(\.romanNumeral)
+
+        XCTAssertGreaterThanOrEqual(progression.chords.count, 8)
+        XCTAssertTrue(romans.contains("#ivø7"), "advanced should include passing/neighbor harmonic glue")
+        XCTAssertTrue(romans.contains("V7/vi"), "advanced should include secondary dominants")
+        XCTAssertTrue(romans.contains("bII7"), "advanced should include turnaround color")
+    }
+
     func testMockUsesSeedChordCountToDistributeDurationsAcrossTotalBeats() throws {
         let style = HarmonicStyle(
             id: "test_style",

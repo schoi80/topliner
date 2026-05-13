@@ -26,7 +26,8 @@ struct ChordGenerationPromptBuilder {
         - Return exactly one JSON object matching the response schema.
         - Use the requested styleID and key exactly as supplied.
         - Generate chords that support the melodyNotes rhythm and pitch contour.
-        - Match requested complexity: simple = fewer/basic chords, balanced = style seed density, advanced = richer extensions/color.
+        - Match requested complexity: simple = fewer/basic chords, balanced = style seed density, advanced = richer extensions/color with passing chords, turnaround chords, secondary dominants, and neighbor chords as harmonic glue.
+        - If previousProgression is present, this is a regeneration request. Generate a meaningfully different variant: do not repeat the same chord symbols, roman numerals, or harmonic rhythm unless required by the melody.
         - All startBeat and durationBeats values must align to \(formatNumber(quantizeGridBeats))-beat grid.
         - Chord events must cover useful portions of the requested totalBeats without negative starts or durations.
         - MIDI values must be integers in the 0...127 range.
@@ -60,11 +61,43 @@ struct ChordGenerationPromptBuilder {
           "bpm": \(formatNumber(request.bpm)),
           "totalBeats": \(formatNumber(request.totalBeats)),
           "complexity": "\(request.complexity.rawValue)",
+          "variantIndex": \(request.variantIndex),
+          "previousProgression": \(previousProgressionJSON(request.previousProgression)),
           "melodyNotes": [
         \(notes)
           ]
         }
         """
+    }
+
+    private func previousProgressionJSON(_ progression: ChordProgression?) -> String {
+        guard let progression else { return "null" }
+        let chords = progression.chords.map { chord in
+            """
+                {
+                  "symbol": "\(escaped(chord.symbol))",
+                  "rootMidiNote": \(chord.rootMidiNote),
+                  "midiNotes": [\(chord.midiNotes.map(String.init).joined(separator: ", "))],
+                  "startBeat": \(formatNumber(chord.startBeat)),
+                  "durationBeats": \(formatNumber(chord.durationBeats)),
+                  "romanNumeral": \(optionalStringJSON(chord.romanNumeral))
+                }
+            """
+        }.joined(separator: ",\n")
+        return """
+        {
+          "styleID": "\(escaped(progression.styleID))",
+          "key": "\(escaped(progression.key ?? ""))",
+          "chords": [
+        \(chords)
+          ]
+        }
+        """
+    }
+
+    private func optionalStringJSON(_ value: String?) -> String {
+        guard let value else { return "null" }
+        return "\"\(escaped(value))\""
     }
 
     private func styleJSON(style: HarmonicStyle) -> String {

@@ -59,7 +59,7 @@ struct ChordGenerationView: View {
                     ProgressView()
                         .controlSize(.small)
                 } else {
-                    Label("Generate", systemImage: "sparkles")
+                    Label(viewModel.generatedProgression == nil ? "Generate" : "Regenerate", systemImage: "sparkles")
                 }
             }
             .disabled(viewModel.isGenerating || viewModel.selectedStyleID.isEmpty)

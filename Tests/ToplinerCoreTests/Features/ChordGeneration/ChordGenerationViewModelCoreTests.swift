@@ -115,6 +115,33 @@ final class ChordGenerationViewModelCoreTests: XCTestCase {
         XCTAssertEqual(provider.requests.last?.complexity, .simple)
     }
 
+    func testRegenerateIncludesPreviousProgressionAndIncrementsVariantIndex() throws {
+        let styleLibrary = try StyleLibrary.defaultLibrary()
+        let firstProgression = ChordProgression(
+            styleID: "neo_soul",
+            key: "C",
+            chords: [ChordEvent(symbol: "Cmaj9", rootMidiNote: 60, midiNotes: [60, 64, 67, 71, 74], startBeat: 0, durationBeats: 4)],
+            explanation: "First"
+        )
+        let secondProgression = ChordProgression(
+            styleID: "neo_soul",
+            key: "C",
+            chords: [ChordEvent(symbol: "Fmaj9", rootMidiNote: 65, midiNotes: [65, 69, 72, 76, 79], startBeat: 0, durationBeats: 4)],
+            explanation: "Second"
+        )
+        let provider = RecordingChordProvider(results: [firstProgression, secondProgression])
+        let viewModel = ChordGenerationViewModel(styleLibrary: styleLibrary, provider: provider)
+
+        viewModel.generateChords(melodyNotes: [], key: "C", bpm: 120, totalBeats: 16)
+        viewModel.generateChords(melodyNotes: [], key: "C", bpm: 120, totalBeats: 16)
+
+        XCTAssertNil(provider.requests[0].previousProgression)
+        XCTAssertEqual(provider.requests[0].variantIndex, 0)
+        XCTAssertEqual(provider.requests[1].previousProgression, firstProgression)
+        XCTAssertEqual(provider.requests[1].variantIndex, 1)
+        XCTAssertEqual(viewModel.generatedProgression, secondProgression)
+    }
+
     func testClearGeneratedChordsRemovesProgressionOverlayAndErrors() throws {
         let styleLibrary = try StyleLibrary.defaultLibrary()
         let viewModel = ChordGenerationViewModel(styleLibrary: styleLibrary, provider: RecordingChordProvider())
@@ -138,19 +165,23 @@ final class ChordGenerationViewModelCoreTests: XCTestCase {
 private final class RecordingChordProvider: ChordGenerationProviding {
     var requests: [ChordGenerationRequest] = []
     var result: ChordProgression
+    var results: [ChordProgression]
     var error: Error?
 
     init(
         result: ChordProgression = ChordProgression(styleID: "neo_soul", key: "C", chords: [], explanation: nil),
+        results: [ChordProgression] = [],
         error: Error? = nil
     ) {
         self.result = result
+        self.results = results
         self.error = error
     }
 
     func generateProgression(for request: ChordGenerationRequest) throws -> ChordProgression {
         requests.append(request)
         if let error { throw error }
+        if requests.count <= results.count { return results[requests.count - 1] }
         return result
     }
 }

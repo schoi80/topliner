@@ -24,6 +24,7 @@ final class ChordGenerationViewModel {
     var isGenerating: Bool = false
     var generatedProgression: ChordProgression?
     var errorMessage: String?
+    private(set) var generationCount: Int = 0
 
     private(set) var styleLibrary: StyleLibrary
     private var provider: any ChordGenerationProviding
@@ -79,6 +80,7 @@ final class ChordGenerationViewModel {
     ) {
         isGenerating = true
         errorMessage = nil
+        let previousProgression = generatedProgression
         generatedProgression = nil
 
         let request = ChordGenerationRequest(
@@ -87,11 +89,14 @@ final class ChordGenerationViewModel {
             bpm: bpm,
             melodyNotes: melodyNotes,
             totalBeats: totalBeats,
-            complexity: selectedComplexity
+            complexity: selectedComplexity,
+            previousProgression: previousProgression,
+            variantIndex: generationCount
         )
 
         do {
             generatedProgression = try provider.generateProgression(for: request)
+            generationCount += 1
         } catch {
             errorMessage = friendlyMessage(for: error)
         }
@@ -102,6 +107,7 @@ final class ChordGenerationViewModel {
     func clearGeneratedChords() {
         generatedProgression = nil
         errorMessage = nil
+        generationCount = 0
     }
 
     private func friendlyMessage(for error: Error) -> String {

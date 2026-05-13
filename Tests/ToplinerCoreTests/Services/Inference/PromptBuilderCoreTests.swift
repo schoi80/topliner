@@ -72,6 +72,41 @@ final class PromptBuilderCoreTests: XCTestCase {
         XCTAssertTrue(prompt.contains("Do not include prose"))
     }
 
+    func testPromptIncludesPreviousProgressionAndRegenerationInstructions() throws {
+        let style = HarmonicStyle(
+            id: "neo_soul",
+            displayName: "Neo-soul",
+            promptInstructions: "Use lush chords.",
+            progressionSeeds: []
+        )
+        let previous = ChordProgression(
+            styleID: "neo_soul",
+            key: "C",
+            chords: [ChordEvent(symbol: "Cmaj9", rootMidiNote: 60, midiNotes: [60, 64, 67, 71, 74], startBeat: 0, durationBeats: 4, romanNumeral: "Imaj9", confidence: 0.9)],
+            explanation: "Previous"
+        )
+        let request = ChordGenerationRequest(
+            styleID: style.id,
+            key: "C",
+            bpm: 120,
+            melodyNotes: [],
+            totalBeats: 16,
+            complexity: .advanced,
+            previousProgression: previous,
+            variantIndex: 1
+        )
+
+        let prompt = ChordGenerationPromptBuilder().buildPrompt(request: request, style: style)
+
+        XCTAssertTrue(prompt.contains("previousProgression"))
+        XCTAssertTrue(prompt.contains("Cmaj9"))
+        XCTAssertTrue(prompt.contains("Generate a meaningfully different variant"))
+        XCTAssertTrue(prompt.contains("passing chords"))
+        XCTAssertTrue(prompt.contains("turnaround chords"))
+        XCTAssertTrue(prompt.contains("secondary dominants"))
+        XCTAssertTrue(prompt.contains("neighbor chords"))
+    }
+
     func testPromptIncludesStrictResponseSchema() {
         let builder = ChordGenerationPromptBuilder()
         let style = HarmonicStyle(

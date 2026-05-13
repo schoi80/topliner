@@ -192,6 +192,33 @@ final class ComposerViewModelCoreTests: XCTestCase {
         XCTAssertNil(viewModel.selectedNoteID)
     }
 
+    func testSessionSettingsDefaultToFourBarsAt120BPMWithMetronomeOff() {
+        let viewModel = ComposerViewModel()
+
+        XCTAssertEqual(viewModel.bpm, 120)
+        XCTAssertEqual(viewModel.barLength, 4)
+        XCTAssertEqual(viewModel.totalBeats, 16)
+        XCTAssertFalse(viewModel.isMetronomeEnabled)
+    }
+
+    func testSessionSettingsClampBPMAndBarLength() {
+        let viewModel = ComposerViewModel()
+
+        viewModel.bpm = 12
+        viewModel.barLength = 99
+
+        XCTAssertEqual(viewModel.bpm, 40)
+        XCTAssertEqual(viewModel.barLength, 16)
+        XCTAssertEqual(viewModel.totalBeats, 64)
+
+        viewModel.bpm = 400
+        viewModel.barLength = 0
+
+        XCTAssertEqual(viewModel.bpm, 240)
+        XCTAssertEqual(viewModel.barLength, 1)
+        XCTAssertEqual(viewModel.totalBeats, 4)
+    }
+
     private func makeGeometry() -> PianoRollGeometry {
         PianoRollGeometry(size: CGSize(width: 400, height: 480), pitchRange: 60...71, totalBeats: 16, quantizeGrid: 0.25)
     }

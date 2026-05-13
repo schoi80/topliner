@@ -126,6 +126,24 @@ final class SequencerServiceCoreTests: XCTestCase {
         ])
     }
 
+    func testScheduleAddsMetronomeClickEventsWhenEnabled() {
+        let playback = MockSequencerPlayback()
+        let sequencer = SequencerService(playback: playback, bpm: 120, loopBeats: 4)
+
+        sequencer.schedule(leadNotes: [], chordProgression: nil, metronomeEnabled: true)
+
+        XCTAssertEqual(sequencer.scheduledEvents, [
+            SequencerEvent(beat: 0, kind: .noteOn, pitch: 84, velocity: 110, track: .metronome),
+            SequencerEvent(beat: 0.08, kind: .noteOff, pitch: 84, velocity: 0, track: .metronome),
+            SequencerEvent(beat: 1, kind: .noteOn, pitch: 76, velocity: 84, track: .metronome),
+            SequencerEvent(beat: 1.08, kind: .noteOff, pitch: 76, velocity: 0, track: .metronome),
+            SequencerEvent(beat: 2, kind: .noteOn, pitch: 76, velocity: 84, track: .metronome),
+            SequencerEvent(beat: 2.08, kind: .noteOff, pitch: 76, velocity: 0, track: .metronome),
+            SequencerEvent(beat: 3, kind: .noteOn, pitch: 76, velocity: 84, track: .metronome),
+            SequencerEvent(beat: 3.08, kind: .noteOff, pitch: 76, velocity: 0, track: .metronome)
+        ])
+    }
+
     func testStopTurnsOffActivePitches() {
         let playback = MockSequencerPlayback()
         let sequencer = SequencerService(playback: playback, bpm: 60, loopBeats: 4)

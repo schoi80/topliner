@@ -35,7 +35,7 @@ struct MockChordGenerationProvider: ChordGenerationProviding {
             styleID: style.id,
             key: request.key,
             chords: events,
-            explanation: "Mock progression (\(request.complexity.displayName.lowercased())) using \(style.displayName) seed \"\(seed.name)\" and \(request.melodyNotes.count) melody note(s)."
+            explanation: "Mock progression variant \(request.variantIndex + 1) (\(request.complexity.displayName.lowercased())) using \(style.displayName) seed \"\(seed.name)\" and \(request.melodyNotes.count) melody note(s)."
         )
     }
 
@@ -45,11 +45,19 @@ struct MockChordGenerationProvider: ChordGenerationProviding {
             return ProgressionSeed(name: "Fallback", chords: ["I", "IV", "V", "I"])
         }
         guard nonEmptySeeds.count > 1, let firstNote = request.melodyNotes.sorted(by: melodySort).first else {
-            return nonEmptySeeds[0]
+            let variantOffset = max(0, request.variantIndex)
+            return nonEmptySeeds[variantOffset % nonEmptySeeds.count]
         }
 
         let melodyBucket = melodicSeedBucket(for: firstNote.pitch)
-        return nonEmptySeeds[melodyBucket % nonEmptySeeds.count]
+        let variantOffset = max(0, request.variantIndex)
+        let previousRomans = request.previousProgression?.chords.compactMap(\.romanNumeral) ?? []
+        let preferredIndex = (melodyBucket + variantOffset) % nonEmptySeeds.count
+        let preferredSeed = nonEmptySeeds[preferredIndex]
+        if !previousRomans.isEmpty, previousRomans == chords(from: preferredSeed, complexity: request.complexity) {
+            return nonEmptySeeds[(preferredIndex + 1) % nonEmptySeeds.count]
+        }
+        return preferredSeed
     }
 
     private func melodySort(_ lhs: MIDINoteEvent, _ rhs: MIDINoteEvent) -> Bool {
@@ -72,8 +80,19 @@ struct MockChordGenerationProvider: ChordGenerationProviding {
         case .balanced:
             return seed.chords
         case .advanced:
-            return seed.chords.map(enriched)
+            return advancedChords(from: seed.chords)
         }
+    }
+
+    private func advancedChords(from baseChords: [String]) -> [String] {
+        guard !baseChords.isEmpty else { return [] }
+        var advanced: [String] = []
+        let glue = ["#ivø7", "V7/vi", "bII7", "viiø7"]
+        for (index, chord) in baseChords.enumerated() {
+            advanced.append(enriched(chord))
+            advanced.append(glue[index % glue.count])
+        }
+        return advanced
     }
 
     private func simplified(_ romanChord: String) -> String {
@@ -176,7 +195,8 @@ private enum RomanChordParser {
         }
 
         if rawSuffix.hasPrefix("ø") {
-            return "m7b5" + rawSuffix.dropFirst()
+            let remainder = rawSuffix.dropFirst()
+            return remainder == "7" ? "m7b5" : "m7b5" + remainder
         }
 
         if numeral.first?.isLowercase == true, rawSuffix.first?.isNumber == true {
