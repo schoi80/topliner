@@ -28,6 +28,7 @@
 		B816FD171A04FAB597AA877F /* LeadVoiceBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8686E36CB4C4266AD2E5081 /* LeadVoiceBufferTests.swift */; };
 		B8BFC9EF4A8EC6A3F0443EE3 /* MIDINoteEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D0FFEA0E1C83A8C5E9551F /* MIDINoteEventTests.swift */; };
 		BE6A9C534881829E69C7F443 /* QuantizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF15F22A4F56ABEB0C15AC05 /* QuantizerTests.swift */; };
+		C47CF596CAE1B06547C87394 /* AudioEngineService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B8B8C40411107DE47863A2 /* AudioEngineService.swift */; };
 		CC4B21FA4E5335C06A17C597 /* PianoRollCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767DC646984C1FB44A34B2E2 /* PianoRollCanvasView.swift */; };
 		CE40CF66D9CE63DD6DBD5057 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AA5A8E6673FC30C20831CE /* AppEnvironment.swift */; };
 		D8ADD207369825D3FD82CD82 /* PianoRollGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE473382DB4B20F486A4934 /* PianoRollGeometryTests.swift */; };
@@ -71,6 +72,7 @@
 		844F76AE5C4F6A03CBF713C9 /* PlayheadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayheadView.swift; sourceTree = "<group>"; };
 		84BA5711C11F0FBE52EE2E0A /* ToplinerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerApp.swift; sourceTree = "<group>"; };
 		A07B161209CDB6DED2185DFE /* LeadVoiceBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadVoiceBuffer.swift; sourceTree = "<group>"; };
+		A7B8B8C40411107DE47863A2 /* AudioEngineService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngineService.swift; sourceTree = "<group>"; };
 		A975B631614EC8652C81A8E9 /* PianoRollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollView.swift; sourceTree = "<group>"; };
 		AEE8E3C578AAD73BF10FAF8E /* ToplinerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToplinerTests.swift; sourceTree = "<group>"; };
 		BAE473382DB4B20F486A4934 /* PianoRollGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollGeometryTests.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 		2004A76FF17578D95290ADFB /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				A7B8B8C40411107DE47863A2 /* AudioEngineService.swift */,
 				25A54A6FEE587DDEF253D1A8 /* PlayheadController.swift */,
 			);
 			path = Audio;
@@ -373,6 +376,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE40CF66D9CE63DD6DBD5057 /* AppEnvironment.swift in Sources */,
+				C47CF596CAE1B06547C87394 /* AudioEngineService.swift in Sources */,
 				DADD99A0BF093D22C20ABB5C /* ChordProgression.swift in Sources */,
 				416258E155A33F6E18319D8C /* ComposerView.swift in Sources */,
 				B584B0A9F2F2FB16E7017427 /* ComposerViewModel.swift in Sources */,
