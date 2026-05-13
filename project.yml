@@ -49,6 +49,7 @@ targets:
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         NSMicrophoneUsageDescription: Topliner needs microphone access to record vocal ideas and convert them into MIDI notes.
+        NSBluetoothAlwaysUsageDescription: Topliner uses Bluetooth to pair with MIDI controllers and hosts for wireless MIDI output.
         UILaunchScreen: {}
   ToplinerTests:
     type: bundle.unit-test
