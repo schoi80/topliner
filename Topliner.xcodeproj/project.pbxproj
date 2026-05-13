@@ -39,6 +39,7 @@
 		D8ADD207369825D3FD82CD82 /* PianoRollGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE473382DB4B20F486A4934 /* PianoRollGeometryTests.swift */; };
 		DADD99A0BF093D22C20ABB5C /* ChordProgression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327E7B31202E51E6F4D80795 /* ChordProgression.swift */; };
 		E2DFAC43990AEE7DE091B78F /* ToplinerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED587464EE5A35D20E5A9D6 /* ToplinerUITests.swift */; };
+		F3A5AD46C8A93268396E64C0 /* PitchTraceSegmenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B63EAF1BFC9305A9FBFE40 /* PitchTraceSegmenter.swift */; };
 		FCF6B106CBDC16CA0B077A85 /* PlayheadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25A54A6FEE587DDEF253D1A8 /* PlayheadController.swift */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +62,7 @@
 
 /* Begin PBXFileReference section */
 		05AA5A8E6673FC30C20831CE /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		08B63EAF1BFC9305A9FBFE40 /* PitchTraceSegmenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchTraceSegmenter.swift; sourceTree = "<group>"; };
 		2064C1620978F59E70897489 /* ProjectDocumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectDocumentTests.swift; sourceTree = "<group>"; };
 		25A54A6FEE587DDEF253D1A8 /* PlayheadController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayheadController.swift; sourceTree = "<group>"; };
 		27893BC0B37F8E1F533D28A9 /* PianoRollInteractionLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoRollInteractionLayer.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				A7B8B8C40411107DE47863A2 /* AudioEngineService.swift */,
+				08B63EAF1BFC9305A9FBFE40 /* PitchTraceSegmenter.swift */,
 				8DA1165FB5CE1990C924FA99 /* PitchTrackingService.swift */,
 				25A54A6FEE587DDEF253D1A8 /* PlayheadController.swift */,
 				ED24371F43AB591882807DFB /* SequencerService.swift */,
@@ -413,6 +416,7 @@
 				88C12EDE788FDFFBF271A99E /* PianoRollGridView.swift in Sources */,
 				4167E67476054C47391BFC1A /* PianoRollInteractionLayer.swift in Sources */,
 				4C57C13B0FBE00C7C9968FCD /* PianoRollView.swift in Sources */,
+				F3A5AD46C8A93268396E64C0 /* PitchTraceSegmenter.swift in Sources */,
 				C8BC4FB6A9870AEEC685E91F /* PitchTrackingService.swift in Sources */,
 				FCF6B106CBDC16CA0B077A85 /* PlayheadController.swift in Sources */,
 				2453B053C1E417D2811F03C7 /* PlayheadView.swift in Sources */,

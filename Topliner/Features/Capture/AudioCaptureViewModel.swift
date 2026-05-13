@@ -26,28 +26,34 @@ protocol AudioRecordingManaging: AnyObject {
 final class AudioCaptureViewModel {
     private let recorder: AudioRecordingManaging
     private let pitchTracker: PitchTrackingManaging
+    private let pitchSegmenter: PitchTraceSegmenting
 
     private(set) var permissionStatus: MicrophonePermissionStatus
     private(set) var isRecording: Bool
     private(set) var capturedBuffer: CapturedAudioBuffer?
     private(set) var pitchTrace: [PitchSample]
+    private(set) var draftMIDINotes: [MIDINoteEvent]
     private(set) var errorMessage: String?
 
     init(
         recorder: AudioRecordingManaging = SystemAudioRecorder(),
         pitchTracker: PitchTrackingManaging = PitchTrackingService(),
+        pitchSegmenter: PitchTraceSegmenting = PitchTraceSegmenter(),
         permissionStatus: MicrophonePermissionStatus = .unknown,
         isRecording: Bool = false,
         capturedBuffer: CapturedAudioBuffer? = nil,
         pitchTrace: [PitchSample] = [],
+        draftMIDINotes: [MIDINoteEvent] = [],
         errorMessage: String? = nil
     ) {
         self.recorder = recorder
         self.pitchTracker = pitchTracker
+        self.pitchSegmenter = pitchSegmenter
         self.permissionStatus = permissionStatus
         self.isRecording = isRecording
         self.capturedBuffer = capturedBuffer
         self.pitchTrace = pitchTrace
+        self.draftMIDINotes = draftMIDINotes
         self.errorMessage = errorMessage
     }
 
@@ -70,6 +76,7 @@ final class AudioCaptureViewModel {
             try recorder.startRecording()
             capturedBuffer = nil
             pitchTrace = []
+            draftMIDINotes = []
             errorMessage = nil
             isRecording = true
         } catch {
@@ -81,8 +88,10 @@ final class AudioCaptureViewModel {
     func stopRecording() {
         guard isRecording else { return }
         let buffer = recorder.stopRecording()
+        let trace = buffer.map { pitchTracker.track(buffer: $0) } ?? []
         capturedBuffer = buffer
-        pitchTrace = buffer.map { pitchTracker.track(buffer: $0) } ?? []
+        pitchTrace = trace
+        draftMIDINotes = pitchSegmenter.segment(trace: trace, bpm: 120)
         isRecording = false
     }
 

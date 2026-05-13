@@ -49,12 +49,18 @@ final class AudioCaptureViewModelCoreTests: XCTestCase {
     func testStopRecordingStoresCapturedBufferTranscribesPitchTraceAndClearsRecordingState() {
         let buffer = CapturedAudioBuffer(samples: [0.1, 0.2, 0.3], sampleRate: 44_100)
         let recorder = MockAudioRecorder(permissionResult: .granted, stopResult: buffer)
-        let pitchTracker = MockPitchTracker(samplesToReturn: [
+        let pitchTrace = [
             PitchSample(timestamp: 0.0, frequency: 440.0, midiNote: 69, amplitude: 0.5)
-        ])
+        ]
+        let draftNotes = [
+            MIDINoteEvent(pitch: 69, startBeat: 0.0, durationBeats: 0.5, velocity: 96)
+        ]
+        let pitchTracker = MockPitchTracker(samplesToReturn: pitchTrace)
+        let segmenter = MockPitchTraceSegmenter(notesToReturn: draftNotes)
         let viewModel = AudioCaptureViewModel(
             recorder: recorder,
             pitchTracker: pitchTracker,
+            pitchSegmenter: segmenter,
             permissionStatus: .granted
         )
 
@@ -64,7 +70,9 @@ final class AudioCaptureViewModelCoreTests: XCTestCase {
         XCTAssertFalse(viewModel.isRecording)
         XCTAssertEqual(viewModel.capturedBuffer, buffer)
         XCTAssertEqual(viewModel.pitchTrace, pitchTracker.samplesToReturn)
+        XCTAssertEqual(viewModel.draftMIDINotes, draftNotes)
         XCTAssertEqual(pitchTracker.buffersTracked, [buffer])
+        XCTAssertEqual(segmenter.segmentCalls, [PitchTraceSegmenterCall(trace: pitchTrace, bpm: 120)])
     }
 
     func testToggleRecordingStartsThenStops() {
@@ -119,5 +127,24 @@ private final class MockPitchTracker: PitchTrackingManaging {
     func track(buffer: CapturedAudioBuffer) -> [PitchSample] {
         buffersTracked.append(buffer)
         return samplesToReturn
+    }
+}
+
+private struct PitchTraceSegmenterCall: Equatable {
+    var trace: [PitchSample]
+    var bpm: Double
+}
+
+private final class MockPitchTraceSegmenter: PitchTraceSegmenting {
+    var notesToReturn: [MIDINoteEvent]
+    private(set) var segmentCalls: [PitchTraceSegmenterCall] = []
+
+    init(notesToReturn: [MIDINoteEvent]) {
+        self.notesToReturn = notesToReturn
+    }
+
+    func segment(trace: [PitchSample], bpm: Double) -> [MIDINoteEvent] {
+        segmentCalls.append(PitchTraceSegmenterCall(trace: trace, bpm: bpm))
+        return notesToReturn
     }
 }

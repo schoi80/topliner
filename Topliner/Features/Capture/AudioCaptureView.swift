@@ -10,6 +10,7 @@ struct AudioCaptureView: View {
             captureControls
             capturedBufferSummary
             pitchTraceSummary
+            draftMIDINotesSummary
             Spacer()
         }
         .padding(24)
@@ -114,6 +115,38 @@ struct AudioCaptureView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    @ViewBuilder
+    private var draftMIDINotesSummary: some View {
+        if !viewModel.draftMIDINotes.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Draft MIDI notes")
+                    .font(.headline)
+
+                Text("\(viewModel.draftMIDINotes.count) notes segmented and quantized")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                if let firstNote = viewModel.draftMIDINotes.first,
+                   let lastNote = viewModel.draftMIDINotes.last {
+                    Text("MIDI \(firstNote.pitch) at beat \(formattedBeat(firstNote.startBeat)) → MIDI \(lastNote.pitch)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background(.green.opacity(0.08), in: RoundedRectangle(cornerRadius: 16))
+        } else if !viewModel.pitchTrace.isEmpty {
+            Text("No draft MIDI notes survived segmentation yet.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private func formattedBeat(_ beat: Double) -> String {
+        beat.formatted(.number.precision(.fractionLength(0...2)))
     }
 
     private var statusText: String {
