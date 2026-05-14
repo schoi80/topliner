@@ -25,6 +25,7 @@ schemes:
     test:
       targets:
         - ToplinerTests
+        - ToplinerUITests
 
 targets:
   Topliner:

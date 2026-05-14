@@ -38,6 +38,7 @@ struct ToplinerAppShell: View {
                         )
                     }
                     .buttonStyle(.plain)
+                    .accessibilityIdentifier("topliner.nav.\(section.rawValue)")
                 }
             }
 
@@ -54,12 +55,16 @@ struct ToplinerAppShell: View {
         switch selectedSection {
         case .compose:
             ComposerView()
+                .accessibilityIdentifier("topliner.screen.compose")
         case .capture:
             NavigationStack { AudioCaptureView() }
+                .accessibilityIdentifier("topliner.screen.capture")
         case .projects:
             NavigationStack { ProjectBrowserView() }
+                .accessibilityIdentifier("topliner.screen.projects")
         case .midi:
             MIDISettingsView()
+                .accessibilityIdentifier("topliner.screen.midi")
         }
     }
 }
