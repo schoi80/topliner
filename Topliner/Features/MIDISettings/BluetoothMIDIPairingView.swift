@@ -20,6 +20,7 @@ struct BluetoothMIDIPairingView: View {
             .buttonStyle(.borderedProminent)
             .frame(minHeight: StudioLayout.minimumTouchTarget)
             .disabled(!service.canPresentPairingInterface)
+            .accessibilityIdentifier("topliner.midi.bluetooth.pair")
 
             Text(service.availabilityMessage)
                 .font(.caption)

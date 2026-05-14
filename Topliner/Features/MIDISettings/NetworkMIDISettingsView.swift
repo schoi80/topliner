@@ -12,6 +12,7 @@ struct NetworkMIDISettingsView: View {
             ))
             .disabled(!service.canEnableNetworkMIDI)
             .frame(minHeight: StudioLayout.minimumTouchTarget)
+            .accessibilityIdentifier("topliner.midi.network.enable")
 
             Picker("Connection Policy", selection: Binding(
                 get: { service.connectionPolicy },
