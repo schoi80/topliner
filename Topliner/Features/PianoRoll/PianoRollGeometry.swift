@@ -3,8 +3,27 @@ import CoreGraphics
 struct PianoRollGeometry {
     var size: CGSize
     var pitchRange: ClosedRange<Int>
-    var totalBeats: Double
+    var startBeat: Double
+    var visibleBeats: Double
     var quantizeGrid: Double
+
+    init(size: CGSize, pitchRange: ClosedRange<Int>, totalBeats: Double, quantizeGrid: Double) {
+        self.init(
+            size: size,
+            pitchRange: pitchRange,
+            startBeat: 0,
+            visibleBeats: totalBeats,
+            quantizeGrid: quantizeGrid
+        )
+    }
+
+    init(size: CGSize, pitchRange: ClosedRange<Int>, startBeat: Double, visibleBeats: Double, quantizeGrid: Double) {
+        self.size = size
+        self.pitchRange = pitchRange
+        self.startBeat = startBeat
+        self.visibleBeats = visibleBeats
+        self.quantizeGrid = quantizeGrid
+    }
 
     func rect(for note: MIDINoteEvent) -> CGRect {
         let x = xPosition(forBeat: note.startBeat)
@@ -15,9 +34,9 @@ struct PianoRollGeometry {
     }
 
     func beat(atX x: CGFloat) -> Double {
-        guard size.width > 0, totalBeats > 0 else { return 0 }
+        guard size.width > 0, visibleBeats > 0 else { return startBeat }
         let clampedX = min(max(x, 0), size.width)
-        return Double(clampedX / size.width) * totalBeats
+        return startBeat + Double(clampedX / size.width) * visibleBeats
     }
 
     func pitch(atY y: CGFloat) -> Int {
@@ -41,8 +60,8 @@ struct PianoRollGeometry {
     }
 
     private var beatWidth: CGFloat {
-        guard totalBeats > 0 else { return 0 }
-        return size.width / CGFloat(totalBeats)
+        guard visibleBeats > 0 else { return 0 }
+        return size.width / CGFloat(visibleBeats)
     }
 
     private var laneHeight: CGFloat {
@@ -51,7 +70,7 @@ struct PianoRollGeometry {
     }
 
     private func xPosition(forBeat beat: Double) -> CGFloat {
-        CGFloat(beat) * beatWidth
+        CGFloat(beat - startBeat) * beatWidth
     }
 
     private func yPosition(forPitch pitch: Int) -> CGFloat {
