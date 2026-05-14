@@ -4,6 +4,13 @@ import SwiftUI
 #if canImport(UIKit)
 import UIKit
 
+final class MultiTouchPassthroughView: UIView {
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let touchCount = event?.allTouches?.count ?? 0
+        return touchCount >= 2 && super.point(inside: point, with: event)
+    }
+}
+
 struct PianoRollViewportGestureLayer: UIViewRepresentable {
     var onPan: (CGSize, CGSize) -> Void
     var onZoom: (Double, CGPoint, CGSize) -> Void
@@ -13,7 +20,7 @@ struct PianoRollViewportGestureLayer: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> UIView {
-        let view = UIView(frame: .zero)
+        let view = MultiTouchPassthroughView(frame: .zero)
         view.backgroundColor = .clear
         view.isMultipleTouchEnabled = true
 

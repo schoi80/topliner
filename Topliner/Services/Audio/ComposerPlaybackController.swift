@@ -5,6 +5,7 @@ import Observation
 final class ComposerPlaybackController {
     private let audioEngine: AudioEnginePlaybackManaging
     private let sequencer: SequencerService
+    private let previewPlayback: SequencerPlaybackManaging
 
     private(set) var currentBeat: Double
     private(set) var isPlaying: Bool
@@ -28,6 +29,7 @@ final class ComposerPlaybackController {
         currentBeat: Double = 0
     ) {
         self.audioEngine = audioEngine
+        self.previewPlayback = playback
         sequencer = SequencerService(playback: playback, bpm: bpm, loopBeats: totalBeats, currentBeat: currentBeat)
         self.currentBeat = currentBeat
         isPlaying = false
@@ -43,9 +45,14 @@ final class ComposerPlaybackController {
         totalBeats: Double,
         currentBeat: Double = 0
     ) {
+        let routedPlayback = TrackRoutingSequencerPlayback(
+            leadPlayback: leadPlayback,
+            chordPlayback: chordPlayback,
+            metronomePlayback: metronomePlayback
+        )
         self.init(
             audioEngine: audioEngine,
-            playback: TrackRoutingSequencerPlayback(leadPlayback: leadPlayback, chordPlayback: chordPlayback, metronomePlayback: metronomePlayback),
+            playback: routedPlayback,
             bpm: bpm,
             totalBeats: totalBeats,
             currentBeat: currentBeat
@@ -75,6 +82,31 @@ final class ComposerPlaybackController {
         sequencer.stop()
         currentBeat = sequencer.currentBeat
         isPlaying = false
+    }
+
+    func previewKeyboardPitch(_ pitch: Int, velocity: Int = 96) throws {
+        do {
+            try audioEngine.start()
+            previewPlayback.noteOn(
+                pitch: min(max(pitch, 0), 127),
+                velocity: min(max(velocity, 0), 127),
+                track: .lead
+            )
+            lastErrorMessage = nil
+        } catch {
+            lastErrorMessage = error.localizedDescription
+            throw error
+        }
+    }
+
+    func stopPreviewKeyboardPitch(_ pitch: Int) {
+        previewPlayback.noteOff(pitch: min(max(pitch, 0), 127), track: .lead)
+    }
+
+    func preview(note: MIDINoteEvent) throws -> Double {
+        try previewKeyboardPitch(note.pitch, velocity: note.velocity)
+        guard bpm > 0 else { return 0 }
+        return max(0, note.durationBeats) * 60 / bpm
     }
 
     func reset() {

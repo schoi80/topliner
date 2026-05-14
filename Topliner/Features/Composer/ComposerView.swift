@@ -40,9 +40,9 @@ struct ComposerView: View {
             VStack(spacing: StudioLayout.panelSpacing) {
                 ComposerTransportView(
                     projectTitle: "Neon Drift",
-                    bpm: viewModel.bpm,
-                    barLength: viewModel.barLength,
-                    isMetronomeEnabled: viewModel.isMetronomeEnabled,
+                    bpm: $viewModel.bpm,
+                    barLength: $viewModel.barLength,
+                    isMetronomeEnabled: $viewModel.isMetronomeEnabled,
                     quantizeGrid: viewModel.leadVoice.quantizeGrid,
                     isPlaying: playbackController.isPlaying,
                     onReset: resetPlayback,
@@ -62,7 +62,10 @@ struct ComposerView: View {
                         onTap: viewModel.handlePianoRollTap,
                         onDrag: viewModel.handlePianoRollDrag,
                         onResize: viewModel.handlePianoRollResize,
-                        onViewportChange: { pianoRollViewport = $0 }
+                        onViewportChange: { pianoRollViewport = $0 },
+                        onKeyboardKeyDown: previewKeyboardPitch,
+                        onKeyboardKeyUp: stopPreviewKeyboardPitch,
+                        onNoteTouchDown: previewNote
                     )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .overlay(
@@ -109,6 +112,12 @@ struct ComposerView: View {
         .onReceive(playbackTimer) { tickDate in
             advancePlaybackIfNeeded(at: tickDate)
         }
+        .onChange(of: viewModel.bpm) { _, newBPM in
+            playbackController.bpm = newBPM
+        }
+        .onChange(of: viewModel.totalBeats) { _, newTotalBeats in
+            playbackController.totalBeats = newTotalBeats
+        }
     }
 
     @ViewBuilder
@@ -152,6 +161,29 @@ struct ComposerView: View {
     private func resetPlayback() {
         playbackController.reset()
         lastPlaybackTick = nil
+    }
+
+    private func previewKeyboardPitch(_ pitch: Int) {
+        do {
+            try playbackController.previewKeyboardPitch(pitch, velocity: 96)
+        } catch {
+            lastPlaybackTick = nil
+        }
+    }
+
+    private func stopPreviewKeyboardPitch(_ pitch: Int) {
+        playbackController.stopPreviewKeyboardPitch(pitch)
+    }
+
+    private func previewNote(_ note: MIDINoteEvent) {
+        do {
+            let releaseDelay = try playbackController.preview(note: note)
+            DispatchQueue.main.asyncAfter(deadline: .now() + releaseDelay) {
+                playbackController.stopPreviewKeyboardPitch(note.pitch)
+            }
+        } catch {
+            lastPlaybackTick = nil
+        }
     }
 
     private var header: some View {

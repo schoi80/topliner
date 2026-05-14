@@ -24,4 +24,19 @@ final class PianoRollKeyboardLayoutCoreTests: XCTestCase {
         XCTAssertEqual(layout.rows.first?.normalizedHeight ?? -1, 1.0 / 12.0, accuracy: 0.0001)
         XCTAssertEqual(layout.rows.last?.normalizedY ?? -1, 11.0 / 12.0, accuracy: 0.0001)
     }
+
+    func testPitchAtYMapsTouchLocationToVisibleKeyboardRows() {
+        let layout = PianoRollKeyboardLayout(pitchRange: 60...71)
+
+        XCTAssertEqual(layout.pitch(atY: 0, height: 360), 71)
+        XCTAssertEqual(layout.pitch(atY: 30, height: 360), 70)
+        XCTAssertEqual(layout.pitch(atY: 359, height: 360), 60)
+    }
+
+    func testPitchAtYClampsOutsideKeyboardBounds() {
+        let layout = PianoRollKeyboardLayout(pitchRange: 60...71)
+
+        XCTAssertEqual(layout.pitch(atY: -40, height: 360), 71)
+        XCTAssertEqual(layout.pitch(atY: 420, height: 360), 60)
+    }
 }

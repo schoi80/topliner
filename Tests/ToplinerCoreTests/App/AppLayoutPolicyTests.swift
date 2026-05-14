@@ -69,7 +69,7 @@ struct AppLayoutPolicyTests {
         #expect(content.contains("NavigationStack { MIDISettingsView() }") == false)
     }
 
-    @Test("composer piano roll uses right-edge keyboard instead of legacy left pitch strip")
+    @Test("composer piano roll uses right-edge keyboard instead of legacy pitch strip")
     func testComposerPianoRollUsesRightEdgeKeyboardInsteadOfLegacyPitchStrip() throws {
         let root = repositoryRoot()
         let content = try String(
@@ -78,7 +78,88 @@ struct AppLayoutPolicyTests {
         )
 
         #expect(content.contains("PianoRollView("))
-        #expect(content.contains("pitchStrip") == false)
+        #expect(content.contains("PianoRollKeyboardStrip") == false)
+        #expect(content.contains("pitchRange: 48...84") == false)
+    }
+
+    @Test("composer wires keyboard strip to press and release synth preview playback")
+    func testComposerWiresKeyboardStripPressAndReleaseToPreviewPlayback() throws {
+        let root = repositoryRoot()
+        let content = try String(
+            contentsOf: root.appendingPathComponent("Topliner/Features/Composer/ComposerView.swift"),
+            encoding: .utf8
+        )
+
+        #expect(content.contains("onKeyboardKeyDown: previewKeyboardPitch"))
+        #expect(content.contains("onKeyboardKeyUp: stopPreviewKeyboardPitch"))
+        #expect(content.contains("private func previewKeyboardPitch(_ pitch: Int)"))
+        #expect(content.contains("private func stopPreviewKeyboardPitch(_ pitch: Int)"))
+        #expect(content.contains("playbackController.previewKeyboardPitch(pitch"))
+        #expect(content.contains("playbackController.stopPreviewKeyboardPitch(pitch)"))
+    }
+
+    @Test("composer wires existing piano-roll note touches to duration-aware synth preview")
+    func testComposerWiresPianoRollNoteTouchesToDurationAwarePreview() throws {
+        let root = repositoryRoot()
+        let content = try String(
+            contentsOf: root.appendingPathComponent("Topliner/Features/Composer/ComposerView.swift"),
+            encoding: .utf8
+        )
+
+        #expect(content.contains("onNoteTouchDown: previewNote"))
+        #expect(content.contains("private func previewNote(_ note: MIDINoteEvent)"))
+        #expect(content.contains("let releaseDelay = try playbackController.preview(note: note)"))
+        #expect(content.contains("playbackController.stopPreviewKeyboardPitch(note.pitch)"))
+    }
+
+    @Test("piano-roll keyboard strip uses drag state for immediate press hold and legato sliding")
+    func testKeyboardStripUsesDragStateForImmediatePressHoldAndLegatoSliding() throws {
+        let root = repositoryRoot()
+        let content = try String(
+            contentsOf: root.appendingPathComponent("Topliner/Features/PianoRoll/PianoRollKeyboardStrip.swift"),
+            encoding: .utf8
+        )
+
+        #expect(content.contains("@State private var activePitch"))
+        #expect(content.contains("DragGesture(minimumDistance: 0"))
+        #expect(content.contains("handleTouch(at: value.location"))
+        #expect(content.contains("onKeyDown?(pitch)"))
+        #expect(content.contains("onKeyUp?(previousPitch)"))
+    }
+
+    @Test("composer transport renders editable tempo loop and metronome controls")
+    func testComposerTransportRendersEditableSessionControls() throws {
+        let root = repositoryRoot()
+        let transportContent = try String(
+            contentsOf: root.appendingPathComponent("Topliner/Features/Composer/ComposerTransportView.swift"),
+            encoding: .utf8
+        )
+        let composerContent = try String(
+            contentsOf: root.appendingPathComponent("Topliner/Features/Composer/ComposerView.swift"),
+            encoding: .utf8
+        )
+
+        #expect(transportContent.contains("@Binding var bpm: Double"))
+        #expect(transportContent.contains("@Binding var barLength: Int"))
+        #expect(transportContent.contains("@Binding var isMetronomeEnabled: Bool"))
+        #expect(transportContent.contains("ComposerSessionControlsView("))
+        #expect(composerContent.contains("bpm: $viewModel.bpm"))
+        #expect(composerContent.contains("barLength: $viewModel.barLength"))
+        #expect(composerContent.contains("isMetronomeEnabled: $viewModel.isMetronomeEnabled"))
+    }
+
+    @Test("composer keeps playback timing in sync when session settings change")
+    func testComposerSyncsPlaybackControllerWhenSessionSettingsChange() throws {
+        let root = repositoryRoot()
+        let content = try String(
+            contentsOf: root.appendingPathComponent("Topliner/Features/Composer/ComposerView.swift"),
+            encoding: .utf8
+        )
+
+        #expect(content.contains(".onChange(of: viewModel.bpm)"))
+        #expect(content.contains("playbackController.bpm = newBPM"))
+        #expect(content.contains(".onChange(of: viewModel.totalBeats)"))
+        #expect(content.contains("playbackController.totalBeats = newTotalBeats"))
     }
 
     private func repositoryRoot() -> URL {

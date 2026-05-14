@@ -43,7 +43,12 @@ final class ComposerViewModel {
 
     func handlePianoRollTap(at point: CGPoint, geometry: PianoRollGeometry) {
         if let tappedNote = note(at: point, geometry: geometry) {
-            selectedNoteID = tappedNote.id
+            if tappedNote.id == selectedNoteID {
+                leadVoice.notes.removeAll { $0.id == tappedNote.id }
+                selectedNoteID = nil
+            } else {
+                selectedNoteID = tappedNote.id
+            }
             return
         }
 

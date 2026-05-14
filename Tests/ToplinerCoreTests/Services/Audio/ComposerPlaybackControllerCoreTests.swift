@@ -58,6 +58,42 @@ final class ComposerPlaybackControllerCoreTests: XCTestCase {
         XCTAssertTrue(playback.events.isEmpty)
         XCTAssertEqual(controller.lastErrorMessage, PlaybackTestError.engineFailed.localizedDescription)
     }
+
+    func testPreviewKeyboardPitchStartsEngineAndTriggersLeadVoiceWithoutStartingSequencer() throws {
+        let engine = RecordingPlaybackAudioEngine()
+        let playback = RecordingSequencerPlayback()
+        let controller = ComposerPlaybackController(audioEngine: engine, playback: playback, bpm: 120, totalBeats: 16)
+
+        try controller.previewKeyboardPitch(72, velocity: 96)
+
+        XCTAssertTrue(engine.didStart)
+        XCTAssertFalse(controller.isPlaying)
+        XCTAssertEqual(playback.events, [.noteOn(72, 96, .lead)])
+    }
+
+    func testStopPreviewKeyboardPitchReleasesLeadVoice() throws {
+        let engine = RecordingPlaybackAudioEngine()
+        let playback = RecordingSequencerPlayback()
+        let controller = ComposerPlaybackController(audioEngine: engine, playback: playback, bpm: 120, totalBeats: 16)
+
+        try controller.previewKeyboardPitch(72, velocity: 96)
+        controller.stopPreviewKeyboardPitch(72)
+
+        XCTAssertEqual(playback.events, [.noteOn(72, 96, .lead), .noteOff(72, .lead)])
+    }
+
+    func testPreviewNoteStartsLeadVoiceAndReturnsItsDurationInSeconds() throws {
+        let engine = RecordingPlaybackAudioEngine()
+        let playback = RecordingSequencerPlayback()
+        let controller = ComposerPlaybackController(audioEngine: engine, playback: playback, bpm: 120, totalBeats: 16)
+        let note = MIDINoteEvent(pitch: 64, startBeat: 2, durationBeats: 1.5, velocity: 88)
+
+        let releaseDelay = try controller.preview(note: note)
+
+        XCTAssertEqual(releaseDelay, 0.75, accuracy: 0.0001)
+        XCTAssertEqual(playback.events, [.noteOn(64, 88, .lead)])
+    }
+
     func testStartRoutesChordProgressionToChordPlaybackTrack() throws {
         let engine = RecordingPlaybackAudioEngine()
         let leadPlayback = RecordingSequencerPlayback()

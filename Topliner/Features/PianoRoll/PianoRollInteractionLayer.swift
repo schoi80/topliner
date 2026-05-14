@@ -10,7 +10,9 @@ struct PianoRollInteractionLayer: View {
     var onTap: (CGPoint, PianoRollGeometry) -> Void
     var onDrag: ((CGPoint, PianoRollGeometry) -> Void)? = nil
     var onResize: ((CGPoint, PianoRollGeometry) -> Void)? = nil
+    var onNoteTouchDown: ((MIDINoteEvent) -> Void)? = nil
 
+    @State private var didBeginTouch = false
     @State private var didDrag = false
     @State private var activeDragMode: DragMode?
 
@@ -25,9 +27,15 @@ struct PianoRollInteractionLayer: View {
                 .gesture(
                     DragGesture(minimumDistance: 0)
                         .onChanged { value in
+                            let geometry = geometry(for: proxy.size)
+                            if !didBeginTouch {
+                                didBeginTouch = true
+                                if let touchedNote = note(at: value.startLocation, geometry: geometry) {
+                                    onNoteTouchDown?(touchedNote)
+                                }
+                            }
                             guard isDrag(value) else { return }
                             didDrag = true
-                            let geometry = geometry(for: proxy.size)
                             let dragMode = activeDragMode ?? dragMode(for: value.startLocation, geometry: geometry)
                             activeDragMode = dragMode
                             handleDrag(value.location, geometry: geometry, mode: dragMode)
@@ -40,6 +48,7 @@ struct PianoRollInteractionLayer: View {
                             } else if !didDrag {
                                 onTap(value.location, geometry)
                             }
+                            didBeginTouch = false
                             didDrag = false
                             activeDragMode = nil
                         }
@@ -59,6 +68,12 @@ struct PianoRollInteractionLayer: View {
 
     private func isDrag(_ value: DragGesture.Value) -> Bool {
         abs(value.translation.width) > 2 || abs(value.translation.height) > 2
+    }
+
+    private func note(at point: CGPoint, geometry: PianoRollGeometry) -> MIDINoteEvent? {
+        notes.first { note in
+            geometry.rect(for: note).contains(point)
+        }
     }
 
     private func dragMode(for point: CGPoint, geometry: PianoRollGeometry) -> DragMode {

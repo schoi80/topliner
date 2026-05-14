@@ -30,6 +30,23 @@ final class ComposerViewModelCoreTests: XCTestCase {
         XCTAssertEqual(viewModel.selectedNoteID, existingNote.id)
     }
 
+    func testTapOnSelectedExistingNoteDeletesIt() {
+        let selectedID = UUID()
+        let selectedNote = MIDINoteEvent(id: selectedID, pitch: 60, startBeat: 4, durationBeats: 2, velocity: 100)
+        let remainingNote = MIDINoteEvent(pitch: 64, startBeat: 6, durationBeats: 1, velocity: 96)
+        let viewModel = ComposerViewModel(
+            leadVoice: LeadVoiceBuffer(notes: [selectedNote, remainingNote], source: .pianoRoll, quantizeGrid: 0.25),
+            selectedNoteID: selectedID
+        )
+        let geometry = makeGeometry()
+        let selectedRect = geometry.rect(for: selectedNote)
+
+        viewModel.handlePianoRollTap(at: CGPoint(x: selectedRect.midX, y: selectedRect.midY), geometry: geometry)
+
+        XCTAssertEqual(viewModel.leadVoice.notes, [remainingNote])
+        XCTAssertNil(viewModel.selectedNoteID)
+    }
+
     func testTapAddedNoteUsesLeadVoiceQuantizeGrid() {
         let viewModel = ComposerViewModel(leadVoice: LeadVoiceBuffer(notes: [], source: .pianoRoll, quantizeGrid: 1.0))
         let geometry = PianoRollGeometry(size: CGSize(width: 400, height: 480), pitchRange: 60...71, totalBeats: 16, quantizeGrid: viewModel.leadVoice.quantizeGrid)

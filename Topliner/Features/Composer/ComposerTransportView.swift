@@ -10,14 +10,14 @@ struct ComposerSessionControlsView: View {
             Stepper(value: $bpm, in: 40...240, step: 1) {
                 StudioControlChip(title: "BPM", value: "\(Int(bpm))", systemImage: "metronome")
             }
-            .labelsHidden()
             .frame(width: 154)
+            .accessibilityIdentifier("topliner.transport.bpm")
 
             Stepper(value: $barLength, in: 1...16, step: 1) {
                 StudioControlChip(title: "Bars", value: "\(barLength)", systemImage: "repeat")
             }
-            .labelsHidden()
             .frame(width: 150)
+            .accessibilityIdentifier("topliner.transport.loop-bars")
 
             Button {
                 isMetronomeEnabled.toggle()
@@ -31,34 +31,44 @@ struct ComposerSessionControlsView: View {
                 )
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("topliner.transport.metronome")
         }
     }
 }
 
 struct ComposerTransportView: View {
     var projectTitle: String
-    var bpm: Double
-    var barLength: Int
-    var isMetronomeEnabled: Bool
+    @Binding var bpm: Double
+    @Binding var barLength: Int
+    @Binding var isMetronomeEnabled: Bool
     var quantizeGrid: Double
     var isPlaying: Bool
     var onReset: () -> Void
     var onPlayStop: () -> Void
 
     var body: some View {
-        TransportBar(
-            state: StudioTransportState(
-                projectTitle: projectTitle,
-                bpm: bpm,
-                barLength: barLength,
-                isMetronomeEnabled: isMetronomeEnabled,
-                snapLabel: snapLabel
-            ),
-            isPlaying: isPlaying,
-            onReset: onReset,
-            onPlayStop: onPlayStop,
-            onRecord: nil
-        )
+        HStack(spacing: 12) {
+            TransportBar(
+                state: StudioTransportState(
+                    projectTitle: projectTitle,
+                    bpm: bpm,
+                    barLength: barLength,
+                    isMetronomeEnabled: isMetronomeEnabled,
+                    snapLabel: snapLabel
+                ),
+                isPlaying: isPlaying,
+                onReset: onReset,
+                onPlayStop: onPlayStop,
+                onRecord: nil
+            )
+            .frame(maxWidth: .infinity)
+
+            ComposerSessionControlsView(
+                bpm: $bpm,
+                barLength: $barLength,
+                isMetronomeEnabled: $isMetronomeEnabled
+            )
+        }
     }
 
     private var snapLabel: String {

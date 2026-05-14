@@ -16,7 +16,9 @@ struct PianoRollView: View {
     var onDrag: ((CGPoint, PianoRollGeometry) -> Void)?
     var onResize: ((CGPoint, PianoRollGeometry) -> Void)?
     var onViewportChange: ((PianoRollViewport) -> Void)?
-    var onKeyboardKeyTap: ((Int) -> Void)?
+    var onKeyboardKeyDown: ((Int) -> Void)?
+    var onKeyboardKeyUp: ((Int) -> Void)?
+    var onNoteTouchDown: ((MIDINoteEvent) -> Void)?
 
     init(
         notes: [MIDINoteEvent],
@@ -34,7 +36,9 @@ struct PianoRollView: View {
         onDrag: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
         onResize: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
         onViewportChange: ((PianoRollViewport) -> Void)? = nil,
-        onKeyboardKeyTap: ((Int) -> Void)? = nil
+        onKeyboardKeyDown: ((Int) -> Void)? = nil,
+        onKeyboardKeyUp: ((Int) -> Void)? = nil,
+        onNoteTouchDown: ((MIDINoteEvent) -> Void)? = nil
     ) {
         self.notes = notes
         self.chordNotes = chordNotes
@@ -51,7 +55,9 @@ struct PianoRollView: View {
         self.onDrag = onDrag
         self.onResize = onResize
         self.onViewportChange = onViewportChange
-        self.onKeyboardKeyTap = onKeyboardKeyTap
+        self.onKeyboardKeyDown = onKeyboardKeyDown
+        self.onKeyboardKeyUp = onKeyboardKeyUp
+        self.onNoteTouchDown = onNoteTouchDown
     }
 
     private var activeViewport: PianoRollViewport {
@@ -115,7 +121,8 @@ struct PianoRollView: View {
                             quantizeGrid: quantizeGrid,
                             onTap: onTap,
                             onDrag: onDrag,
-                            onResize: onResize
+                            onResize: onResize,
+                            onNoteTouchDown: onNoteTouchDown
                         )
                     }
 
@@ -129,7 +136,11 @@ struct PianoRollView: View {
                     }
                 }
 
-                PianoRollKeyboardStrip(pitchRange: viewport.visiblePitchRange, onKeyTap: onKeyboardKeyTap)
+                PianoRollKeyboardStrip(
+                    pitchRange: viewport.visiblePitchRange,
+                    onKeyDown: onKeyboardKeyDown,
+                    onKeyUp: onKeyboardKeyUp
+                )
             }
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             .accessibilityIdentifier("topliner.piano-roll.container")
