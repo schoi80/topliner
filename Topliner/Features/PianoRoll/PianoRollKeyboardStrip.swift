@@ -72,6 +72,9 @@ struct PianoRollKeyboardStrip: View {
                 }
                 .buttonStyle(.plain)
                 .contentShape(Rectangle())
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(row.label)
+                .accessibilityIdentifier("topliner.piano-roll.key.\(row.label)")
             }
         }
         .frame(width: StudioLayout.pianoKeyboardStripWidth)
@@ -82,6 +85,7 @@ struct PianoRollKeyboardStrip: View {
                 .allowsHitTesting(false)
         )
         .accessibilityLabel("Piano roll keyboard")
+        .accessibilityIdentifier("topliner.piano-roll.keyboard")
     }
 
     private func keyFill(for row: PianoRollKeyboardRow) -> some ShapeStyle {

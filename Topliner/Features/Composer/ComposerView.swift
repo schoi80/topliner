@@ -50,8 +50,6 @@ struct ComposerView: View {
                 )
 
                 HStack(spacing: StudioLayout.panelSpacing) {
-                    pitchStrip
-
                     PianoRollView(
                         notes: viewModel.leadVoice.notes,
                         chordNotes: chordGenerationViewModel.generatedChordNotes,
@@ -149,32 +147,6 @@ struct ComposerView: View {
             source: .pianoRoll,
             quantizeGrid: 0.25
         )
-    }
-
-    private var pitchStrip: some View {
-        VStack(spacing: 0) {
-            ForEach(Array(stride(from: 84, through: 48, by: -6)), id: \.self) { pitch in
-                Text(noteName(for: pitch))
-                    .font(.caption2.monospacedDigit())
-                    .foregroundStyle(StudioTheme.textMuted)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-        }
-        .frame(width: StudioLayout.pitchStripWidth)
-        .background(
-            RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
-                .fill(StudioTheme.surface.opacity(0.92))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
-                .stroke(StudioTheme.border, lineWidth: 1)
-                .allowsHitTesting(false)
-        )
-    }
-
-    private func noteName(for pitch: Int) -> String {
-        let names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-        return "\(names[pitch % 12])\(pitch / 12 - 1)"
     }
 
     private func resetPlayback() {

@@ -69,6 +69,18 @@ struct AppLayoutPolicyTests {
         #expect(content.contains("NavigationStack { MIDISettingsView() }") == false)
     }
 
+    @Test("composer piano roll uses right-edge keyboard instead of legacy left pitch strip")
+    func testComposerPianoRollUsesRightEdgeKeyboardInsteadOfLegacyPitchStrip() throws {
+        let root = repositoryRoot()
+        let content = try String(
+            contentsOf: root.appendingPathComponent("Topliner/Features/Composer/ComposerView.swift"),
+            encoding: .utf8
+        )
+
+        #expect(content.contains("PianoRollView("))
+        #expect(content.contains("pitchStrip") == false)
+    }
+
     private func repositoryRoot() -> URL {
         URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()

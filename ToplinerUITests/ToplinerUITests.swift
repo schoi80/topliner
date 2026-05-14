@@ -48,6 +48,25 @@ final class ToplinerUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Lead"].waitForExistence(timeout: 2))
     }
 
+    func testComposerPianoRollHasOneOctaveKeyboardAtRightEdge() throws {
+        XCTAssertTrue(app.descendants(matching: .any)["topliner.screen.compose"].waitForExistence(timeout: 5))
+
+        let requiredKeys = ["C4", "F#4", "B4"]
+        for key in requiredKeys {
+            let keyButtons = app.buttons.matching(identifier: key)
+            let keyButton = keyButtons.element(boundBy: 0)
+            XCTAssertTrue(keyButton.waitForExistence(timeout: 5), "Missing piano key \(key)")
+            XCTAssertTrue(keyButton.isHittable, "Piano key \(key) is not hittable")
+        }
+
+        let c4Buttons = app.buttons.matching(identifier: "C4")
+        let rightmostC4MaxX = (0..<c4Buttons.count)
+            .map { c4Buttons.element(boundBy: $0).frame.maxX }
+            .max() ?? 0
+        XCTAssertTrue(rightmostC4MaxX > app.windows.element(boundBy: 0).frame.midX, "Piano key strip should sit on the right side of the piano roll workspace")
+        XCTAssertEqual(app.buttons.matching(identifier: "C5").count, 0, "One-octave viewport must not expose a second C above B4")
+    }
+
     private func assertTapSwitchesScreen(buttonID: String, screenID: String, file: StaticString = #filePath, line: UInt = #line) {
         let button = app.buttons[buttonID]
         XCTAssertTrue(button.waitForExistence(timeout: 5), "Missing button \(buttonID)", file: file, line: line)

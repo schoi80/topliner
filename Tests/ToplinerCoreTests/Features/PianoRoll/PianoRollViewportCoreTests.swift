@@ -13,6 +13,19 @@ final class PianoRollViewportCoreTests: XCTestCase {
         XCTAssertEqual(viewport.endBeat, 16, accuracy: 0.0001)
     }
 
+    func testViewportNeverShowsMoreThanOneOctave() {
+        let viewport = PianoRollViewport(
+            startBeat: 0,
+            visibleBeats: 16,
+            centerPitch: 66,
+            visiblePitchCount: 37,
+            totalBeats: 16
+        )
+
+        XCTAssertEqual(viewport.visiblePitchCount, 12)
+        XCTAssertEqual(viewport.visiblePitchRange.count, 12)
+    }
+
     func testVerticalPanMovesPitchWindowAndClampsToMidiBounds() {
         let viewport = PianoRollViewport.default(totalBeats: 16)
             .panned(beatsDelta: 0, pitchDelta: 12)

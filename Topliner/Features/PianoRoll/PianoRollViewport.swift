@@ -2,6 +2,8 @@ import CoreGraphics
 import Foundation
 
 struct PianoRollViewport: Equatable {
+    static let maximumVisiblePitchCount = 12
+
     var startBeat: Double
     var visibleBeats: Double
     var centerPitch: Int
@@ -23,7 +25,7 @@ struct PianoRollViewport: Equatable {
         self.totalBeats = max(totalBeats, minVisibleBeats)
         self.minVisibleBeats = minVisibleBeats
         self.maxVisibleBeats = min(resolvedMaxVisibleBeats, self.totalBeats)
-        self.visiblePitchCount = min(max(visiblePitchCount, 1), 128)
+        self.visiblePitchCount = min(max(visiblePitchCount, 1), Self.maximumVisiblePitchCount)
         self.centerPitch = centerPitch
         self.visibleBeats = visibleBeats
         self.startBeat = startBeat

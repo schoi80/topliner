@@ -132,6 +132,7 @@ struct PianoRollView: View {
                 PianoRollKeyboardStrip(pitchRange: viewport.visiblePitchRange, onKeyTap: onKeyboardKeyTap)
             }
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .accessibilityIdentifier("topliner.piano-roll.container")
             .accessibilityValue("Visible beats \(viewport.startBeat) to \(viewport.endBeat), pitches \(viewport.visiblePitchRange.lowerBound) to \(viewport.visiblePitchRange.upperBound)")
         }
     }

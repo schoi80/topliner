@@ -17,8 +17,11 @@ struct PianoRollInteractionLayer: View {
     var body: some View {
         GeometryReader { proxy in
             Rectangle()
-                .fill(.clear)
+                .fill(Color.black.opacity(0.001))
                 .contentShape(Rectangle())
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Piano roll interaction layer")
+                .accessibilityIdentifier("topliner.piano-roll.viewport")
                 .gesture(
                     DragGesture(minimumDistance: 0)
                         .onChanged { value in
@@ -42,7 +45,6 @@ struct PianoRollInteractionLayer: View {
                         }
                 )
         }
-        .accessibilityLabel("Piano roll interaction layer")
     }
 
     private func geometry(for size: CGSize) -> PianoRollGeometry {
