@@ -11,6 +11,9 @@ struct ToplinerAppShell: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(StudioTheme.background.ignoresSafeArea())
+        .ignoresSafeArea(.container, edges: .all)
+        .persistentSystemOverlays(.hidden)
+        .statusBarHidden(true)
     }
 
     private var topNavigation: some View {
@@ -56,7 +59,7 @@ struct ToplinerAppShell: View {
         case .projects:
             NavigationStack { ProjectBrowserView() }
         case .midi:
-            NavigationStack { MIDISettingsView() }
+            MIDISettingsView()
         }
     }
 }

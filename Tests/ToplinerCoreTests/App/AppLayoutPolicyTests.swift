@@ -55,6 +55,20 @@ struct AppLayoutPolicyTests {
         }
     }
 
+    @Test("root app shell owns full-screen landscape chrome")
+    func testRootAppShellOwnsFullScreenLandscapeChrome() throws {
+        let root = repositoryRoot()
+        let content = try String(
+            contentsOf: root.appendingPathComponent("Topliner/App/ToplinerAppShell.swift"),
+            encoding: .utf8
+        )
+
+        #expect(content.contains(".ignoresSafeArea(.container, edges: .all)"))
+        #expect(content.contains(".persistentSystemOverlays(.hidden)"))
+        #expect(content.contains(".statusBarHidden(true)"))
+        #expect(content.contains("NavigationStack { MIDISettingsView() }") == false)
+    }
+
     private func repositoryRoot() -> URL {
         URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()

@@ -2,27 +2,31 @@ import SwiftUI
 
 struct BluetoothMIDIPairingView: View {
     @Bindable var service: BluetoothMIDIService
+    var compact: Bool = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: compact ? 10 : 16) {
             Text(service.pairingInterfaceDescriptor.title)
-                .font(.headline)
+                .font(compact ? .subheadline.weight(.semibold) : .headline)
 
             Text(service.pairingInterfaceDescriptor.instructions)
-                .font(.subheadline)
+                .font(compact ? .caption : .subheadline)
+                .lineLimit(compact ? 4 : nil)
                 .foregroundStyle(.secondary)
 
             Button("Open Bluetooth MIDI Pairing") {
                 service.presentPairingInterface()
             }
             .buttonStyle(.borderedProminent)
+            .frame(minHeight: StudioLayout.minimumTouchTarget)
             .disabled(!service.canPresentPairingInterface)
 
             Text(service.availabilityMessage)
                 .font(.caption)
+                .lineLimit(2)
                 .foregroundStyle(service.canPresentPairingInterface ? Color.secondary : Color.red)
         }
-        .padding()
+        .padding(compact ? 0 : 16)
         .sheet(isPresented: Binding(
             get: { service.isPairingInterfacePresented },
             set: { isPresented in

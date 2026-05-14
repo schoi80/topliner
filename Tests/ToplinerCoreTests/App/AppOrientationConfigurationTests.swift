@@ -20,5 +20,7 @@ struct AppOrientationConfigurationTests {
         #expect(orientations == ["UIInterfaceOrientationLandscapeLeft", "UIInterfaceOrientationLandscapeRight"])
         #expect(iPadOrientations == orientations)
         #expect(plist["UIRequiresFullScreen"] as? Bool == true)
+        #expect(plist["UIStatusBarHidden"] as? Bool == true)
+        #expect(plist["UIViewControllerBasedStatusBarAppearance"] as? Bool == false)
     }
 }
