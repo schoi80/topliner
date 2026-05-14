@@ -35,6 +35,26 @@ struct AppLayoutPolicyTests {
         }
     }
 
+    @Test("decorative studio overlays do not intercept touches")
+    func testDecorativeStudioOverlaysDoNotInterceptTouches() throws {
+        let root = repositoryRoot()
+        let filesWithDecorativeOverlays = [
+            "Topliner/Design/StudioControlChip.swift",
+            "Topliner/Design/StudioPanel.swift",
+            "Topliner/Design/TransportBar.swift",
+            "Topliner/Features/Composer/ComposerEditingToolbar.swift",
+            "Topliner/Features/Composer/ComposerView.swift"
+        ]
+
+        for relativePath in filesWithDecorativeOverlays {
+            let content = try String(contentsOf: root.appendingPathComponent(relativePath), encoding: .utf8)
+            #expect(
+                content.contains(".allowsHitTesting(false)"),
+                "\(relativePath) must mark decorative overlays as non-interactive so buttons remain tappable"
+            )
+        }
+    }
+
     private func repositoryRoot() -> URL {
         URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()

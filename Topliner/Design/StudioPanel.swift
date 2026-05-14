@@ -44,6 +44,7 @@ struct StudioPanel<Content: View>: View {
         .overlay(
             RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
                 .stroke(StudioTheme.border, lineWidth: 1)
+                .allowsHitTesting(false)
         )
     }
 }

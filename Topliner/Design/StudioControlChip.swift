@@ -35,7 +35,9 @@ struct StudioControlChip: View {
         .overlay(
             RoundedRectangle(cornerRadius: StudioLayout.controlCornerRadius, style: .continuous)
                 .stroke(isActive ? tint.opacity(0.4) : StudioTheme.border, lineWidth: 1)
+                .allowsHitTesting(false)
         )
+        .contentShape(RoundedRectangle(cornerRadius: StudioLayout.controlCornerRadius, style: .continuous))
     }
 }
 

@@ -66,6 +66,7 @@ struct ComposerView: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
                             .stroke(StudioTheme.border, lineWidth: 1)
+                            .allowsHitTesting(false)
                     )
 
                     rightRail
@@ -163,6 +164,7 @@ struct ComposerView: View {
         .overlay(
             RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
                 .stroke(StudioTheme.border, lineWidth: 1)
+                .allowsHitTesting(false)
         )
     }
 
