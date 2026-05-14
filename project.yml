@@ -1,0 +1,91 @@
+name: Topliner
+options:
+  bundleIdPrefix: com.schoi80
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+packages:
+  AudioKit:
+    url: https://github.com/AudioKit/AudioKit.git
+    from: 5.7.2
+  SoundpipeAudioKit:
+    url: https://github.com/AudioKit/SoundpipeAudioKit.git
+    from: 5.7.4
+schemes:
+  Topliner:
+    build:
+      targets:
+        Topliner: all
+        ToplinerTests: [test]
+    test:
+      targets:
+        - ToplinerTests
+
+targets:
+  Topliner:
+    type: application
+    platform: iOS
+    sources:
+      - Topliner
+    dependencies:
+      - package: AudioKit
+        product: AudioKit
+      - package: SoundpipeAudioKit
+        product: SoundpipeAudioKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.schoi80.topliner
+        INFOPLIST_KEY_CFBundleDisplayName: Topliner
+        INFOPLIST_KEY_UILaunchScreen_Generation: true
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
+        INFOPLIST_KEY_UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    info:
+      path: Topliner/Info.plist
+      properties:
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        NSMicrophoneUsageDescription: Topliner needs microphone access to record vocal ideas and convert them into MIDI notes.
+        NSBluetoothAlwaysUsageDescription: Topliner uses Bluetooth to pair with MIDI controllers and hosts for wireless MIDI output.
+        NSLocalNetworkUsageDescription: Topliner uses the local network for RTP-MIDI connections with nearby Macs and DAWs.
+        NSBonjourServices:
+          - _apple-midi._udp
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+  ToplinerTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - ToplinerTests
+    dependencies:
+      - target: Topliner
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.schoi80.topliner.tests
+        GENERATE_INFOPLIST_FILE: YES
+  ToplinerUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - ToplinerUITests
+    dependencies:
+      - target: Topliner
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.schoi80.topliner.uitests
+        GENERATE_INFOPLIST_FILE: YES

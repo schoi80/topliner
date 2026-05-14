@@ -1,0 +1,512 @@
+# Landscape UX Overhaul Implementation Plan
+
+> **For Hermes:** Use subagent-driven-development skill to implement this plan task-by-task.
+
+**Goal:** Redesign Topliner around a landscape-only, full-screen music production UX centered on modern transport controls and easy MIDI note editing.
+
+**Architecture:** Introduce reusable SwiftUI design primitives first, then rebuild screens as landscape-first compositions. Composer becomes the primary workspace: a large piano roll, persistent transport/session controls, bottom MIDI edit tools, and a right contextual panel that switches between chord generation and selected-note inspection. Capture and Project Browser follow after the Composer foundation is stable. MIDI Settings remains scrollable by design.
+
+**Tech Stack:** SwiftUI, Swift Observation, SwiftPM `ToplinerCore`, XcodeGen, XCTest, existing AudioKit playback/sequencer services.
+
+---
+
+## Accepted UX Direction
+
+Topliner supports landscape mode only. Do not implement portrait-specific layouts.
+
+Use the Stitch landscape-wide mockups as visual references, not pixel-perfect specs:
+
+### Stitch Project
+
+- Project: `Topliner UX Overhaul Landscape`
+- Project ID: `7342033863260587803`
+
+### Main Composer Reference
+
+- Screen: `LANDSCAPE WIDE Composer MIDI Editor`
+- Screen ID: `80a54be985fa4c29b6cec061529dea6b`
+- Screenshot: `https://lh3.googleusercontent.com/aida/ADBb0uifjqZkNObHLzhsCMzDVEYO-qMCussmasGGGIeR4fuNBdHhq589vXfjl3fYe1nYHai6M97uLuYzc3NfklVLOTY8rImvfEWd1nmklJc4fuyece8K7hwtraLaVhzLswZ5TiIqdvmGSEGW7N5OqrONW3dYt-WeODb_jJ0iLpiz-vkBDBGw7-_ezetiaPcqat0VVBrhJekWO3uLeri9cooKh8cVzHQjLoRuR47GLo7ggIAVOvtzrXHUqI96Tos`
+
+Use for:
+- top transport/status bar
+- large central piano roll
+- left pitch keyboard/track strip
+- bottom MIDI edit toolbar
+- persistent right Studio Console / chord generation panel
+
+### Selected Note Reference
+
+- Screen: `LANDSCAPE WIDE Selected Note Inspector`
+- Screen ID: `177e7970de404650aff0a2664477dce8`
+- Screenshot: `https://lh3.googleusercontent.com/aida/ADBb0ujPbHKu8MvuupU9as708WDFGBMAJ9KsJn9bFUXTqRdwHAlulszdmS4XQA83wEeTzkbpRLkaKSOAYy9ffrPXRVsZnoV7iz8RAhsn0-1PgwfEE7GmwEICuHAk7p6p16K7Qzj7TR52hRVzr_IS9kDChwS0c2SC-K_lMnyqHicr5ivkpMLV2r4zGX9aNK8w7xo7-Q-OE5AnvkdoBZjdhlXsEh8paxFsB1bPfPbX8Zrd_EopdG9ZPKDw7TQxzj4`
+
+Use for:
+- selected MIDI note state
+- right-side note inspector
+- compact chord regeneration below or beside note controls
+
+### Capture Reference
+
+- Screen: `LANDSCAPE WIDE Capture Takes`
+- Screen ID: `2ec7e2e9165c436cb496956e3aded3e4`
+- Screenshot: `https://lh3.googleusercontent.com/aida/ADBb0uiuy5Jpl4o0rvOryCxuLLYbQsgZlj-bnlWcJso5LfIYZBbPsSAWZUCWIdZY-d_sccp9aadz-71KrA_A-2ZZVZk6o_UWcYgfJ6cFHufhQO571WEucMAL-tFYyWDEwZQJoDqymJ7_L4ERZiTeL1iMXB8-q36Nd1oIM7cBaleSRXyeXgjWfyAKLJy6iczfSUuGyvo2EZqzTJvfbYr_7TrlniErqFD8Zz5MMEG0AFkp0WBBUnOBGzRhJYfdoeo`
+
+Use for:
+- record/count-in/metronome workflow
+- capture lane
+- takes panel
+- edit-in-composer handoff
+
+---
+
+## Product UX Rules
+
+1. Landscape only.
+2. Non-MIDI-settings screens should fit within the landscape viewport without vertical scrolling.
+3. MIDI Settings is the only screen that may intentionally use vertical scrolling.
+4. Composer is the core experience and should get the most screen space.
+5. Transport controls should be persistent and modern:
+   - rewind/reset
+   - play/stop
+   - record where applicable
+   - BPM
+   - bar length / loop length
+   - metronome toggle
+   - snap / quantize status
+6. MIDI editing should be touch-friendly:
+   - visible note blocks
+   - selected-note highlight
+   - drag/resize handles
+   - bottom editing tools
+   - contextual inspector for exact edits
+7. Chord generation should remain close to MIDI editing:
+   - style
+   - complexity
+   - generate/regenerate
+   - progression preview
+   - apply/export affordance
+8. Avoid building generic future-proof navigation. Implement only the screen states we need now.
+9. Do not use the default bottom iOS `TabView` chrome in landscape. It steals vertical real estate from the piano roll. Use compact in-app navigation chips in the top studio chrome instead.
+10. Do not embed the generic `ChordGenerationView` inside the Composer right rail. It was designed for a wider standalone layout and becomes cramped in the rail. Composer needs a compact rail-native harmony module.
+
+---
+
+## Phase 1 Scope
+
+Approved first slice:
+
+1. Create this repo-visible plan.
+2. Add landscape-only app/orientation guardrails.
+3. Build shared design primitives.
+4. Overhaul Composer default landscape layout.
+5. Verify and stop for review before selected-note inspector, capture, and project browser.
+
+---
+
+## Task 1: Commit This UX Plan
+
+**Objective:** Preserve the accepted UX direction and implementation sequence in the repo.
+
+**Files:**
+- Create: `docs/plans/2026-05-13-landscape-ux-overhaul.md`
+
+**Steps:**
+1. Write this plan file.
+2. Run `git diff --check -- docs/plans/2026-05-13-landscape-ux-overhaul.md`.
+3. Commit only this file:
+
+```bash
+git add docs/plans/2026-05-13-landscape-ux-overhaul.md
+git commit -m "docs: add landscape ux overhaul plan"
+```
+
+**Verification:**
+- `git show --stat --oneline HEAD` shows only the plan file.
+
+---
+
+## Task 2: Add Landscape-Only Guardrails
+
+**Objective:** Make the project configuration explicitly landscape-first so later UI work does not target portrait.
+
+**Files:**
+- Modify: `project.yml`
+- Generated by XcodeGen: `Topliner.xcodeproj/project.pbxproj`
+- Test: add or update a project/config test under `Tests/ToplinerCoreTests` if there is an existing project config test pattern; otherwise verify with `xcodegen generate` and an iOS build.
+
+**Implementation notes:**
+Add supported interface orientations for the app target in `project.yml`.
+
+Preferred XcodeGen settings:
+
+```yaml
+INFOPLIST_KEY_UISupportedInterfaceOrientations:
+  - UIInterfaceOrientationLandscapeLeft
+  - UIInterfaceOrientationLandscapeRight
+INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad:
+  - UIInterfaceOrientationLandscapeLeft
+  - UIInterfaceOrientationLandscapeRight
+```
+
+If XcodeGen does not accept array values in `settings.base`, move these into the `info.properties` block instead.
+
+**Verification commands:**
+
+```bash
+xcodegen generate
+xcodebuild -scheme Topliner -destination 'generic/platform=iOS Simulator' build
+```
+
+**Commit:**
+
+```bash
+git add project.yml Topliner.xcodeproj/project.pbxproj
+git commit -m "chore: restrict app orientation to landscape"
+```
+
+---
+
+## Task 3: Add Shared Studio Design Primitives
+
+**Objective:** Create reusable SwiftUI primitives so all redesigned screens use one visual system.
+
+**Files:**
+- Create: `Topliner/Design/StudioTheme.swift`
+- Create: `Topliner/Design/StudioPanel.swift`
+- Create: `Topliner/Design/StudioControlChip.swift`
+- Create: `Topliner/Design/TransportBar.swift`
+- Test: add focused tests only for pure data/formatting helpers if introduced; SwiftUI visual components are build-verified.
+
+**Implementation outline:**
+- `StudioTheme`
+  - colors: background, surface, panel, border, grid, cyan, violet, orange, danger
+  - spacing constants
+  - corner radius constants
+- `StudioPanel`
+  - title optional
+  - rounded rectangle background
+  - subtle border
+- `StudioControlChip`
+  - label/value/icon style
+  - selected/active state
+- `TransportBar`
+  - project title
+  - play/stop/reset actions
+  - BPM display/control hook
+  - bars/loop display
+  - metronome active state
+  - snap/quantize status
+
+**Verification commands:**
+
+```bash
+swift test --filter ComposerViewModelCoreTests
+xcodebuild -scheme Topliner -destination 'generic/platform=iOS Simulator' build
+```
+
+**Commit:**
+
+```bash
+git add Topliner/Design
+git commit -m "feat: add studio design primitives"
+```
+
+---
+
+## Task 4: Extract Composer Subviews for Landscape Composition
+
+**Objective:** Break `ComposerView` into smaller subviews before the layout rewrite.
+
+**Files:**
+- Modify: `Topliner/Features/Composer/ComposerView.swift`
+- Create: `Topliner/Features/Composer/ComposerTransportView.swift`
+- Create: `Topliner/Features/Composer/ComposerEditingToolbar.swift`
+- Create: `Topliner/Features/Composer/ComposerHarmonyPanel.swift`
+
+**Refactor target:**
+Keep behavior unchanged while moving existing UI into named components.
+
+**Verification commands:**
+
+```bash
+swift test --filter 'ComposerViewModelCoreTests|ChordGenerationViewModelCoreTests'
+xcodebuild -scheme Topliner -destination 'generic/platform=iOS Simulator' build
+```
+
+**Commit:**
+
+```bash
+git add Topliner/Features/Composer
+git commit -m "refactor: extract composer landscape subviews"
+```
+
+---
+
+## Task 5: Implement Composer Default Landscape Layout
+
+**Objective:** Replace the vertical Composer stack with the first accepted landscape layout.
+
+**Files:**
+- Modify: `Topliner/Features/Composer/ComposerView.swift`
+- Modify: `Topliner/Features/Composer/ComposerTransportView.swift`
+- Modify: `Topliner/Features/Composer/ComposerEditingToolbar.swift`
+- Modify: `Topliner/Features/Composer/ComposerHarmonyPanel.swift`
+- Modify if needed: `Topliner/Features/PianoRoll/PianoRollView.swift`
+
+**Layout target:**
+
+```text
++--------------------------------------------------------------------------------+
+| Transport: project, reset/play/stop, BPM, bars, metronome, snap/quantize        |
++----------+-------------------------------------------------------+-------------+
+| Pitch    |                                                       | Harmony     |
+| labels   |              Piano roll / MIDI notes                  | panel       |
+|          |                                                       |             |
++----------+-------------------------------------------------------+-------------+
+| Bottom MIDI tools: draw/select/delete/quantize/velocity/duration/nudge          |
++--------------------------------------------------------------------------------+
+```
+
+**Acceptance criteria:**
+- `ComposerView` uses `GeometryReader` or proportional frames to fit landscape.
+- No `ScrollView` is introduced in Composer.
+- Piano roll gets the largest area.
+- ChordGeneration remains visible as a compact rail-native harmony module; do not embed the generic `ChordGenerationView` in the rail.
+- Existing playback, clear, regenerate, BPM, bars, and metronome behavior still works.
+- MIDI export remains reachable; if it does not fit, expose it as a compact toolbar action or panel button rather than a separate vertical row.
+
+**Verification commands:**
+
+```bash
+swift test --filter 'ComposerViewModelCoreTests|ChordGenerationViewModelCoreTests|PianoRoll'
+xcodebuild -scheme Topliner -destination 'generic/platform=iOS Simulator' build
+```
+
+**Commit:**
+
+```bash
+git add Topliner/Features/Composer Topliner/Features/PianoRoll
+git commit -m "feat: add landscape composer workspace"
+```
+
+---
+
+### Task 5A: Replace Bottom Tabs with Compact Landscape App Shell
+
+**Objective:** Remove the default bottom `TabView` chrome and render Compose/Capture/Projects/MIDI through compact top navigation that preserves vertical space.
+
+**Files:**
+- Create: `Topliner/App/ToplinerSection.swift`
+- Create: `Topliner/App/ToplinerAppShell.swift`
+- Modify: `Topliner/ContentView.swift`
+- Test: `Tests/ToplinerCoreTests/App/ToplinerSectionCoreTests.swift`
+
+**Acceptance criteria:**
+- `ContentView` no longer uses `TabView`.
+- Navigation options are compact chips, not bottom tabs.
+- Active screen content fills the landscape viewport.
+- MIDI still opens `MIDISettingsView`, preserving its existing scroll behavior.
+
+**Verification commands:**
+
+```bash
+swift test --filter ToplinerSectionCoreTests
+xcodegen generate >/dev/null && xcodebuild -scheme Topliner -destination 'generic/platform=iOS Simulator' -jobs 1 -quiet build
+```
+
+**Commit:**
+
+```bash
+git add Topliner/App Topliner/ContentView.swift Tests/ToplinerCoreTests/App Topliner.xcodeproj/project.pbxproj
+git commit -m "feat: add compact landscape app shell"
+```
+
+---
+
+### Task 5B: Replace Composer Rail ChordGeneration with Compact Harmony Module
+
+**Objective:** Replace the cramped embedded `ChordGenerationView` inside `ComposerHarmonyPanel` with compact controls designed for a narrow right rail.
+
+**Files:**
+- Modify: `Topliner/Features/Composer/ComposerHarmonyPanel.swift`
+- Test: `Tests/ToplinerCoreTests/Features/Composer/ComposerHarmonyPanelModelCoreTests.swift`
+
+**Acceptance criteria:**
+- The rail uses compact vertical controls: progression preview, style menu, complexity picker, Generate/Regenerate button, status/export actions.
+- The generic `ChordGenerationView` is not embedded in `ComposerHarmonyPanel`.
+- Generate/Regenerate still calls `ChordGenerationViewModel.generateChords(...)` with melody, key, BPM, and total beats.
+- The current progression remains visible as compact chord chips.
+
+**Verification commands:**
+
+```bash
+swift test --filter 'ComposerHarmonyPanelModelCoreTests|ChordGenerationViewModelCoreTests'
+xcodegen generate >/dev/null && xcodebuild -scheme Topliner -destination 'generic/platform=iOS Simulator' -jobs 1 -quiet build
+```
+
+**Commit:**
+
+```bash
+git add Topliner/Features/Composer Tests/ToplinerCoreTests/Features/Composer Topliner.xcodeproj/project.pbxproj
+git commit -m "feat: compact composer harmony rail"
+```
+
+---
+
+## Task 6: Manual Landscape Simulator Smoke Pass
+
+**Objective:** Validate the first UX slice manually in a landscape simulator before continuing.
+
+**Steps:**
+1. Build and run Topliner on an iPad or iPhone simulator in landscape.
+2. Open Composer.
+3. Verify:
+   - no vertical scrolling needed
+   - transport is visible
+   - BPM changes update playback/export values
+   - bars control changes piano-roll total beats
+   - metronome toggle remains visible
+   - Generate / Regenerate visible in right panel
+   - piano roll notes are still tappable/draggable/resizable
+   - Clear removes lead and generated chord notes
+4. Capture any visual issues as follow-up tasks.
+
+**Verification command:**
+
+```bash
+make verify
+```
+
+**Commit:**
+Only commit fixes if the smoke pass reveals issues. Otherwise proceed to review.
+
+---
+
+## Phase 2: Selected Note Inspector
+
+Do not start until Phase 1 is accepted.
+
+### Task 7: Add Selected Note Derived State
+
+**Objective:** Make selected-note details easy for the inspector to render.
+
+**Files:**
+- Modify: `Topliner/Features/Composer/ComposerViewModel.swift`
+- Test: `Tests/ToplinerCoreTests/Features/Composer/ComposerViewModelCoreTests.swift`
+
+**Acceptance criteria:**
+- Expose selected note safely by ID.
+- Keep mutation paths testable.
+- Add exact edit actions only as needed: pitch, start, duration, velocity.
+
+### Task 8: Build Selected Note Inspector Panel
+
+**Objective:** Replace the full harmony panel with note controls when a note is selected.
+
+**Files:**
+- Create: `Topliner/Features/Composer/SelectedNoteInspectorView.swift`
+- Modify: `Topliner/Features/Composer/ComposerView.swift`
+
+**Acceptance criteria:**
+- Inspector shows pitch, start, duration, velocity.
+- Delete/split/duplicate controls are visible if implemented; otherwise show only actions backed by view-model behavior.
+- Compact chord generation remains visible.
+
+---
+
+## Phase 3: MIDI Editing Polish
+
+Do not start until selected-note inspector is accepted.
+
+### Task 9: Improve Piano Roll Note Affordances
+
+**Objective:** Make touch editing clearer and easier.
+
+**Files:**
+- Modify: `Topliner/Features/PianoRoll/PianoRollCanvasView.swift`
+- Modify: `Topliner/Features/PianoRoll/PianoRollInteractionLayer.swift`
+- Test: existing piano-roll layout/interaction tests
+
+**Acceptance criteria:**
+- Selected notes have clear handles.
+- Handles are large enough for touch.
+- Drag and resize remain grid-snapped.
+- Chord notes remain visually distinct from lead notes.
+
+---
+
+## Phase 4: Capture / Takes
+
+Do not start until Composer workflow is accepted.
+
+### Task 10: Overhaul Capture Screen
+
+**Objective:** Convert Capture to the landscape Performance Capture direction.
+
+**Files:**
+- Modify: `Topliner/Features/Capture/AudioCaptureView.swift`
+- Create subviews under `Topliner/Features/Capture/` as needed.
+
+**Acceptance criteria:**
+- no vertical scroll
+- top transport/record/count-in/metronome controls
+- central capture lane
+- takes panel
+- clear edit-in-composer handoff placeholder if full navigation is not ready
+
+---
+
+## Phase 5: Project Browser
+
+### Task 11: Overhaul Project Browser
+
+**Objective:** Convert Project Browser to a full-screen landscape project grid.
+
+**Files:**
+- Modify: `Topliner/Features/ProjectBrowser/ProjectBrowserView.swift`
+
+**Acceptance criteria:**
+- no vertical scroll for default/sample project count
+- search/filter/new/import visible
+- project cards show key/BPM/last edited/thumbnail metadata
+- selected-project details panel or tray visible
+
+---
+
+## Phase 6: MIDI Config Alignment
+
+### Task 12: Visually Align MIDI Settings While Preserving Scroll
+
+**Objective:** Make MIDI Settings look like the new app without changing its config-screen scroll behavior.
+
+**Files:**
+- Modify: `Topliner/Features/MIDISettings/MIDISettingsView.swift`
+
+**Acceptance criteria:**
+- existing `ScrollView` remains
+- styling aligns with StudioTheme
+- no functional regressions
+
+---
+
+## Global Verification Gate
+
+Run before every commit that touches code:
+
+```bash
+swift test
+xcodebuild -scheme Topliner -destination 'generic/platform=iOS Simulator' build
+git diff --check
+```
+
+Run before declaring a phase complete:
+
+```bash
+make verify
+```
+
+---
+
+## Current Working Tree Note
+
+At the time this plan was written, the branch already had uncommitted regeneration/BPM/metronome/bar-length changes plus generated Xcode project changes and local `sketches/` mockups. Keep plan commits narrow and do not mix unrelated UX plan changes with those implementation changes unless intentionally squashing the current local work.

@@ -1,0 +1,105 @@
+import SwiftUI
+
+struct PianoRollView: View {
+    var notes: [MIDINoteEvent]
+    var chordNotes: [MIDINoteEvent]
+    var selectedNoteID: UUID?
+    var totalBeats: Double = 16
+    var beatsPerBar: Int = 4
+    var pitchRange: ClosedRange<Int> = 48...84
+    var quantizeGrid: Double = 0.25
+    var currentBeat: Double?
+    var pitchTrace: [PitchSample]
+    var bpm: Double
+    var onTap: ((CGPoint, PianoRollGeometry) -> Void)?
+    var onDrag: ((CGPoint, PianoRollGeometry) -> Void)?
+    var onResize: ((CGPoint, PianoRollGeometry) -> Void)?
+
+    init(
+        notes: [MIDINoteEvent],
+        chordNotes: [MIDINoteEvent] = [],
+        selectedNoteID: UUID?,
+        totalBeats: Double = 16,
+        beatsPerBar: Int = 4,
+        pitchRange: ClosedRange<Int> = 48...84,
+        quantizeGrid: Double = 0.25,
+        currentBeat: Double? = nil,
+        pitchTrace: [PitchSample] = [],
+        bpm: Double = 120,
+        onTap: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
+        onDrag: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
+        onResize: ((CGPoint, PianoRollGeometry) -> Void)? = nil
+    ) {
+        self.notes = notes
+        self.chordNotes = chordNotes
+        self.selectedNoteID = selectedNoteID
+        self.totalBeats = totalBeats
+        self.beatsPerBar = beatsPerBar
+        self.pitchRange = pitchRange
+        self.quantizeGrid = quantizeGrid
+        self.currentBeat = currentBeat
+        self.pitchTrace = pitchTrace
+        self.bpm = bpm
+        self.onTap = onTap
+        self.onDrag = onDrag
+        self.onResize = onResize
+    }
+
+    var body: some View {
+        ZStack {
+            PianoRollGridView(totalBeats: totalBeats, beatsPerBar: beatsPerBar, pitchRange: pitchRange)
+
+            if !pitchTrace.isEmpty {
+                PitchTraceView(
+                    samples: pitchTrace,
+                    bpm: bpm,
+                    totalBeats: totalBeats,
+                    pitchRange: pitchRange,
+                    quantizeGrid: quantizeGrid
+                )
+            }
+
+            PianoRollCanvasView(
+                notes: notes,
+                chordNotes: chordNotes,
+                selectedNoteID: selectedNoteID,
+                totalBeats: totalBeats,
+                pitchRange: pitchRange,
+                quantizeGrid: quantizeGrid
+            )
+
+            if let currentBeat {
+                PlayheadView(currentBeat: currentBeat, totalBeats: totalBeats)
+            }
+
+            if let onTap {
+                PianoRollInteractionLayer(
+                    notes: notes,
+                    selectedNoteID: selectedNoteID,
+                    totalBeats: totalBeats,
+                    pitchRange: pitchRange,
+                    quantizeGrid: quantizeGrid,
+                    onTap: onTap,
+                    onDrag: onDrag,
+                    onResize: onResize
+                )
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+}
+
+#Preview {
+    PianoRollView(
+        notes: [
+            MIDINoteEvent(pitch: 60, startBeat: 0, durationBeats: 1, velocity: 100),
+            MIDINoteEvent(pitch: 64, startBeat: 1, durationBeats: 1, velocity: 100),
+            MIDINoteEvent(pitch: 67, startBeat: 2, durationBeats: 2, velocity: 100),
+            MIDINoteEvent(pitch: 72, startBeat: 5, durationBeats: 1.5, velocity: 100)
+        ],
+        selectedNoteID: nil
+    )
+    .frame(height: 360)
+    .padding()
+    .background(Color.black)
+}
