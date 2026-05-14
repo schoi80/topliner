@@ -16,6 +16,7 @@ struct PianoRollView: View {
     var onDrag: ((CGPoint, PianoRollGeometry) -> Void)?
     var onResize: ((CGPoint, PianoRollGeometry) -> Void)?
     var onViewportChange: ((PianoRollViewport) -> Void)?
+    var onKeyboardKeyTap: ((Int) -> Void)?
 
     init(
         notes: [MIDINoteEvent],
@@ -32,7 +33,8 @@ struct PianoRollView: View {
         onTap: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
         onDrag: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
         onResize: ((CGPoint, PianoRollGeometry) -> Void)? = nil,
-        onViewportChange: ((PianoRollViewport) -> Void)? = nil
+        onViewportChange: ((PianoRollViewport) -> Void)? = nil,
+        onKeyboardKeyTap: ((Int) -> Void)? = nil
     ) {
         self.notes = notes
         self.chordNotes = chordNotes
@@ -49,6 +51,7 @@ struct PianoRollView: View {
         self.onDrag = onDrag
         self.onResize = onResize
         self.onViewportChange = onViewportChange
+        self.onKeyboardKeyTap = onKeyboardKeyTap
     }
 
     private var activeViewport: PianoRollViewport {
@@ -68,61 +71,65 @@ struct PianoRollView: View {
     var body: some View {
         GeometryReader { proxy in
             let viewport = activeViewport
-            ZStack {
-                PianoRollGridView(
-                    startBeat: viewport.startBeat,
-                    visibleBeats: viewport.visibleBeats,
-                    beatsPerBar: beatsPerBar,
-                    pitchRange: viewport.visiblePitchRange
-                )
+            HStack(spacing: 0) {
+                ZStack {
+                    PianoRollGridView(
+                        startBeat: viewport.startBeat,
+                        visibleBeats: viewport.visibleBeats,
+                        beatsPerBar: beatsPerBar,
+                        pitchRange: viewport.visiblePitchRange
+                    )
 
-                if !pitchTrace.isEmpty {
-                    PitchTraceView(
-                        samples: pitchTrace,
-                        bpm: bpm,
+                    if !pitchTrace.isEmpty {
+                        PitchTraceView(
+                            samples: pitchTrace,
+                            bpm: bpm,
+                            totalBeats: viewport.visibleBeats,
+                            startBeat: viewport.startBeat,
+                            pitchRange: viewport.visiblePitchRange,
+                            quantizeGrid: quantizeGrid
+                        )
+                    }
+
+                    PianoRollCanvasView(
+                        notes: notes,
+                        chordNotes: chordNotes,
+                        selectedNoteID: selectedNoteID,
                         totalBeats: viewport.visibleBeats,
                         startBeat: viewport.startBeat,
                         pitchRange: viewport.visiblePitchRange,
                         quantizeGrid: quantizeGrid
                     )
-                }
 
-                PianoRollCanvasView(
-                    notes: notes,
-                    chordNotes: chordNotes,
-                    selectedNoteID: selectedNoteID,
-                    totalBeats: viewport.visibleBeats,
-                    startBeat: viewport.startBeat,
-                    pitchRange: viewport.visiblePitchRange,
-                    quantizeGrid: quantizeGrid
-                )
+                    if let currentBeat {
+                        PlayheadView(currentBeat: currentBeat, startBeat: viewport.startBeat, visibleBeats: viewport.visibleBeats)
+                    }
 
-                if let currentBeat {
-                    PlayheadView(currentBeat: currentBeat, startBeat: viewport.startBeat, visibleBeats: viewport.visibleBeats)
-                }
+                    if let onTap {
+                        PianoRollInteractionLayer(
+                            notes: notes,
+                            selectedNoteID: selectedNoteID,
+                            totalBeats: viewport.visibleBeats,
+                            startBeat: viewport.startBeat,
+                            pitchRange: viewport.visiblePitchRange,
+                            quantizeGrid: quantizeGrid,
+                            onTap: onTap,
+                            onDrag: onDrag,
+                            onResize: onResize
+                        )
+                    }
 
-                if let onTap {
-                    PianoRollInteractionLayer(
-                        notes: notes,
-                        selectedNoteID: selectedNoteID,
-                        totalBeats: viewport.visibleBeats,
-                        startBeat: viewport.startBeat,
-                        pitchRange: viewport.visiblePitchRange,
-                        quantizeGrid: quantizeGrid,
-                        onTap: onTap,
-                        onDrag: onDrag,
-                        onResize: onResize
-                    )
-                }
-
-                if let onViewportChange {
-                    PianoRollViewportGestureLayer { translation, size in
-                        onViewportChange(viewport.pannedByPixels(translation, canvasSize: size))
-                    } onZoom: { scale, anchor, size in
-                        let anchorUnit = size.width > 0 ? anchor.x / size.width : 0.5
-                        onViewportChange(viewport.zoomedTime(by: scale, anchorUnit: Double(anchorUnit)))
+                    if let onViewportChange {
+                        PianoRollViewportGestureLayer { translation, size in
+                            onViewportChange(viewport.pannedByPixels(translation, canvasSize: size))
+                        } onZoom: { scale, anchor, size in
+                            let anchorUnit = size.width > 0 ? anchor.x / size.width : 0.5
+                            onViewportChange(viewport.zoomedTime(by: scale, anchorUnit: Double(anchorUnit)))
+                        }
                     }
                 }
+
+                PianoRollKeyboardStrip(pitchRange: viewport.visiblePitchRange, onKeyTap: onKeyboardKeyTap)
             }
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             .accessibilityValue("Visible beats \(viewport.startBeat) to \(viewport.endBeat), pitches \(viewport.visiblePitchRange.lowerBound) to \(viewport.visiblePitchRange.upperBound)")
