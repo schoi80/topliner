@@ -5,6 +5,7 @@ struct ComposerView: View {
     @State private var viewModel: ComposerViewModel
     @State private var chordGenerationViewModel: ChordGenerationViewModel
     @State private var playbackController: ComposerPlaybackController
+    @State private var pianoRollViewport: PianoRollViewport
     @State private var isShowingClearConfirmation = false
     @State private var lastPlaybackTick: Date?
 
@@ -22,6 +23,7 @@ struct ComposerView: View {
 
         _viewModel = State(initialValue: ComposerViewModel(leadVoice: Self.sampleLeadVoice))
         _chordGenerationViewModel = State(initialValue: ChordGenerationViewModel())
+        _pianoRollViewport = State(initialValue: PianoRollViewport.default(totalBeats: 16))
         _playbackController = State(
             initialValue: ComposerPlaybackController(
                 audioEngine: audioEngine,
@@ -48,24 +50,25 @@ struct ComposerView: View {
                 )
 
                 HStack(spacing: StudioLayout.panelSpacing) {
-                    pitchStrip
-
                     PianoRollView(
                         notes: viewModel.leadVoice.notes,
                         chordNotes: chordGenerationViewModel.generatedChordNotes,
                         selectedNoteID: viewModel.selectedNoteID,
                         totalBeats: viewModel.totalBeats,
+                        viewport: pianoRollViewport,
                         quantizeGrid: viewModel.leadVoice.quantizeGrid,
                         currentBeat: playbackController.currentBeat,
                         bpm: viewModel.bpm,
                         onTap: viewModel.handlePianoRollTap,
                         onDrag: viewModel.handlePianoRollDrag,
-                        onResize: viewModel.handlePianoRollResize
+                        onResize: viewModel.handlePianoRollResize,
+                        onViewportChange: { pianoRollViewport = $0 }
                     )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .overlay(
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
                             .stroke(StudioTheme.border, lineWidth: 1)
+                            .allowsHitTesting(false)
                     )
 
                     rightRail
@@ -144,31 +147,6 @@ struct ComposerView: View {
             source: .pianoRoll,
             quantizeGrid: 0.25
         )
-    }
-
-    private var pitchStrip: some View {
-        VStack(spacing: 0) {
-            ForEach(Array(stride(from: 84, through: 48, by: -6)), id: \.self) { pitch in
-                Text(noteName(for: pitch))
-                    .font(.caption2.monospacedDigit())
-                    .foregroundStyle(StudioTheme.textMuted)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-        }
-        .frame(width: StudioLayout.pitchStripWidth)
-        .background(
-            RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
-                .fill(StudioTheme.surface.opacity(0.92))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
-                .stroke(StudioTheme.border, lineWidth: 1)
-        )
-    }
-
-    private func noteName(for pitch: Int) -> String {
-        let names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-        return "\(names[pitch % 12])\(pitch / 12 - 1)"
     }
 
     private func resetPlayback() {

@@ -64,6 +64,17 @@
                ReferencedContainer = "container:Topliner.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F14BE5FFCFAD7B856981BA84"
+               BuildableName = "ToplinerUITests.xctest"
+               BlueprintName = "ToplinerUITests"
+               ReferencedContainer = "container:Topliner.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>

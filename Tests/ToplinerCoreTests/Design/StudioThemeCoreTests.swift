@@ -41,6 +41,7 @@ struct StudioThemeCoreTests {
         #expect(StudioLayout.minimumTransportHeight >= 56)
         #expect(StudioLayout.minimumToolbarHeight >= 56)
         #expect(StudioLayout.minimumTouchTarget >= 44)
+        #expect(StudioLayout.pianoKeyboardStripWidth >= 44)
         #expect(StudioLayout.harmonyPanelWidth >= 240)
     }
 }

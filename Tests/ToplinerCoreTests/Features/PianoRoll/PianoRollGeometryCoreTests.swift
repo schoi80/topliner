@@ -36,6 +36,22 @@ final class PianoRollGeometryCoreTests: XCTestCase {
         XCTAssertEqual(result.beat, 4, accuracy: 0.0001)
     }
 
+    func testGeometryCanMapScrolledVisibleBeatWindow() {
+        let geometry = PianoRollGeometry(
+            size: CGSize(width: 400, height: 480),
+            pitchRange: 60...71,
+            startBeat: 4,
+            visibleBeats: 8,
+            quantizeGrid: 0.25
+        )
+        let note = MIDINoteEvent(pitch: 60, startBeat: 6, durationBeats: 2, velocity: 100)
+
+        XCTAssertEqual(geometry.beat(atX: 0), 4, accuracy: 0.0001)
+        XCTAssertEqual(geometry.beat(atX: 400), 12, accuracy: 0.0001)
+        XCTAssertEqual(geometry.rect(for: note).origin.x, 100, accuracy: 0.0001)
+        XCTAssertEqual(geometry.rect(for: note).width, 100, accuracy: 0.0001)
+    }
+
     private func makeGeometry() -> PianoRollGeometry {
         PianoRollGeometry(size: CGSize(width: 400, height: 480), pitchRange: 60...71, totalBeats: 16, quantizeGrid: 0.25)
     }

@@ -25,6 +25,30 @@ final class MIDISettingsViewModelCoreTests: XCTestCase {
         XCTAssertEqual(viewModel.outputRoute, .chords)
     }
 
+    func testSetOutputRouteUpdatesLeadAndChordTogglesAsOneDAWStyleChoice() {
+        let viewModel = MIDISettingsViewModel()
+
+        viewModel.setOutputRoute(.lead)
+        XCTAssertTrue(viewModel.sendLeadNotes)
+        XCTAssertFalse(viewModel.sendChordNotes)
+        XCTAssertEqual(viewModel.outputRoute, .lead)
+
+        viewModel.setOutputRoute(.chords)
+        XCTAssertFalse(viewModel.sendLeadNotes)
+        XCTAssertTrue(viewModel.sendChordNotes)
+        XCTAssertEqual(viewModel.outputRoute, .chords)
+
+        viewModel.setOutputRoute(nil)
+        XCTAssertFalse(viewModel.sendLeadNotes)
+        XCTAssertFalse(viewModel.sendChordNotes)
+        XCTAssertNil(viewModel.outputRoute)
+
+        viewModel.setOutputRoute(.both)
+        XCTAssertTrue(viewModel.sendLeadNotes)
+        XCTAssertTrue(viewModel.sendChordNotes)
+        XCTAssertEqual(viewModel.outputRoute, .both)
+    }
+
     func testSetDisplayChannelClampsToMidiRangeAndStoresZeroBasedChannel() {
         let viewModel = MIDISettingsViewModel()
 

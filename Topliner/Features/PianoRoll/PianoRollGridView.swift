@@ -12,19 +12,34 @@ struct PianoRollHorizontalGridLine: Equatable {
 }
 
 struct PianoRollGridMetrics {
-    var totalBeats: Double
+    var startBeat: Double
+    var visibleBeats: Double
     var beatsPerBar: Int
     var pitchRange: ClosedRange<Int>
 
-    func verticalLines() -> [PianoRollVerticalGridLine] {
-        guard totalBeats > 0 else { return [] }
+    init(totalBeats: Double, beatsPerBar: Int, pitchRange: ClosedRange<Int>) {
+        self.init(startBeat: 0, visibleBeats: totalBeats, beatsPerBar: beatsPerBar, pitchRange: pitchRange)
+    }
 
-        let lastBeat = Int(totalBeats.rounded(.down))
-        return (0...lastBeat).map { beatIndex in
+    init(startBeat: Double, visibleBeats: Double, beatsPerBar: Int, pitchRange: ClosedRange<Int>) {
+        self.startBeat = startBeat
+        self.visibleBeats = visibleBeats
+        self.beatsPerBar = beatsPerBar
+        self.pitchRange = pitchRange
+    }
+
+    func verticalLines() -> [PianoRollVerticalGridLine] {
+        guard visibleBeats > 0 else { return [] }
+
+        let firstBeat = Int(startBeat.rounded(.up))
+        let lastBeat = Int((startBeat + visibleBeats).rounded(.down))
+        guard firstBeat <= lastBeat else { return [] }
+
+        return (firstBeat...lastBeat).map { beatIndex in
             let beat = Double(beatIndex)
             return PianoRollVerticalGridLine(
                 beat: beat,
-                normalizedX: beat / totalBeats,
+                normalizedX: (beat - startBeat) / visibleBeats,
                 isMajor: isBarBoundary(beatIndex)
             )
         }
@@ -49,12 +64,27 @@ struct PianoRollGridMetrics {
 }
 
 struct PianoRollGridView: View {
-    var totalBeats: Double = 16
+    var startBeat: Double = 0
+    var visibleBeats: Double = 16
     var beatsPerBar: Int = 4
     var pitchRange: ClosedRange<Int> = 48...84
 
+    init(totalBeats: Double = 16, beatsPerBar: Int = 4, pitchRange: ClosedRange<Int> = 48...84) {
+        self.startBeat = 0
+        self.visibleBeats = totalBeats
+        self.beatsPerBar = beatsPerBar
+        self.pitchRange = pitchRange
+    }
+
+    init(startBeat: Double, visibleBeats: Double, beatsPerBar: Int = 4, pitchRange: ClosedRange<Int> = 48...84) {
+        self.startBeat = startBeat
+        self.visibleBeats = visibleBeats
+        self.beatsPerBar = beatsPerBar
+        self.pitchRange = pitchRange
+    }
+
     private var metrics: PianoRollGridMetrics {
-        PianoRollGridMetrics(totalBeats: totalBeats, beatsPerBar: beatsPerBar, pitchRange: pitchRange)
+        PianoRollGridMetrics(startBeat: startBeat, visibleBeats: visibleBeats, beatsPerBar: beatsPerBar, pitchRange: pitchRange)
     }
 
     var body: some View {
@@ -68,6 +98,7 @@ struct PianoRollGridView: View {
         .overlay {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .stroke(Color.white.opacity(0.08), lineWidth: 1)
+                .allowsHitTesting(false)
         }
         .accessibilityLabel("Four bar piano roll grid")
     }

@@ -35,6 +35,52 @@ struct AppLayoutPolicyTests {
         }
     }
 
+    @Test("decorative studio overlays do not intercept touches")
+    func testDecorativeStudioOverlaysDoNotInterceptTouches() throws {
+        let root = repositoryRoot()
+        let filesWithDecorativeOverlays = [
+            "Topliner/Design/StudioControlChip.swift",
+            "Topliner/Design/StudioPanel.swift",
+            "Topliner/Design/TransportBar.swift",
+            "Topliner/Features/Composer/ComposerEditingToolbar.swift",
+            "Topliner/Features/Composer/ComposerView.swift"
+        ]
+
+        for relativePath in filesWithDecorativeOverlays {
+            let content = try String(contentsOf: root.appendingPathComponent(relativePath), encoding: .utf8)
+            #expect(
+                content.contains(".allowsHitTesting(false)"),
+                "\(relativePath) must mark decorative overlays as non-interactive so buttons remain tappable"
+            )
+        }
+    }
+
+    @Test("root app shell owns full-screen landscape chrome")
+    func testRootAppShellOwnsFullScreenLandscapeChrome() throws {
+        let root = repositoryRoot()
+        let content = try String(
+            contentsOf: root.appendingPathComponent("Topliner/App/ToplinerAppShell.swift"),
+            encoding: .utf8
+        )
+
+        #expect(content.contains(".ignoresSafeArea(.container, edges: .all)"))
+        #expect(content.contains(".persistentSystemOverlays(.hidden)"))
+        #expect(content.contains(".statusBarHidden(true)"))
+        #expect(content.contains("NavigationStack { MIDISettingsView() }") == false)
+    }
+
+    @Test("composer piano roll uses right-edge keyboard instead of legacy left pitch strip")
+    func testComposerPianoRollUsesRightEdgeKeyboardInsteadOfLegacyPitchStrip() throws {
+        let root = repositoryRoot()
+        let content = try String(
+            contentsOf: root.appendingPathComponent("Topliner/Features/Composer/ComposerView.swift"),
+            encoding: .utf8
+        )
+
+        #expect(content.contains("PianoRollView("))
+        #expect(content.contains("pitchStrip") == false)
+    }
+
     private func repositoryRoot() -> URL {
         URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()

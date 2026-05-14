@@ -3,15 +3,18 @@ import SwiftUI
 struct StudioPanel<Content: View>: View {
     private let title: String?
     private let subtitle: String?
+    private let contentPadding: CGFloat
     private let content: Content
 
     init(
         _ title: String? = nil,
         subtitle: String? = nil,
+        padding: CGFloat = 14,
         @ViewBuilder content: () -> Content
     ) {
         self.title = title
         self.subtitle = subtitle
+        self.contentPadding = padding
         self.content = content()
     }
 
@@ -36,7 +39,7 @@ struct StudioPanel<Content: View>: View {
 
             content
         }
-        .padding(14)
+        .padding(contentPadding)
         .background(
             RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
                 .fill(StudioTheme.panel.opacity(0.96))
@@ -44,6 +47,7 @@ struct StudioPanel<Content: View>: View {
         .overlay(
             RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
                 .stroke(StudioTheme.border, lineWidth: 1)
+                .allowsHitTesting(false)
         )
     }
 }

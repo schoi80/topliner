@@ -26,6 +26,7 @@ enum StudioLayout {
     static let minimumToolbarHeight: CGFloat = 58
     static let minimumTouchTarget: CGFloat = 44
     static let pitchStripWidth: CGFloat = 58
+    static let pianoKeyboardStripWidth: CGFloat = 52
     static let harmonyPanelWidth: CGFloat = 286
 }
 

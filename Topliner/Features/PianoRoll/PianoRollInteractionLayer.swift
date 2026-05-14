@@ -4,6 +4,7 @@ struct PianoRollInteractionLayer: View {
     var notes: [MIDINoteEvent] = []
     var selectedNoteID: UUID?
     var totalBeats: Double = 16
+    var startBeat: Double = 0
     var pitchRange: ClosedRange<Int> = 48...84
     var quantizeGrid: Double = 0.25
     var onTap: (CGPoint, PianoRollGeometry) -> Void
@@ -16,8 +17,11 @@ struct PianoRollInteractionLayer: View {
     var body: some View {
         GeometryReader { proxy in
             Rectangle()
-                .fill(.clear)
+                .fill(Color.black.opacity(0.001))
                 .contentShape(Rectangle())
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Piano roll interaction layer")
+                .accessibilityIdentifier("topliner.piano-roll.viewport")
                 .gesture(
                     DragGesture(minimumDistance: 0)
                         .onChanged { value in
@@ -41,14 +45,14 @@ struct PianoRollInteractionLayer: View {
                         }
                 )
         }
-        .accessibilityLabel("Piano roll interaction layer")
     }
 
     private func geometry(for size: CGSize) -> PianoRollGeometry {
         PianoRollGeometry(
             size: size,
             pitchRange: pitchRange,
-            totalBeats: totalBeats,
+            startBeat: startBeat,
+            visibleBeats: totalBeats,
             quantizeGrid: quantizeGrid
         )
     }

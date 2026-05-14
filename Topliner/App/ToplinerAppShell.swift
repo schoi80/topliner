@@ -11,6 +11,9 @@ struct ToplinerAppShell: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(StudioTheme.background.ignoresSafeArea())
+        .ignoresSafeArea(.container, edges: .all)
+        .persistentSystemOverlays(.hidden)
+        .statusBarHidden(true)
     }
 
     private var topNavigation: some View {
@@ -35,6 +38,7 @@ struct ToplinerAppShell: View {
                         )
                     }
                     .buttonStyle(.plain)
+                    .accessibilityIdentifier("topliner.nav.\(section.rawValue)")
                 }
             }
 
@@ -51,12 +55,16 @@ struct ToplinerAppShell: View {
         switch selectedSection {
         case .compose:
             ComposerView()
+                .accessibilityIdentifier("topliner.screen.compose")
         case .capture:
             NavigationStack { AudioCaptureView() }
+                .accessibilityIdentifier("topliner.screen.capture")
         case .projects:
             NavigationStack { ProjectBrowserView() }
+                .accessibilityIdentifier("topliner.screen.projects")
         case .midi:
-            NavigationStack { MIDISettingsView() }
+            MIDISettingsView()
+                .accessibilityIdentifier("topliner.screen.midi")
         }
     }
 }

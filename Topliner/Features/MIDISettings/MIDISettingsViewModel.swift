@@ -42,6 +42,23 @@ final class MIDISettingsViewModel {
         }
     }
 
+    func setOutputRoute(_ route: MIDIOutputRoute?) {
+        switch route {
+        case .both:
+            sendLeadNotes = true
+            sendChordNotes = true
+        case .lead:
+            sendLeadNotes = true
+            sendChordNotes = false
+        case .chords:
+            sendLeadNotes = false
+            sendChordNotes = true
+        case nil:
+            sendLeadNotes = false
+            sendChordNotes = false
+        }
+    }
+
     func setDisplayChannel(_ channel: Int) {
         midiChannel = Self.clamp(channel - 1, lower: 0, upper: 15)
     }

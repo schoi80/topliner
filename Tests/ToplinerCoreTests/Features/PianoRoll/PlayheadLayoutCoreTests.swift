@@ -4,7 +4,13 @@ import XCTest
 
 final class PlayheadLayoutCoreTests: XCTestCase {
     func testXPositionMapsCurrentBeatIntoWidth() {
-        let layout = PlayheadLayout(currentBeat: 4, totalBeats: 16, width: 400)
+        let layout = PlayheadLayout(currentBeat: 4, totalBeats: 16, width: 320)
+
+        XCTAssertEqual(layout.xPosition, 80, accuracy: 0.0001)
+    }
+
+    func testXPositionMapsScrolledVisibleBeatWindow() {
+        let layout = PlayheadLayout(currentBeat: 6, startBeat: 4, visibleBeats: 8, width: 400)
 
         XCTAssertEqual(layout.xPosition, 100, accuracy: 0.0001)
     }

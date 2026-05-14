@@ -78,6 +78,7 @@ struct ComposerEditingToolbar: View {
         .overlay(
             RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
                 .stroke(StudioTheme.border, lineWidth: 1)
+                .allowsHitTesting(false)
         )
     }
 
@@ -103,6 +104,7 @@ struct ComposerEditingToolbar: View {
         .overlay(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .stroke(StudioTheme.border, lineWidth: 1)
+                .allowsHitTesting(false)
         )
     }
 }

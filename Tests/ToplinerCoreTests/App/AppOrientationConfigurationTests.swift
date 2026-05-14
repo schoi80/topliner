@@ -20,5 +20,19 @@ struct AppOrientationConfigurationTests {
         #expect(orientations == ["UIInterfaceOrientationLandscapeLeft", "UIInterfaceOrientationLandscapeRight"])
         #expect(iPadOrientations == orientations)
         #expect(plist["UIRequiresFullScreen"] as? Bool == true)
+        #expect(plist["UIStatusBarHidden"] as? Bool == true)
+        #expect(plist["UIViewControllerBasedStatusBarAppearance"] as? Bool == false)
+    }
+
+    @Test("project targets iPad as a native full-screen device family")
+    func testProjectTargetsIPadAsNativeFullScreenDeviceFamily() throws {
+        let root = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let projectYAML = try String(contentsOf: root.appendingPathComponent("project.yml"), encoding: .utf8)
+
+        #expect(projectYAML.contains("TARGETED_DEVICE_FAMILY: \"1,2\""))
     }
 }

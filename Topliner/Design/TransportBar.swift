@@ -49,6 +49,7 @@ struct TransportBar: View {
         .overlay(
             RoundedRectangle(cornerRadius: StudioLayout.panelCornerRadius, style: .continuous)
                 .stroke(StudioTheme.border, lineWidth: 1)
+                .allowsHitTesting(false)
         )
     }
 }
@@ -72,9 +73,11 @@ private struct TransportIconButton: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: StudioLayout.controlCornerRadius, style: .continuous)
                         .stroke(StudioTheme.border, lineWidth: 1)
+                        .allowsHitTesting(false)
                 )
         }
         .buttonStyle(.plain)
+        .contentShape(RoundedRectangle(cornerRadius: StudioLayout.controlCornerRadius, style: .continuous))
         .accessibilityLabel(accessibilityLabel)
     }
 }
