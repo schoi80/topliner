@@ -5,6 +5,7 @@ struct ComposerView: View {
     @State private var viewModel: ComposerViewModel
     @State private var chordGenerationViewModel: ChordGenerationViewModel
     @State private var playbackController: ComposerPlaybackController
+    @State private var pianoRollViewport: PianoRollViewport
     @State private var isShowingClearConfirmation = false
     @State private var lastPlaybackTick: Date?
 
@@ -22,6 +23,7 @@ struct ComposerView: View {
 
         _viewModel = State(initialValue: ComposerViewModel(leadVoice: Self.sampleLeadVoice))
         _chordGenerationViewModel = State(initialValue: ChordGenerationViewModel())
+        _pianoRollViewport = State(initialValue: PianoRollViewport.default(totalBeats: 16))
         _playbackController = State(
             initialValue: ComposerPlaybackController(
                 audioEngine: audioEngine,
@@ -55,12 +57,14 @@ struct ComposerView: View {
                         chordNotes: chordGenerationViewModel.generatedChordNotes,
                         selectedNoteID: viewModel.selectedNoteID,
                         totalBeats: viewModel.totalBeats,
+                        viewport: pianoRollViewport,
                         quantizeGrid: viewModel.leadVoice.quantizeGrid,
                         currentBeat: playbackController.currentBeat,
                         bpm: viewModel.bpm,
                         onTap: viewModel.handlePianoRollTap,
                         onDrag: viewModel.handlePianoRollDrag,
-                        onResize: viewModel.handlePianoRollResize
+                        onResize: viewModel.handlePianoRollResize,
+                        onViewportChange: { pianoRollViewport = $0 }
                     )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .overlay(

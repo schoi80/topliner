@@ -69,6 +69,7 @@ struct PianoRollCanvasView: View {
     var chordNotes: [MIDINoteEvent] = []
     var selectedNoteID: UUID?
     var totalBeats: Double = 16
+    var startBeat: Double = 0
     var pitchRange: ClosedRange<Int> = 48...84
     var quantizeGrid: Double = 0.25
 
@@ -77,7 +78,8 @@ struct PianoRollCanvasView: View {
             let geometry = PianoRollGeometry(
                 size: size,
                 pitchRange: pitchRange,
-                totalBeats: totalBeats,
+                startBeat: startBeat,
+                visibleBeats: totalBeats,
                 quantizeGrid: quantizeGrid
             )
             let layout = PianoRollNoteLayout(

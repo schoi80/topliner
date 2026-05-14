@@ -4,6 +4,7 @@ struct PianoRollInteractionLayer: View {
     var notes: [MIDINoteEvent] = []
     var selectedNoteID: UUID?
     var totalBeats: Double = 16
+    var startBeat: Double = 0
     var pitchRange: ClosedRange<Int> = 48...84
     var quantizeGrid: Double = 0.25
     var onTap: (CGPoint, PianoRollGeometry) -> Void
@@ -48,7 +49,8 @@ struct PianoRollInteractionLayer: View {
         PianoRollGeometry(
             size: size,
             pitchRange: pitchRange,
-            totalBeats: totalBeats,
+            startBeat: startBeat,
+            visibleBeats: totalBeats,
             quantizeGrid: quantizeGrid
         )
     }

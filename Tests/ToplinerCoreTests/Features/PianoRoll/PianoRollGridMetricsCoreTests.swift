@@ -37,4 +37,14 @@ final class PianoRollGridMetricsCoreTests: XCTestCase {
         XCTAssertEqual(horizontalPositions[0], 0, accuracy: 0.0001)
         XCTAssertEqual(horizontalPositions[horizontalPositions.count - 1], 1, accuracy: 0.0001)
     }
+
+    func testScrolledBeatWindowNormalizesAroundStartBeat() {
+        let metrics = PianoRollGridMetrics(startBeat: 4, visibleBeats: 8, beatsPerBar: 4, pitchRange: 60...71)
+        let lines = metrics.verticalLines()
+
+        XCTAssertEqual(lines.first?.beat, 4)
+        XCTAssertEqual(lines.first?.normalizedX ?? -1, 0, accuracy: 0.0001)
+        XCTAssertEqual(lines.last?.beat, 12)
+        XCTAssertEqual(lines.last?.normalizedX ?? -1, 1, accuracy: 0.0001)
+    }
 }

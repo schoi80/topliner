@@ -55,6 +55,7 @@ struct PitchTraceView: View {
     var bpm: Double
     var sampleDurationSeconds: Double = 0.1
     var totalBeats: Double = 16
+    var startBeat: Double = 0
     var pitchRange: ClosedRange<Int> = 48...84
     var quantizeGrid: Double = 0.25
 
@@ -63,7 +64,8 @@ struct PitchTraceView: View {
             let geometry = PianoRollGeometry(
                 size: size,
                 pitchRange: pitchRange,
-                totalBeats: totalBeats,
+                startBeat: startBeat,
+                visibleBeats: totalBeats,
                 quantizeGrid: quantizeGrid
             )
             let layout = PitchTraceLayout(
